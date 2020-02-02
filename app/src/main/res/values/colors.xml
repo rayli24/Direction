@@ -3,4 +3,9 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+    <color name="greenTime">#67CF1E</color>
+    <color name="solidPurple">#4432A1</color>
+    <color name="gradientLightPurple">#C86DD7</color>
+    <color name="gradientMediumPurple">#9755CA</color>
+    <color name="gradientDarkPurple">#3023AE</color>
 </resources>
