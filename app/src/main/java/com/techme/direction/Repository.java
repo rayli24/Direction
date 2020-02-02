@@ -8,6 +8,9 @@ import java.util.List;
 import androidx.lifecycle.LiveData;
 import androidx.room.Update;
 
+/**
+ * Class: this is to prevent the ViewModel class and Room to be in direct contact with each other
+ */
 public class Repository {
     private Dao dao;
     private LiveData<List<Note>> allNotes;
@@ -23,6 +26,7 @@ public class Repository {
          allNotes = dao.getAllNotes();
          allCreateNotes = dao.getAllCreateNotes();
          allStores = dao.getAllStores();
+         allCountries = dao.getAllCountries();
     }
 
     public void insertNotes(Note note){
@@ -45,7 +49,7 @@ public class Repository {
         new DeleteCreateAsyncTask(dao).execute(createNote);
     }
 
-    // live data for
+    // Live Data for the tables
     public LiveData<List<Note>> getAllNotes(){return allNotes;}
     public LiveData<List<Country>> getAllCountries(){return allCountries;}
     public LiveData<List<CreateNote>> getAllCreateNotes(){return allCreateNotes;}
