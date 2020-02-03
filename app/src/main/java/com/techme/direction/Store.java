@@ -9,7 +9,7 @@ public class Store {
     @PrimaryKey(autoGenerate = true)
     private long id;
 
-    private String country_name;
+    private String countryName;
 
     private String name;
 
@@ -21,13 +21,17 @@ public class Store {
     @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
     private byte[] logo;
 
-    public Store(String name, int time, byte[] logo, String type, String country_name, boolean selected) {
+    public Store(String name, int time, byte[] logo, String type, String countryName, boolean selected) {
         this.name = name;
         this.time = time;
         this.logo = logo;
         this.type = type;
-        this.country_name = country_name;
+        this.countryName = countryName;
         this.selected = selected;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public long getId() {
@@ -37,7 +41,7 @@ public class Store {
     public String getType(){return type;}
 
     public String getCountryName() {
-        return country_name;
+        return countryName;
     }
 
     public String getName() {
@@ -48,7 +52,7 @@ public class Store {
         return time;
     }
 
-    public byte[] getImage() {
+    public byte[] getLogo() {
         return logo;
     }
 

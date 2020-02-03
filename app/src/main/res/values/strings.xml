@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Direction</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="nav_bottom_list_title">List</string>
+    <string name="nav_bottom_dining_title">Dining</string>
+    <string name="nav_bottom_grocery_title">Grocery</string>
+    <string name="nav_bottom_note_title">Notes</string>
 </resources>

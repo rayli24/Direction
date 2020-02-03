@@ -18,7 +18,7 @@ public class Note {
         return note_id;
     }
 
-    public void setNote_id(int note_id) {
+    public void setNote_id(long note_id) {
         this.note_id = note_id;
     }
 

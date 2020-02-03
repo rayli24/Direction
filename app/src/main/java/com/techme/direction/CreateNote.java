@@ -15,20 +15,25 @@ public class CreateNote {
 
     private int amount;
 
-    private Timestamp timestamp;
+    private int timestamp; // keep incrementing to keep track of las input
 
     private boolean checked;
     @ForeignKey(entity = Note.class,parentColumns = "note_id",childColumns = "create_id",onDelete = ForeignKey.CASCADE)
     private long note_id;
 
-    public CreateNote(String item, int amount, boolean checked, int note_id) {
+    public CreateNote(String item, int amount, boolean checked,int timestamp, long note_id) {
         this.item = item;
         this.amount = amount;
         this.checked = checked;
+        this.timestamp = timestamp;
         this.note_id = note_id;
     }
 
-    public Timestamp timestamp()
+    public void setCreate_id(long create_id) {
+        this.create_id = create_id;
+    }
+
+    public int timestamp()
     {
         return timestamp;
     }
@@ -39,10 +44,6 @@ public class CreateNote {
 
     public long getNote_id() {
         return note_id;
-    }
-
-    public void setCreate_id(int create_id) {
-        this.create_id = create_id;
     }
 
     public long getCreate_id() {

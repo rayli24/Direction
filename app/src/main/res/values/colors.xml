@@ -8,4 +8,7 @@
     <color name="gradientLightPurple">#C86DD7</color>
     <color name="gradientMediumPurple">#9755CA</color>
     <color name="gradientDarkPurple">#3023AE</color>
+    <color name="transparent">#0000</color>
+    <color name="white">#FFFFFF</color>
+
 </resources>
