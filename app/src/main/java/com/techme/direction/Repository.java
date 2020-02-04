@@ -16,6 +16,8 @@ public class Repository {
     private LiveData<List<Note>> allNotes;
     private LiveData<List<CreateNote>> allCreateNotes;
     private LiveData<List<Store>> allStores;
+    private LiveData<List<Store>> allGroceries;
+    private LiveData<List<Store>> allDining;
     private LiveData<List<Country>> allCountries;
 
 
@@ -54,6 +56,8 @@ public class Repository {
     public LiveData<List<Country>> getAllCountries(){return allCountries;}
     public LiveData<List<CreateNote>> getAllCreateNotes(){return allCreateNotes;}
     public LiveData<List<Store>> getAllStores(){return allStores;}
+    public LiveData<List<Store>> getAllGroceries(){return allGroceries;}
+    public LiveData<List<Store>> getAllDining(){return allDining;}
 
     private static class InsertNotes extends AsyncTask<Note,Void,Void>
     {

@@ -6,7 +6,7 @@
     tools:context=".MyGroceryFragment">
 
     <RelativeLayout
-        android:id="@+id/myGroceryBarLayout"
+        android:id="@+id/my_grocery_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="102dp"
         android:background="@drawable/gradient_purple">
@@ -27,7 +27,7 @@
         android:id="@+id/recycle_view_my_grocery"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/myGroceryBarLayout"
+        android:layout_below="@+id/my_grocery_bar_layout"
         tools:listitem="@layout/my_store_recycle_view"/>
 
 

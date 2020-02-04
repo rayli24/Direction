@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/bar_search"
+        android:title="@string/search_bar"
+        android:icon="@drawable/ic_search_white_24dp"
+        app:showAsAction="always|collapseActionView"/>
+
+
+    <item
+        android:id="@+id/bar_settings"
+        android:title="@string/settings"
+        android:icon="@drawable/ic_more_vert_black_24dp"
+        app:showAsAction="always|collapseActionView">
+
+        <menu>
+            <item
+                android:id="@+id/bar_current_time"
+                android:title="@string/current_time" />
+        </menu>
+
+    </item>
+
+
+
+
+</menu>

@@ -3,12 +3,17 @@ package com.techme.direction;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.ListFragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -27,6 +32,7 @@ public class MyStoreActivity extends AppCompatActivity {
         setContentView(R.layout.activity_my_store);
         ContextHelper.Helper.setResource(getResources()); // store Resource in a class
         floatingActionButton = findViewById(R.id.float_button_store);
+
         navigationView = findViewById(R.id.bottom_nav_my_store);
         navigationView.setOnNavigationItemSelectedListener(navListener);
         // create a viewModel for every activity that need to get a specific table
@@ -37,6 +43,8 @@ public class MyStoreActivity extends AppCompatActivity {
 //                Toast.makeText(MyStoreActivity.this, "Testing", Toast.LENGTH_SHORT).show();
 //            }
 //        });
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_my_store,new MyStoresFragment()).commit();
+        buttons();
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
@@ -68,6 +76,34 @@ public class MyStoreActivity extends AppCompatActivity {
                 }
             };
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_action_bar,menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case R.id.bar_search:
+                Toast.makeText(this, "search clicked", Toast.LENGTH_SHORT).show();
+                return  true;
+            case R.id.bar_settings:
+                Toast.makeText(this, "settings clicked", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.bar_current_time:
+                Toast.makeText(this, "time clicked", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
+
     /**
      * toggle the visibility of the floating button
      * @param show
@@ -78,5 +114,19 @@ public class MyStoreActivity extends AppCompatActivity {
             floatingActionButton.show();
         else
             floatingActionButton.hide();
+    }
+
+    /**
+     * hold all the onClick button listeners
+     */
+    private void buttons()
+    {
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MyStoreActivity.this, AddStoreActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }

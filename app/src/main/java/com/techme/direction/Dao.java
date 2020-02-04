@@ -39,6 +39,12 @@ public interface Dao {
     @Query("select * from store_table order by name")
     LiveData<List<Store>> getAllStores();
 
+    @Query("select * from store_table where type = 'grocery' order by name")
+    LiveData<List<Store>> getAllGrocery();
+
+    @Query("select * from store_table where type = 'dining' order by name")
+    LiveData<List<Store>> getAllDining();
+
     @Query("select * from note_table order by name")
     LiveData<List<Note>> getAllNotes();
 

@@ -6,7 +6,7 @@
     tools:context=".MyNoteFragment">
 
     <RelativeLayout
-        android:id="@+id/myNoteBarLayout"
+        android:id="@+id/my_note_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="102dp"
         tools:ignore="MissingConstraints"
@@ -21,8 +21,8 @@
             android:textColor="@color/white"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/btn_create_note"
+        <ImageView
+            android:id="@+id/img_add_my_note"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/ic_add_white_24dp"
@@ -32,6 +32,13 @@
 
 
     </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycle_view_my_notes"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/my_note_bar_layout"
+        tools:listitem="@layout/notes_recycle_view"/>
 
 
 </RelativeLayout>

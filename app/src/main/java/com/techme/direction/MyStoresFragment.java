@@ -34,7 +34,7 @@ public class MyStoresFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(DirectionViewModel.class);
-        mViewModel.getAllStore().observe(getViewLifecycleOwner(), new Observer<List<Store>>() {
+        mViewModel.getAllStores().observe(getViewLifecycleOwner(), new Observer<List<Store>>() {
             @Override
             public void onChanged(List<Store> stores) {
                 Toast.makeText(getContext(),"In my store",Toast.LENGTH_SHORT).show();

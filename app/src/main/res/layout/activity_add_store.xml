@@ -4,32 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MyStoreActivity">
+    tools:context=".AddStoreActivity">
 
     <FrameLayout
-        android:id="@+id/fragment_my_store"
+        android:id="@+id/fragment_add_store"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/bottom_nav_my_store">
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/float_button_store"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_add_white_24dp"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="15dp"/>
-
-</FrameLayout>
+        android:layout_above="@+id/bottom_nav_add_store"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_nav_my_store"
+        android:id="@+id/bottom_nav_add_store"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:menu="@menu/menu_add_bottom_nav"
         android:layout_alignParentBottom="true"
-        app:menu="@menu/menu_my_bottom_nav"
-        app:labelVisibilityMode="labeled"
         android:background="?android:attr/windowBackground"/>
-
 
 </RelativeLayout>

@@ -4,29 +4,30 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools">
 
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
-        android:background="@drawable/recycle_view_border"
+        android:background="@drawable/recycle_view_gradient_border"
         android:padding="6dp">
 
         <ImageView
-            android:id="@+id/imgLogo"
+            android:id="@+id/img_add_logo_recycle_view"
             android:layout_width="60dp"
             android:layout_height="50dp"
             android:src="@drawable/walmart"
             android:layout_marginStart="10dp"/>
 
         <TextView
-            android:id="@+id/txtName"
+            android:id="@+id/txt_add_name_recycle_view"
             android:layout_width="174dp"
             android:layout_height="30dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="0dp"
-            android:layout_toRightOf="@+id/imgLogo"
+            android:layout_toRightOf="@+id/img_add_logo_recycle_view"
             android:layout_marginStart="10dp"
             android:maxLines="1"
             android:ellipsize="end"

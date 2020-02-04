@@ -1,6 +1,7 @@
 package com.techme.direction;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -9,7 +10,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.ImageView;
 
 
 public class MyNoteFragment extends Fragment {
@@ -23,6 +24,8 @@ public class MyNoteFragment extends Fragment {
     private String mParam2;
 
 //    private OnFragmentInteractionListener mListener;
+
+    private ImageView imgAdd;
 
     public MyNoteFragment() {
         // Required empty public constructor
@@ -49,17 +52,24 @@ public class MyNoteFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.my_note_fragment, container, false);
+        View view = inflater.inflate(R.layout.my_note_fragment, container, false);
+        imgAdd =  view.findViewById(R.id.img_add_my_note);
+        imgAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(),SelectNoteActivity.class);
+                startActivity(intent);
+            }
+        });
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

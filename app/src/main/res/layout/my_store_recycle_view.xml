@@ -10,23 +10,23 @@
         android:layout_marginTop="12dp"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
-        android:background="@drawable/recycle_view_border"
+        android:background="@drawable/recycle_view_gradient_border"
         android:padding="6dp">
 
         <ImageView
-            android:id="@+id/imgLogo"
+            android:id="@+id/img_my_logo_recycle_view"
             android:layout_width="60dp"
             android:layout_height="50dp"
             android:src="@drawable/sobey"
             android:layout_marginStart="10dp"/>
 
         <TextView
-            android:id="@+id/txtName"
+            android:id="@+id/txt_my_name_recycle_view"
             android:layout_width="174dp"
             android:layout_height="30dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="0dp"
-            android:layout_toRightOf="@+id/imgLogo"
+            android:layout_toRightOf="@+id/img_my_logo_recycle_view"
             android:layout_marginStart="10dp"
             android:maxLines="1"
             android:ellipsize="end"
@@ -35,21 +35,21 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
         <ImageView
-            android:id="@+id/imglocation"
+            android:id="@+id/img_my_location_recycle_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_location_24dp"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/txtName"/>
+            android:layout_toRightOf="@+id/txt_my_name_recycle_view"/>
         
         <TextView
-            android:id="@+id/txtTime"
+            android:id="@+id/txt_my_time_recycle_view"
             android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:text="120 min"
             android:textSize="14sp"
             android:textColor="@color/greenTime"
-            android:layout_toRightOf="@+id/imglocation"
+            android:layout_toRightOf="@+id/img_my_location_recycle_view"
             android:layout_centerVertical="true"
             android:layout_marginStart="6dp"/>
 
@@ -57,7 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_directions_car_24dp"
-            android:layout_toRightOf="@+id/txtTime"
+            android:layout_toRightOf="@+id/txt_my_time_recycle_view"
             android:layout_centerVertical="true"
             android:layout_marginStart="4dp"/>
 

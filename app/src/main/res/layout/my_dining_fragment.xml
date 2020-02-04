@@ -6,7 +6,7 @@
     tools:context=".MyDiningFragment">
 
     <RelativeLayout
-        android:id="@+id/myDiningBarLayout"
+        android:id="@+id/my_dining_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="102dp"
         tools:ignore="MissingConstraints"
@@ -25,7 +25,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycle_view_my_dining"
-        android:layout_below="@+id/myDiningBarLayout"
+        android:layout_below="@+id/my_dining_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:listitem="@layout/my_store_recycle_view"/>

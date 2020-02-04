@@ -3,13 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MyStoresFragment">
+    tools:context=".AddDiningFragment">
 
     <RelativeLayout
-        android:id="@+id/my_store_bar_layout"
+        android:id="@+id/add_dining_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="102dp"
-        tools:ignore="MissingConstraints"
         android:background="@drawable/gradient_purple">
 
         <TextView
@@ -17,17 +16,17 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
-            android:text="My Store List"
+            android:text="Add Dining List"
             android:textColor="@color/white"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
 
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycle_view_my_store"
+        android:id="@+id/recycle_view_add_dining"
         android:layout_width="match_parent"
-        android:layout_below="@+id/my_store_bar_layout"
         android:layout_height="match_parent"
-        tools:listitem="@layout/my_store_recycle_view"/>
+        tools:listitem="@layout/add_store_recycle_view"
+        android:layout_below="@+id/add_dining_bar_layout"/>
 
 </RelativeLayout>
