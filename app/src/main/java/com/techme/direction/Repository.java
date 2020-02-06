@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 import java.util.List;
 
 import androidx.lifecycle.LiveData;
-import androidx.room.Update;
 
 /**
  * Class: this is to prevent the ViewModel class and Room to be in direct contact with each other
@@ -15,7 +14,8 @@ public class Repository {
     private Dao dao;
     private LiveData<List<Note>> allNotes;
     private LiveData<List<CreateNote>> allCreateNotes;
-    private LiveData<List<Store>> allStores;
+    private LiveData<List<Store>> allSelectedStores;
+    private LiveData<List<Store>> allUnSelectedStores;
     private LiveData<List<Store>> allGroceries;
     private LiveData<List<Store>> allDining;
     private LiveData<List<Country>> allCountries;
@@ -27,20 +27,27 @@ public class Repository {
          dao = database.dao();
          allNotes = dao.getAllNotes();
          allCreateNotes = dao.getAllCreateNotes();
-         allStores = dao.getAllStores();
+         allSelectedStores = dao.getAllSelectedStores();
          allCountries = dao.getAllCountries();
+         allGroceries = dao.getAllGrocery();
+         allDining = dao.getAllDining();
+         allUnSelectedStores = dao.getAllUnSelectedStores();
     }
 
     public void insertNotes(Note note){
-        new InsertNotes(dao).execute(note);
+        new InsertNotesAsyncTask(dao).execute(note);
     }
 
     public void insertCreateNote(CreateNote createNote){
-        new InsertCreateNote(dao).execute(createNote);
+        new InsertCreateNoteAsyncTask(dao).execute(createNote);
     }
 
     public void updateCreateNote(CreateNote createNote){
-        new UpdateCreateNote(dao).execute(createNote);
+        new UpdateCreateNoteAsyncTask(dao).execute(createNote);
+    }
+
+    public void updateStore(Store store){
+        new UpdateStoreAsyncTask(dao).execute(store);
     }
 
     public void deleteNote(Note note){
@@ -55,15 +62,16 @@ public class Repository {
     public LiveData<List<Note>> getAllNotes(){return allNotes;}
     public LiveData<List<Country>> getAllCountries(){return allCountries;}
     public LiveData<List<CreateNote>> getAllCreateNotes(){return allCreateNotes;}
-    public LiveData<List<Store>> getAllStores(){return allStores;}
+    public LiveData<List<Store>> getAllSelectedStores(){return allSelectedStores;}
+    public LiveData<List<Store>> getAllUnSelectedStores(){return allUnSelectedStores;}
     public LiveData<List<Store>> getAllGroceries(){return allGroceries;}
     public LiveData<List<Store>> getAllDining(){return allDining;}
 
-    private static class InsertNotes extends AsyncTask<Note,Void,Void>
+    private static class InsertNotesAsyncTask extends AsyncTask<Note,Void,Void>
     {
         private Dao dao;
 
-        private InsertNotes(Dao dao){this.dao = dao;}
+        private InsertNotesAsyncTask(Dao dao){this.dao = dao;}
         @Override
         protected Void doInBackground(Note... notes) {
             dao.insertNote(notes[0]);
@@ -71,10 +79,10 @@ public class Repository {
         }
     }
 
-    private static class InsertCreateNote extends AsyncTask<CreateNote,Void,Void>
+    private static class InsertCreateNoteAsyncTask extends AsyncTask<CreateNote,Void,Void>
     {
         private Dao dao;
-        private InsertCreateNote(Dao dao){this.dao =dao;}
+        private InsertCreateNoteAsyncTask(Dao dao){this.dao =dao;}
 
         @Override
         protected Void doInBackground(CreateNote... createNotes) {
@@ -83,14 +91,26 @@ public class Repository {
         }
     }
 
-    private static class UpdateCreateNote extends AsyncTask<CreateNote,Void,Void>
+    private static class UpdateCreateNoteAsyncTask extends AsyncTask<CreateNote,Void,Void>
     {
         private Dao dao;
-        private UpdateCreateNote(Dao dao){this.dao =dao;}
+        private UpdateCreateNoteAsyncTask(Dao dao){this.dao =dao;}
 
         @Override
         protected Void doInBackground(CreateNote... createNotes) {
             dao.updateCreateNote(createNotes[0]);
+            return null;
+        }
+    }
+
+    private static class UpdateStoreAsyncTask extends AsyncTask<Store,Void,Void>
+    {
+        private Dao dao;
+        private UpdateStoreAsyncTask(Dao dao) {this.dao = dao;}
+
+        @Override
+        protected Void doInBackground(Store... stores) {
+            dao.updateStore(stores[0]);
             return null;
         }
     }

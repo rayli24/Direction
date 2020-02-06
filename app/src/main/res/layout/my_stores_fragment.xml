@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MyStoresFragment">
+    tools:context=".ui.fragments.MyStoresFragment">
 
     <RelativeLayout
         android:id="@+id/my_store_bar_layout"

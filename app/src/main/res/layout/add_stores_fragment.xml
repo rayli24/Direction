@@ -3,30 +3,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddStoresFragment">
+    android:background="@color/white"
+    tools:context=".ui.fragments.AddStoresFragment">
 
-    <RelativeLayout
-        android:id="@+id/add_store_bar_layout"
-        android:layout_width="match_parent"
-        android:layout_height="102dp"
-        android:background="@drawable/gradient_purple">
+        <RelativeLayout
+            android:id="@+id/add_store_bar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="102dp"
+            android:background="@drawable/gradient_purple">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:text="Add Store List"
-            android:textColor="@color/white"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:text="Add Store List"
+                android:textColor="@color/white"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
 
-    </RelativeLayout>
+        </RelativeLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycle_view_add_store"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:listitem="@layout/add_store_recycle_view"
-        android:layout_below="@+id/add_store_bar_layout"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycle_view_add_store"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/add_store_recycle_view"
+            android:padding="8dp"
+            android:layout_below="@+id/add_store_bar_layout"/>
 
 </RelativeLayout>

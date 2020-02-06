@@ -15,13 +15,13 @@ public class Store {
 
     private String type;
 
-    private boolean selected;
+    private int selected;
 
     private int time;
     @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
     private byte[] logo;
 
-    public Store(String name, int time, byte[] logo, String type, String countryName, boolean selected) {
+    public Store(String name, int time, byte[] logo, String type, String countryName, int selected) {
         this.name = name;
         this.time = time;
         this.logo = logo;
@@ -34,11 +34,21 @@ public class Store {
         this.id = id;
     }
 
+    public void setSelected(int selected) {
+        this.selected = selected;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
+    }
+
     public long getId() {
         return id;
     }
 
-    public String getType(){return type;}
+    public String getType() {
+        return type;
+    }
 
     public String getCountryName() {
         return countryName;
@@ -56,6 +66,8 @@ public class Store {
         return logo;
     }
 
-    public boolean getSelected(){return selected;}
+    public int getSelected() {
+        return selected;
+    }
 }
 

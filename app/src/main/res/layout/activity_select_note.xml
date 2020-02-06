@@ -9,7 +9,7 @@
     android:layout_marginLeft="40dp"
     android:layout_marginRight="40dp"
     android:background="@color/transparent"
-    tools:context=".SelectNoteActivity">
+    tools:context=".ui.SelectNoteActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"

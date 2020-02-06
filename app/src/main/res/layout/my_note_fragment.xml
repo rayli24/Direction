@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MyNoteFragment">
+    tools:context=".ui.fragments.MyNoteFragment">
 
     <RelativeLayout
         android:id="@+id/my_note_bar_layout"

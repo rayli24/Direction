@@ -9,6 +9,10 @@
     <string name="nav_bottom_note_title">Notes</string>
     <string name="search_bar">Search</string>
     <string name="settings">Settings</string>
-    <string name="current_time">Current Time</string>
+    <string name="setting_duration_time">Duration Time</string>
     <string name="title_activity_maps">Map</string>
+    <string name="setting_location">Location</string>
+    <string name="setting_alphabetic">A - Z</string>
+    <string name="setting_nearest">Nearest</string>
+    <string name="setting_sorting">Sorting</string>
 </resources>

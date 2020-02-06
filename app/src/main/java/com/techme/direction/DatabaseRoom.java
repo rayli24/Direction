@@ -1,12 +1,9 @@
 package com.techme.direction;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
-import android.renderscript.Allocation;
 
 import java.io.IOException;
 
@@ -46,6 +43,37 @@ public abstract class DatabaseRoom extends RoomDatabase {
         }
     };
 
+    // test to fill new elements for now
+    private static RoomDatabase.Callback roomOpen = new RoomDatabase.Callback(){
+        @Override
+        public void onOpen(@NonNull SupportSQLiteDatabase db) {
+            super.onOpen(db);
+            new DirectionAsyncTask(instance).execute();
+        }
+    };
+
+
+    private static RoomDatabase.Callback roomDestroy = new RoomDatabase.Callback(){
+        @Override
+        public void onOpen(@NonNull SupportSQLiteDatabase db) {
+            super.onOpen(db);
+            new DeleteAllAsyncTask(instance).execute();
+        }
+    };
+
+    public static class DeleteAllAsyncTask extends AsyncTask<Void,Void,Void>
+    {
+        private Dao dao;
+
+        private DeleteAllAsyncTask(DatabaseRoom db){this.dao = db.dao();}
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            dao.deleteAllStore();
+            return null;
+        }
+    }
+
     public static class DirectionAsyncTask extends AsyncTask<Void,Void,Void>{
 
         private Dao dao;
@@ -57,17 +85,22 @@ public abstract class DatabaseRoom extends RoomDatabase {
 
         @Override
         protected Void doInBackground(Void... voids) {
-
+            country();
+            try {
+                store();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             return null;
         }
 
-        private void country()
+        public void country()
         {
             dao.insertCountry(new Country("Canada"));
             dao.insertCountry(new Country("USA"));
         }
 
-        private void store() throws IOException {
+        public void store() throws IOException {
             final String CANADA = "Canada";
             final String USA = "USA";
             final String GROCERY = "grocery";
@@ -76,42 +109,42 @@ public abstract class DatabaseRoom extends RoomDatabase {
 
             Bitmap bitmap = BitmapFactory.decodeResource(ContextHelper.Helper.getResource(), R.drawable.sobey);
             dao.insertStore(new Store("Sobey's",12,convertImageToByte(bitmap),
-                    GROCERY, CANADA, false));
+                    GROCERY, CANADA, 0));
 
-            bitmap = BitmapFactory.decodeResource(ContextHelper.Helper.getResource(), R.drawable.walmart);
-            dao.insertStore(new Store("Walmart",9,convertImageToByte(bitmap),
-                       GROCERY, CANADA, false));
+            Bitmap a = BitmapFactory.decodeResource(ContextHelper.Helper.getResource(), R.drawable.walmart);
+            dao.insertStore(new Store("Walmart",9,convertImageToByte(a),
+                       GROCERY, CANADA, 0));
 
-            bitmap = BitmapFactory.decodeResource(ContextHelper.Helper.getResource(), R.drawable.pizzahut);
-            dao.insertStore(new Store("Pizza Hut",17,convertImageToByte(bitmap),
-                    DINING, CANADA, false));
+            Bitmap b = BitmapFactory.decodeResource(ContextHelper.Helper.getResource(), R.drawable.pizzahut);
+            dao.insertStore(new Store("Pizza Hut",17,convertImageToByte(b),
+                    DINING, CANADA, 0));
 
-            bitmap = BitmapFactory.decodeResource(ContextHelper.Helper.getResource(), R.drawable.mcdonald);
-            dao.insertStore(new Store("McDonald's",23,convertImageToByte(bitmap),
-                    DINING, CANADA, false));
+            Bitmap c = BitmapFactory.decodeResource(ContextHelper.Helper.getResource(), R.drawable.mcdonald);
+            dao.insertStore(new Store("McDonald's",23,convertImageToByte(c),
+                    DINING, CANADA, 0));
 
-            bitmap = BitmapFactory.decodeResource(ContextHelper.Helper.getResource(), R.drawable.kfc);
-            dao.insertStore(new Store("K.F.C",11,convertImageToByte(bitmap),
-                    DINING, CANADA, false));
+            Bitmap d = BitmapFactory.decodeResource(ContextHelper.Helper.getResource(), R.drawable.kfc);
+            dao.insertStore(new Store("K.F.C",11,convertImageToByte(d),
+                    DINING, CANADA, 0));
 
 
             // USA
 
-            bitmap = BitmapFactory.decodeResource(ContextHelper.Helper.getResource(), R.drawable.walmart);
-            dao.insertStore(new Store("Walmart",19,convertImageToByte(bitmap),
-                       GROCERY, USA, false));
+            Bitmap f = BitmapFactory.decodeResource(ContextHelper.Helper.getResource(), R.drawable.walmart);
+            dao.insertStore(new Store("Walmart",19,convertImageToByte(f),
+                       GROCERY, USA, 0));
 
-            bitmap = BitmapFactory.decodeResource(ContextHelper.Helper.getResource(), R.drawable.pizzahut);
-            dao.insertStore(new Store("Pizza Hut",8,convertImageToByte(bitmap),
-                    DINING, USA, false));
+            Bitmap g = BitmapFactory.decodeResource(ContextHelper.Helper.getResource(), R.drawable.pizzahut);
+            dao.insertStore(new Store("Pizza Hut",8,convertImageToByte(g),
+                    DINING, USA, 0));
 
-            bitmap = BitmapFactory.decodeResource(ContextHelper.Helper.getResource(), R.drawable.mcdonald);
-            dao.insertStore(new Store("McDonald's",13,convertImageToByte(bitmap),
-                    DINING, USA, false));
+            Bitmap h = BitmapFactory.decodeResource(ContextHelper.Helper.getResource(), R.drawable.mcdonald);
+            dao.insertStore(new Store("McDonald's",13,convertImageToByte(h),
+                    DINING, USA, 0));
 
-            bitmap = BitmapFactory.decodeResource(ContextHelper.Helper.getResource(), R.drawable.kfc);
-            dao.insertStore(new Store("K.F.C",12,convertImageToByte(bitmap),
-                    DINING, USA, false));
+            Bitmap i = BitmapFactory.decodeResource(ContextHelper.Helper.getResource(), R.drawable.kfc);
+            dao.insertStore(new Store("K.F.C",12,convertImageToByte(i),
+                    DINING, USA, 0));
 
 
 

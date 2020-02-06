@@ -17,8 +17,25 @@
 
         <menu>
             <item
-                android:id="@+id/bar_current_time"
-                android:title="@string/current_time" />
+                android:id="@+id/bar_duration_time"
+                android:title="@string/setting_duration_time"/>
+            <item
+                android:id="@+id/bar_location"
+                android:title="@string/setting_location"/>
+
+            <item
+                android:id="@+id/bar_sorting"
+                android:title="@string/setting_sorting">
+                <menu>
+                    <item
+                        android:id="@+id/bar_alphabetic"
+                        android:title="@string/setting_alphabetic"/>
+                    <item
+                        android:id="@+id/bar_nearest"
+                        android:title="@string/setting_nearest"/>
+                </menu>
+            </item>
+
         </menu>
 
     </item>

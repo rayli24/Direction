@@ -1,14 +1,10 @@
-package com.techme.direction;
+package com.techme.direction.ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.ListFragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,8 +14,13 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import java.util.List;
+import com.techme.direction.ContextHelper;
+import com.techme.direction.DirectionViewModel;
+import com.techme.direction.ui.fragments.MyDiningFragment;
+import com.techme.direction.ui.fragments.MyGroceryFragment;
+import com.techme.direction.ui.fragments.MyNoteFragment;
+import com.techme.direction.ui.fragments.MyStoresFragment;
+import com.techme.direction.R;
 
 public class MyStoreActivity extends AppCompatActivity {
     DirectionViewModel viewModel;
@@ -95,8 +96,17 @@ public class MyStoreActivity extends AppCompatActivity {
             case R.id.bar_settings:
                 Toast.makeText(this, "settings clicked", Toast.LENGTH_SHORT).show();
                 return true;
-            case R.id.bar_current_time:
+            case R.id.bar_duration_time:
                 Toast.makeText(this, "time clicked", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.bar_alphabetic:
+                Toast.makeText(this, "alpha clicked", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.bar_location:
+                Toast.makeText(this, "location clicked", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.bar_nearest:
+                Toast.makeText(this, "nearest clicked", Toast.LENGTH_SHORT).show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

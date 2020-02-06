@@ -1,4 +1,4 @@
-package com.techme.direction;
+package com.techme.direction.ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,6 +12,10 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.techme.direction.ui.fragments.AddDiningFragment;
+import com.techme.direction.ui.fragments.AddGroceryFragment;
+import com.techme.direction.ui.fragments.AddStoresFragment;
+import com.techme.direction.R;
 
 public class AddStoreActivity extends AppCompatActivity {
     private BottomNavigationView navigationView;

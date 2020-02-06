@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".CreateNoteActivity">
+    tools:context=".ui.CreateNoteActivity">
 
     <RelativeLayout
         android:id="@+id/create_note_bar_layout"
@@ -58,6 +58,7 @@
             android:layout_centerHorizontal="true"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:layout_marginLeft="30dp"
+            android:inputType="text"
             android:layout_marginRight="30dp"/>
 
         <EditText
@@ -67,6 +68,7 @@
             android:layout_below="@+id/edit_item_create_note"
             android:hint="Amount"
             android:layout_marginLeft="50dp"
+            android:inputType="number"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
 
         <Button
