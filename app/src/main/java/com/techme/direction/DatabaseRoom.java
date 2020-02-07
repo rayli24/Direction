@@ -17,7 +17,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import static com.techme.direction.helper.ConvertImage.convertImageToByte;
 
-@Database(entities = {Country.class,CreateNote.class,Note.class,Store.class},version = 1)
+@Database(entities = {Country.class,CreateNote.class,Note.class,Store.class},version = 3)
 public abstract class DatabaseRoom extends RoomDatabase {
 
     private static DatabaseRoom instance;
@@ -88,12 +88,18 @@ public abstract class DatabaseRoom extends RoomDatabase {
         @Override
         protected Void doInBackground(Void... voids) {
             country();
+            defaultNote();
             try {
                 store();
             } catch (IOException e) {
                 e.printStackTrace();
             }
             return null;
+        }
+
+        public void defaultNote()
+        {
+            dao.insertNote(new Note("Daily note",0));
         }
 
         public void country()

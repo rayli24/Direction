@@ -15,7 +15,7 @@ public class Store {
 
     private String type;
 
-    private int selected;
+    private int selected; // 0 is false, 1 is true
 
     private int time;
     @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
