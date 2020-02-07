@@ -1,10 +1,12 @@
 package com.techme.direction.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.techme.direction.ContextHelper;
@@ -22,16 +24,19 @@ public class MyStoreRecycleAdapter extends RecyclerView.Adapter<MyStoreRecycleAd
     private onItemClickListener listener;
     private List<Store> selectedList = new ArrayList<>();
 
-    class MyStoreViewHolder extends RecyclerView.ViewHolder {
+    public class MyStoreViewHolder extends RecyclerView.ViewHolder {
         private ImageView imgLogo;
-        private TextView name;
-        private TextView time;
+        private TextView name, time;
+        public RelativeLayout viewForeground, viewBackground;
 
         public MyStoreViewHolder(@NonNull View itemView) {
             super(itemView);
             imgLogo = itemView.findViewById(R.id.img_my_logo_recycle_view);
             name = itemView.findViewById(R.id.txt_my_name_recycle_view);
             time = itemView.findViewById(R.id.txt_my_time_recycle_view);
+            viewForeground = itemView.findViewById(R.id.layout_foreground_my_store_recycle_view);
+            viewBackground = itemView.findViewById(R.id.layout_background_my_store_recycle_view);
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -72,6 +77,12 @@ public class MyStoreRecycleAdapter extends RecyclerView.Adapter<MyStoreRecycleAd
     public void setList(List<Store> store) {
         selectedList = store;
         notifyDataSetChanged();
+    }
+
+    public void removeItem(int position)
+    {
+        selectedList.remove(position);
+        notifyItemRemoved(position);
     }
 
     public interface onItemClickListener {

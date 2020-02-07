@@ -15,4 +15,5 @@
     <string name="setting_alphabetic">A - Z</string>
     <string name="setting_nearest">Nearest</string>
     <string name="setting_sorting">Sorting</string>
+    <string name="delete">DELETE</string>
 </resources>

@@ -6,6 +6,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.techme.direction.DirectionViewModel;
+import com.techme.direction.MyStoreRecycleItemTouchHelper;
 import com.techme.direction.R;
 import com.techme.direction.Store;
 import com.techme.direction.adapter.MyStoreRecycleAdapter;
@@ -22,11 +24,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MyGroceryFragment extends Fragment {
+public class MyGroceryFragment extends Fragment implements MyStoreRecycleItemTouchHelper.RecyclerItemTouchHelperListener {
 
     private RecyclerView recyclerView;
     private DirectionViewModel viewModel;
     private MyStoreRecycleAdapter adapter;
+    private final static String GROCERY = "grocery";
 
     public MyGroceryFragment() {
         // Required empty public constructor
@@ -54,12 +57,21 @@ public class MyGroceryFragment extends Fragment {
             public void onChanged(List<Store> stores) {
                 List<Store> list = new ArrayList<>();
                 for (Store store : stores) {
-                    if (store.getCountryName().equals("Canada") && store.getType().equals("grocery")) {
+                    if (store.getCountryName().equals("Canada") && store.getType().equals(GROCERY)) {
                         list.add(store);
                     }
                 }
                 adapter.setList(list);
             }
         });
+
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallBack = new MyStoreRecycleItemTouchHelper(0,ItemTouchHelper.LEFT,this);
+    }
+
+    @Override
+    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
+        adapter.getStore(viewHolder.getAdapterPosition()).setSelected(0);
+        viewModel.updateStore(adapter.getStore(viewHolder.getAdapterPosition()));
+        adapter.removeItem(viewHolder.getAdapterPosition());
     }
 }
