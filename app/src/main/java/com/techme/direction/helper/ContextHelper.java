@@ -1,4 +1,4 @@
-package com.techme.direction;
+package com.techme.direction.helper;
 
 import android.content.res.Resources;
 

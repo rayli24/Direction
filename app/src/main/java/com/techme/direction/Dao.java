@@ -42,10 +42,10 @@ public interface Dao {
     void deleteAllStore();
 
     // get the data from database with LiveData
-    @Query("select * from store_table where selected = 1 order by time")
+    @Query("select * from store_table where selected = 1 order by time") // 1 stands for true
     LiveData<List<Store>> getAllSelectedStores();
 
-    @Query("select * from store_table where selected = 0 order by name")
+    @Query("select * from store_table where selected = 0 order by name") // 0 stands for false
     LiveData<List<Store>> getAllUnSelectedStores();
 
     @Query("select * from store_table where type = 'grocery' order by name")

@@ -23,14 +23,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
+
 public class AddDiningFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private AddStoreRecycleAdapter adapter;
     private DirectionViewModel viewModel;
+    private final String DINING = "dining";
 
     public AddDiningFragment() {
         // Required empty public constructor
@@ -59,10 +58,26 @@ public class AddDiningFragment extends Fragment {
                 List<Store> list = new ArrayList<>();
                 for(Store store: stores)
                 {
-                    if(store.getCountryName().equals("Canada") && store.getType().equals("dining"))
+                    if(store.getCountryName().equals("Canada") && store.getType().equals(DINING))
                         list.add(store);
                 }
-                adapter.setList(list);
+                adapter.submitList(list);
+            }
+        });
+        itemClicked();
+    }
+
+    /**
+     * this method is to update the selected items in add store and send them to my store list
+     */
+    private void itemClicked()
+    {
+        adapter.setOnItemClickListener(new AddStoreRecycleAdapter.onItemClickListener() {
+            @Override
+            public void onClick(Store store, int position) {
+                Store myStore = adapter.getStore(position);
+                myStore.setSelected(1);
+                viewModel.updateStore(myStore);
             }
         });
     }

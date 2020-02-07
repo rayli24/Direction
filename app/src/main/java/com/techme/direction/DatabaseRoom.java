@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 
+import com.techme.direction.helper.ContextHelper;
+
 import java.io.IOException;
 
 import androidx.annotation.NonNull;
@@ -13,7 +15,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import static com.techme.direction.ConvertImage.convertImageToByte;
+import static com.techme.direction.helper.ConvertImage.convertImageToByte;
 
 @Database(entities = {Country.class,CreateNote.class,Note.class,Store.class},version = 1)
 public abstract class DatabaseRoom extends RoomDatabase {

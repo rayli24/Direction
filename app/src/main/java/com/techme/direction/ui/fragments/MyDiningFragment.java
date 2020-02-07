@@ -15,7 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.techme.direction.DirectionViewModel;
-import com.techme.direction.MyStoreRecycleItemTouchHelper;
+import com.techme.direction.helper.MyStoreRecycleItemTouchHelper;
 import com.techme.direction.R;
 import com.techme.direction.Store;
 import com.techme.direction.adapter.MyStoreRecycleAdapter;
@@ -60,18 +60,18 @@ public class MyDiningFragment extends Fragment implements MyStoreRecycleItemTouc
                         list.add(store);
                     }
                 }
-                adapter.setList(list);
+                adapter.submitList(list);
             }
         });
 
 
         ItemTouchHelper.SimpleCallback itemTouchHelperCallBack = new MyStoreRecycleItemTouchHelper(0,ItemTouchHelper.LEFT,this);
+        new ItemTouchHelper(itemTouchHelperCallBack).attachToRecyclerView(recyclerView);
     }
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
         adapter.getStore(viewHolder.getAdapterPosition()).setSelected(0);
         viewModel.updateStore(adapter.getStore(viewHolder.getAdapterPosition()));
-        adapter.removeItem(viewHolder.getAdapterPosition());
     }
 }

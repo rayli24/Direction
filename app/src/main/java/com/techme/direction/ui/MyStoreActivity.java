@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.techme.direction.ContextHelper;
+import com.techme.direction.helper.ContextHelper;
 import com.techme.direction.DirectionViewModel;
 import com.techme.direction.ui.fragments.MyDiningFragment;
 import com.techme.direction.ui.fragments.MyGroceryFragment;

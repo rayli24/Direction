@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.techme.direction.ConvertImage;
+import com.techme.direction.helper.ConvertImage;
 import com.techme.direction.R;
 import com.techme.direction.Store;
 
@@ -14,11 +14,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class AddStoreRecycleAdapter extends RecyclerView.Adapter<AddStoreRecycleAdapter.AddStoreViewHolder> {
-    private List<Store> unselectedList = new ArrayList<>();
+public class AddStoreRecycleAdapter extends ListAdapter<Store, AddStoreRecycleAdapter.AddStoreViewHolder> {
+    //private List<Store> unselectedList = new ArrayList<>();
     private onItemClickListener listener;
+
+    public AddStoreRecycleAdapter() {
+        super(Diff_Callback);
+    }
+
+    private static final DiffUtil.ItemCallback<Store> Diff_Callback = new DiffUtil.ItemCallback<Store>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull Store oldItem, @NonNull Store newItem) {
+            return oldItem.getId() == newItem.getId();
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull Store oldItem, @NonNull Store newItem) {
+            return oldItem.getType().equals(newItem.getType()) && oldItem.getSelected() == newItem.getSelected()
+                    && oldItem.getName().equals(newItem.getName()) && oldItem.getCountryName().equals(newItem.getCountryName())
+                    && oldItem.getLogo() == newItem.getLogo() && oldItem.getTime() == newItem.getTime();
+        }
+    };
 
     class AddStoreViewHolder extends RecyclerView.ViewHolder {
         private ImageView imgLogo;
@@ -35,7 +55,7 @@ public class AddStoreRecycleAdapter extends RecyclerView.Adapter<AddStoreRecycle
                 public void onClick(View view) {
                     int position = getAdapterPosition();
                     if (listener != null && position != RecyclerView.NO_POSITION) {
-                        listener.onClick(getStore(position),position);
+                        listener.onClick(getStore(position), position);
                     }
                 }
             });
@@ -51,29 +71,20 @@ public class AddStoreRecycleAdapter extends RecyclerView.Adapter<AddStoreRecycle
 
     @Override
     public void onBindViewHolder(@NonNull AddStoreViewHolder holder, int position) {
-        Store store = unselectedList.get(position);
+        Store store = getItem(position);
         holder.imgLogo.setImageBitmap(ConvertImage.convertByteToImage(store.getLogo()));
         holder.txtName.setText(store.getName());
     }
 
-    @Override
-    public int getItemCount() {
-        return unselectedList.size();
-    }
-
-    public void setList(List<Store> list) {
-        unselectedList = list;
-        notifyDataSetChanged();
-    }
 
     // to get the position
     public Store getStore(int position) {
-        return unselectedList.get(position);
+        return getItem(position);
     }
 
     //create an interface to override the onclick listener
     public interface onItemClickListener {
-        void onClick(Store store,int position);
+        void onClick(Store store, int position);
     }
 
     // method be called in other classes to get on click events

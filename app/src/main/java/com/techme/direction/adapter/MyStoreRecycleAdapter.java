@@ -1,16 +1,13 @@
 package com.techme.direction.adapter;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.techme.direction.ContextHelper;
-import com.techme.direction.ConvertImage;
+import com.techme.direction.helper.ConvertImage;
 import com.techme.direction.R;
 import com.techme.direction.Store;
 
@@ -18,11 +15,34 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class MyStoreRecycleAdapter extends RecyclerView.Adapter<MyStoreRecycleAdapter.MyStoreViewHolder> {
+public class MyStoreRecycleAdapter extends ListAdapter<Store,MyStoreRecycleAdapter.MyStoreViewHolder> {
     private onItemClickListener listener;
-    private List<Store> selectedList = new ArrayList<>();
+    //private List<Store> selectedList = new ArrayList<>();
+
+    public MyStoreRecycleAdapter() {
+        super(Diff_Callback);
+    }
+
+    // to handle the proper animation in the recycle view
+    private static final DiffUtil.ItemCallback<Store> Diff_Callback = new DiffUtil.ItemCallback<Store>() {
+        // check if the items are the same by checking their id
+        @Override
+        public boolean areItemsTheSame(@NonNull Store oldItem, @NonNull Store newItem) {
+            return oldItem.getId() == newItem.getId();
+        }
+
+        // to make sure if the contests are the same
+        @Override
+        public boolean areContentsTheSame(@NonNull Store oldItem, @NonNull Store newItem) {
+            return oldItem.getType().equals(newItem.getType()) && oldItem.getSelected() == newItem.getSelected()
+                    && oldItem.getName().equals(newItem.getName()) && oldItem.getCountryName().equals(newItem.getCountryName())
+            && oldItem.getLogo() == newItem.getLogo() && oldItem.getTime() == newItem.getTime();
+        }
+    };
 
     public class MyStoreViewHolder extends RecyclerView.ViewHolder {
         private ImageView imgLogo;
@@ -65,25 +85,11 @@ public class MyStoreRecycleAdapter extends RecyclerView.Adapter<MyStoreRecycleAd
         holder.time.setText(String.valueOf(store.getTime())+ " min");
     }
 
-    @Override
-    public int getItemCount() {
-        return selectedList.size();
-    }
 
     public Store getStore(int position) {
-        return selectedList.get(position);
+        return getItem(position);
     }
 
-    public void setList(List<Store> store) {
-        selectedList = store;
-        notifyDataSetChanged();
-    }
-
-    public void removeItem(int position)
-    {
-        selectedList.remove(position);
-        notifyItemRemoved(position);
-    }
 
     public interface onItemClickListener {
         void onclick(Store store);

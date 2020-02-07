@@ -60,12 +60,9 @@ public class AddStoresFragment extends Fragment {
                 {
                     if(store.getCountryName().equals("Canada")) {
                         list.add(store);
-                        System.out.println("name in view " + store.getName());
-                        System.out.println("selected in view "+store.getSelected());
                     }
                 }
-                Toast.makeText(getContext(), "Done with the list", Toast.LENGTH_SHORT).show();;
-                adapter.setList(list);
+                adapter.submitList(list);
             }
         });
         itemClicked();
@@ -79,8 +76,8 @@ public class AddStoresFragment extends Fragment {
         adapter.setOnItemClickListener(new AddStoreRecycleAdapter.onItemClickListener() {
             @Override
             public void onClick(Store store, int position) {
-                adapter.getStore(position).setSelected(1);
                 Store myStore = adapter.getStore(position);
+                myStore.setSelected(1);
                 viewModel.updateStore(myStore);
             }
         });
