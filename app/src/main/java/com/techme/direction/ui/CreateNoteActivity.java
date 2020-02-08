@@ -105,7 +105,7 @@ public class CreateNoteActivity extends AppCompatActivity implements CreateNoteR
     }
 
     /**
-     * this method checks if the item is new or an already existing item that need to edit
+     * this method checks if the item is new or an already existing item that need to be edit
      */
     public void onButtonClick() {
         btnAdd.setOnClickListener(new View.OnClickListener() {
@@ -162,6 +162,7 @@ public class CreateNoteActivity extends AppCompatActivity implements CreateNoteR
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
-
+        CreateNote createNote = adapter.getCreateNote(position);
+        viewModel.deleteCreateNote(createNote);
     }
 }

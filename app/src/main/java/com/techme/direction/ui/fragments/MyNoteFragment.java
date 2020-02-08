@@ -24,6 +24,7 @@ import com.techme.direction.Store;
 import com.techme.direction.adapter.MyNoteRecycleAdapter;
 import com.techme.direction.adapter.SelectNoteRecycleAdapter;
 import com.techme.direction.helper.MyNoteRecycleItemTouchHelper;
+import com.techme.direction.helper.ReceiveDataHelper;
 import com.techme.direction.helper.VariablesHelper;
 import com.techme.direction.ui.CreateNoteActivity;
 import com.techme.direction.ui.SelectNoteActivity;
@@ -113,11 +114,12 @@ public class MyNoteFragment extends Fragment implements MyNoteRecycleItemTouchHe
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
         Note note = adapter.getNote(viewHolder.getAdapterPosition());
+        // delete all the create notes that belong to the note by getting the note id
+        for(CreateNote createNote: ReceiveDataHelper.getCreateNoteData(getViewLifecycleOwner(),note.getNote_id())){
+            viewModel.deleteCreateNote(createNote);
+        }
         note.setSelected(VariablesHelper.FALSE);
         viewModel.updateNote(note);
-        // delete all the create notes that belong to the note by getting the note id
         // remember to check for when a grocery store has been deleted from my store list to delete it from notes as well
-        //for(CreateNote createNote: viewModel.getAllCreateNote().)
-        //viewModel.deleteCreateNote();
     }
 }

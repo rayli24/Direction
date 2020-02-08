@@ -14,8 +14,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.techme.direction.CreateNote;
 import com.techme.direction.DirectionViewModel;
 import com.techme.direction.Note;
+import com.techme.direction.helper.ReceiveDataHelper;
 import com.techme.direction.helper.VariablesHelper;
 import com.techme.direction.helper.MyStoreRecycleItemTouchHelper;
 import com.techme.direction.R;
@@ -80,7 +82,21 @@ public class MyGroceryFragment extends Fragment implements MyStoreRecycleItemTou
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
-        adapter.getStore(viewHolder.getAdapterPosition()).setSelected(0);
+        Store store = adapter.getStore(viewHolder.getAdapterPosition());
+        String name = store.getName();
+        // this if statement checks if the item that is about to be delete is a grocery
+        // and then checks if that grocery note was used to create its own create notes
+        if(store.getType().equals(VariablesHelper.GROCERY)){
+            Note note = ReceiveDataHelper.getNoteData(getViewLifecycleOwner(), name);
+            if(note.getSelected() == VariablesHelper.TRUE){
+                long noteId = note.getNote_id();
+                for(CreateNote createNote: ReceiveDataHelper.getCreateNoteData(getViewLifecycleOwner(),noteId)){
+                    viewModel.deleteCreateNote(createNote);
+                }
+            }
+            viewModel.deleteNote(note);
+        }
+        store.setSelected(VariablesHelper.FALSE);
         viewModel.updateStore(adapter.getStore(viewHolder.getAdapterPosition()));
     }
 }

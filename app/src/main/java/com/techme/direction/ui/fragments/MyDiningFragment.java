@@ -72,7 +72,7 @@ public class MyDiningFragment extends Fragment implements MyStoreRecycleItemTouc
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
-        adapter.getStore(viewHolder.getAdapterPosition()).setSelected(0);
+        adapter.getStore(viewHolder.getAdapterPosition()).setSelected(VariablesHelper.FALSE);
         viewModel.updateStore(adapter.getStore(viewHolder.getAdapterPosition()));
     }
 }
