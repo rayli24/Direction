@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.techme.direction.DirectionViewModel;
+import com.techme.direction.helper.VariablesHelper;
 import com.techme.direction.helper.MyStoreRecycleItemTouchHelper;
 import com.techme.direction.R;
 import com.techme.direction.Store;
@@ -56,7 +57,7 @@ public class MyDiningFragment extends Fragment implements MyStoreRecycleItemTouc
             public void onChanged(List<Store> stores) {
                 List<Store> list = new ArrayList<>();
                 for (Store store : stores) {
-                    if (store.getCountryName().equals("Canada") && store.getType().equals("dining")) {
+                    if (store.getCountryName().equals("Canada") && store.getType().equals(VariablesHelper.DINING)) {
                         list.add(store);
                     }
                 }

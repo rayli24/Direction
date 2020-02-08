@@ -15,8 +15,7 @@ public class DirectionViewModel extends AndroidViewModel {
     private LiveData<List<Country>> allCountries;
     private LiveData<List<Store>> allSelectedStores;
     private LiveData<List<Store>> allUnSelectedStores;
-    private LiveData<List<Store>> allGroceries;
-    private LiveData<List<Store>> allDining;
+
 
     public DirectionViewModel(@NonNull Application application) {
         super(application);
@@ -25,8 +24,6 @@ public class DirectionViewModel extends AndroidViewModel {
         allCreateNote = repository.getAllCreateNotes();
         allNotes = repository.getAllNotes();
         allSelectedStores = repository.getAllSelectedStores();
-        allGroceries = repository.getAllGroceries();
-        allDining = repository.getAllDining();
         allUnSelectedStores = repository.getAllUnSelectedStores();
     }
 
@@ -35,8 +32,10 @@ public class DirectionViewModel extends AndroidViewModel {
     public void insertCreateNote(CreateNote createNote){repository.insertCreateNote(createNote);}
     public void updateCreateNote(CreateNote createNote){repository.updateCreateNote(createNote);}
     public void updateStore(Store store){repository.updateStore(store);}
+    public void updateNote(Note note){repository.updateNote(note);}
     public void deleteCreateNote(CreateNote createNote){repository.deleteCreateNote(createNote);}
     public void deleteNote(Note note){repository.deleteNote(note);}
+    public void deleteAllNotes(){repository.deleteAllNotes();}
 
     // Live Data for the tables
     public LiveData<List<Note>> getAllNotes(){return allNotes;}
@@ -44,6 +43,4 @@ public class DirectionViewModel extends AndroidViewModel {
     public LiveData<List<Country>> getAllCountries(){return allCountries;}
     public LiveData<List<Store>> getAllSelectedStores(){return allSelectedStores;}
     public LiveData<List<Store>> getAllUnSelectedStores(){return allUnSelectedStores;}
-    public LiveData<List<Store>> getAllGroceries(){return allGroceries;}
-    public LiveData<List<Store>> getAllDining(){return allDining;}
 }

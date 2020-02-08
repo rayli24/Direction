@@ -33,6 +33,10 @@ public class CreateNote {
         this.create_id = create_id;
     }
 
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
+
     public int timestamp()
     {
         return timestamp;

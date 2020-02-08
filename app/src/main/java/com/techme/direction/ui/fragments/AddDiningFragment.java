@@ -18,6 +18,7 @@ import com.techme.direction.adapter.AddStoreRecycleAdapter;
 import com.techme.direction.DirectionViewModel;
 import com.techme.direction.R;
 import com.techme.direction.Store;
+import com.techme.direction.helper.VariablesHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,6 @@ public class AddDiningFragment extends Fragment {
     private RecyclerView recyclerView;
     private AddStoreRecycleAdapter adapter;
     private DirectionViewModel viewModel;
-    private final String DINING = "dining";
 
     public AddDiningFragment() {
         // Required empty public constructor
@@ -58,7 +58,7 @@ public class AddDiningFragment extends Fragment {
                 List<Store> list = new ArrayList<>();
                 for(Store store: stores)
                 {
-                    if(store.getCountryName().equals("Canada") && store.getType().equals(DINING))
+                    if(store.getCountryName().equals("Canada") && store.getType().equals(VariablesHelper.DINING))
                         list.add(store);
                 }
                 adapter.submitList(list);

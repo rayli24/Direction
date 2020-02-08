@@ -6,7 +6,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.techme.direction.DirectionViewModel;
+import com.techme.direction.Note;
+import com.techme.direction.helper.VariablesHelper;
 import com.techme.direction.helper.MyStoreRecycleItemTouchHelper;
 import com.techme.direction.R;
 import com.techme.direction.Store;
@@ -30,7 +31,6 @@ public class MyGroceryFragment extends Fragment implements MyStoreRecycleItemTou
     private RecyclerView recyclerView;
     private DirectionViewModel viewModel;
     private MyStoreRecycleAdapter adapter;
-    private final static String GROCERY = "grocery";
 
     public MyGroceryFragment() {
         // Required empty public constructor
@@ -47,27 +47,35 @@ public class MyGroceryFragment extends Fragment implements MyStoreRecycleItemTou
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        init();
+        viewModelMethod();
+
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallBack = new MyStoreRecycleItemTouchHelper(0,ItemTouchHelper.LEFT,this);
+        new ItemTouchHelper(itemTouchHelperCallBack).attachToRecyclerView(recyclerView);
+    }
+
+    private void init(){
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemViewCacheSize(20);
         adapter = new MyStoreRecycleAdapter();
         recyclerView.setAdapter(adapter);
+    }
+
+    private void viewModelMethod(){
         viewModel = new ViewModelProvider(this).get(DirectionViewModel.class);
         viewModel.getAllSelectedStores().observe(getViewLifecycleOwner(), new Observer<List<Store>>() {
             @Override
             public void onChanged(List<Store> stores) {
                 List<Store> list = new ArrayList<>();
                 for (Store store : stores) {
-                    if (store.getCountryName().equals("Canada") && store.getType().equals(GROCERY)) {
+                    if (store.getCountryName().equals("Canada") && store.getType().equals(VariablesHelper.GROCERY)) {
                         list.add(store);
                     }
                 }
                 adapter.submitList(list);
             }
         });
-
-        ItemTouchHelper.SimpleCallback itemTouchHelperCallBack = new MyStoreRecycleItemTouchHelper(0,ItemTouchHelper.LEFT,this);
-        new ItemTouchHelper(itemTouchHelperCallBack).attachToRecyclerView(recyclerView);
     }
 
     @Override

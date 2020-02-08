@@ -14,14 +14,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.techme.direction.Note;
 import com.techme.direction.adapter.AddStoreRecycleAdapter;
 import com.techme.direction.DirectionViewModel;
 import com.techme.direction.R;
 import com.techme.direction.Store;
+import com.techme.direction.helper.VariablesHelper;
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 
 public class AddGroceryFragment extends Fragment {
@@ -29,7 +30,6 @@ public class AddGroceryFragment extends Fragment {
     private AddStoreRecycleAdapter adapter;
     private DirectionViewModel viewModel;
     private RecyclerView recyclerView;
-    public final String GROCERY = "grocery";
 
     public AddGroceryFragment() {
         // Required empty public constructor
@@ -46,39 +46,47 @@ public class AddGroceryFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        init();
+        viewModelMethod();
+
+        itemClicked();
+    }
+
+    private void init() {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemViewCacheSize(20);
         adapter = new AddStoreRecycleAdapter();
         recyclerView.setAdapter(adapter);
+    }
+
+    private void viewModelMethod() {
         viewModel = new ViewModelProvider(this).get(DirectionViewModel.class);
         viewModel.getAllUnSelectedStores().observe(getViewLifecycleOwner(), new Observer<List<Store>>() {
             @Override
             public void onChanged(List<Store> stores) {
                 List<Store> list = new ArrayList<>();
-                for(Store store: stores)
-                {
-                    if(store.getCountryName().equals("Canada") && store.getType().equals(GROCERY))
-                    {
+                for (Store store : stores) {
+                    if (store.getCountryName().equals("Canada") && store.getType().equals(VariablesHelper.GROCERY)) {
                         list.add(store);
                     }
                 }
                 adapter.submitList(list);
             }
         });
-        itemClicked();
     }
 
     /**
      * this method is to update the selected items in add store and send them to my store list
      */
-    private void itemClicked()
-    {
+    private void itemClicked() {
         adapter.setOnItemClickListener(new AddStoreRecycleAdapter.onItemClickListener() {
             @Override
             public void onClick(Store store, int position) {
                 Store myStore = adapter.getStore(position);
-                myStore.setSelected(1);
+                myStore.setSelected(VariablesHelper.TRUE);
+                Note note = new Note(myStore.getName(), VariablesHelper.FALSE);
+                viewModel.insertNote(note);
                 viewModel.updateStore(myStore);
             }
         });

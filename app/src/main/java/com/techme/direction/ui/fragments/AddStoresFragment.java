@@ -16,10 +16,12 @@ import android.view.ViewGroup;
 import android.widget.TabHost;
 import android.widget.Toast;
 
+import com.techme.direction.Note;
 import com.techme.direction.adapter.AddStoreRecycleAdapter;
 import com.techme.direction.DirectionViewModel;
 import com.techme.direction.R;
 import com.techme.direction.Store;
+import com.techme.direction.helper.VariablesHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +31,7 @@ public class AddStoresFragment extends Fragment {
     private DirectionViewModel viewModel;
     private RecyclerView recyclerView;
     private AddStoreRecycleAdapter adapter;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,9 +59,8 @@ public class AddStoresFragment extends Fragment {
             public void onChanged(List<Store> stores) {
                 // update recycle view
                 List<Store> list = new ArrayList<>();
-                for(Store store: stores)
-                {
-                    if(store.getCountryName().equals("Canada")) {
+                for (Store store : stores) {
+                    if (store.getCountryName().equals("Canada")) {
                         list.add(store);
                     }
                 }
@@ -71,13 +73,16 @@ public class AddStoresFragment extends Fragment {
     /**
      * this method is to update the selected items in add store and send them to my store list
      */
-    private void itemClicked()
-    {
+    private void itemClicked() {
         adapter.setOnItemClickListener(new AddStoreRecycleAdapter.onItemClickListener() {
             @Override
             public void onClick(Store store, int position) {
                 Store myStore = adapter.getStore(position);
-                myStore.setSelected(1);
+                myStore.setSelected(VariablesHelper.TRUE);
+                if (myStore.getType().equals(VariablesHelper.GROCERY)) {
+                    Note note = new Note(myStore.getName(), VariablesHelper.FALSE);
+                    viewModel.insertNote(note);
+                }
                 viewModel.updateStore(myStore);
             }
         });

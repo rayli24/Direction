@@ -36,14 +36,7 @@ public class MyStoreActivity extends AppCompatActivity {
 
         navigationView = findViewById(R.id.bottom_nav_my_store);
         navigationView.setOnNavigationItemSelectedListener(navListener);
-        // create a viewModel for every activity that need to get a specific table
-//        viewModel = ViewModelProviders.of(this).get(DirectionViewModel.class);
-//        viewModel.getAllStore().observe(this, new Observer<List<Store>>() {
-//            @Override
-//            public void onChanged(List<Store> stores) {
-//                Toast.makeText(MyStoreActivity.this, "Testing", Toast.LENGTH_SHORT).show();
-//            }
-//        });
+
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_my_store,new MyStoresFragment()).commit();
         buttons();
     }
@@ -136,6 +129,7 @@ public class MyStoreActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MyStoreActivity.this, AddStoreActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
     }

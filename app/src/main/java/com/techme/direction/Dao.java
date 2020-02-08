@@ -27,6 +27,8 @@ public interface Dao {
     @Update
     void updateStore(Store store);
     @Update
+    void updateNote(Note note);
+    @Update
     void updateCreateNote(CreateNote createNote);
 
     // sqlite delete methods
@@ -36,6 +38,10 @@ public interface Dao {
     void deleteNote(Note note);
     @Delete
     void deleteCreateNote(CreateNote createNote);
+
+    // delete all notes if you change country
+    @Query("delete from note_table")
+    void deleteAllNotes();
 
     // empty the whole store table
     @Query("delete from store_table")
@@ -47,12 +53,6 @@ public interface Dao {
 
     @Query("select * from store_table where selected = 0 order by name") // 0 stands for false
     LiveData<List<Store>> getAllUnSelectedStores();
-
-    @Query("select * from store_table where type = 'grocery' order by name")
-    LiveData<List<Store>> getAllGrocery();
-
-    @Query("select * from store_table where type = 'dining' order by name")
-    LiveData<List<Store>> getAllDining();
 
     @Query("select * from note_table order by name")
     LiveData<List<Note>> getAllNotes();

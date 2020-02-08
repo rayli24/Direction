@@ -17,13 +17,13 @@ import com.techme.direction.Note;
 import com.techme.direction.R;
 import com.techme.direction.Store;
 import com.techme.direction.adapter.SelectNoteRecycleAdapter;
-import com.techme.direction.ui.fragments.MyNoteFragment;
+import com.techme.direction.helper.VariablesHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SelectNoteActivity extends AppCompatActivity {
-    public static final String GROCERY = "grocery";
+
     private SelectNoteRecycleAdapter adapter;
     private DirectionViewModel viewModel;
     private RecyclerView recyclerView;
@@ -34,23 +34,9 @@ public class SelectNoteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_note);
         init();
-        recyclerView.setAdapter(adapter);
-        viewModel = new ViewModelProvider(this).get(DirectionViewModel.class);
-        viewModel.getAllSelectedStores().observe(this, new Observer<List<Store>>() {
-            @Override
-            public void onChanged(List<Store> stores) {
-                List<Store> list = new ArrayList<>();
-                for(Store store: stores){
-                    if(store.getType().equals(GROCERY)){
-                        list.add(store);
-                    }
-                }
-                adapter.submitList(list);
-            }
-        });
-
+        viewModelMethod();
         buttonEvents();
-
+        onItemClicked();
     }
 
     private void init(){
@@ -61,23 +47,45 @@ public class SelectNoteActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemViewCacheSize(20);
         adapter = new SelectNoteRecycleAdapter();
+        recyclerView.setAdapter(adapter);
     }
 
-    public void buttonEvents(){
+    private void viewModelMethod(){
+        viewModel = new ViewModelProvider(this).get(DirectionViewModel.class);
+        viewModel.getAllNotes().observe(this, new Observer<List<Note>>() {
+            @Override
+            public void onChanged(List<Note> notes) {
+                List<Note> list = new ArrayList<>();
+                for(Note note: notes){
+                    if(note.getSelected() == VariablesHelper.FALSE){
+                        list.add(note);
+                    }
+                }
+                adapter.submitList(list);
+            }
+        });
+    }
+
+    private void buttonEvents(){
         imgBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(SelectNoteActivity.this, CreateNoteActivity.class);
-                startActivity(intent);
+                finish();
             }
         });
 
+    }
+
+    private void onItemClicked(){
+
         adapter.setOnclickItemListener(new SelectNoteRecycleAdapter.onClickItemListener() {
             @Override
-            public void onClick(Store store) {
-                Note note = new Note(store.getName(),1);
-                viewModel.insertNote(note);
-                Intent intent = new Intent(SelectNoteActivity.this, MyNoteFragment.class);
+            public void onClick(Note note) {
+                Note myNote = new Note(note.getName(),VariablesHelper.TRUE);
+                String name = myNote.getName();
+                viewModel.updateNote(myNote);
+                Intent intent = new Intent(SelectNoteActivity.this, CreateNoteActivity.class);
+                intent.putExtra(VariablesHelper.EXTRA_NOTE,name);
                 startActivity(intent);
                 finish();
             }
