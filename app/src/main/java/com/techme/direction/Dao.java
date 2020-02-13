@@ -19,7 +19,7 @@ public interface Dao {
     @Insert
     void insertNote(Note note);
     @Insert
-    void insertCreateNote(CreateNote createNote);
+    void insertToDoList(ToDoList toDoList);
 
     // sqlite update methods
     @Update
@@ -29,7 +29,7 @@ public interface Dao {
     @Update
     void updateNote(Note note);
     @Update
-    void updateCreateNote(CreateNote createNote);
+    void updateToDoList(ToDoList toDoList);
 
     // sqlite delete methods
     @Delete
@@ -37,7 +37,11 @@ public interface Dao {
     @Delete
     void deleteNote(Note note);
     @Delete
-    void deleteCreateNote(CreateNote createNote);
+    void deleteToDoList(ToDoList toDoList);
+
+    // delete all create notes that belong to note
+    @Query("delete from to_do_list_table where note_id = :id")
+    void deleteNotesId(long id);
 
     // delete all notes if you change country
     @Query("delete from note_table")
@@ -46,6 +50,20 @@ public interface Dao {
     // empty the whole store table
     @Query("delete from store_table")
     void deleteAllStore();
+
+    @Query("delete from to_do_list_table")
+    void deleteAllToDoList();
+
+    //get a specific note
+//    @Query("select * from note_table where name = :name")
+//    List<Note> getNote(String name);
+
+     @Query("select * from note_table where name like :name ")
+     List<Note> searchNote(String name); //todo remember to remove if not work
+
+
+    //todo try, passing the method into the constructor with the string name in a livedata -> repository
+
 
     // get the data from database with LiveData
     @Query("select * from store_table where selected = 1 order by time") // 1 stands for true
@@ -60,7 +78,7 @@ public interface Dao {
     @Query("select * from country_table order by name")
     LiveData<List<Country>> getAllCountries();
 
-    @Query("select * from create_note_table order by timestamp desc")
-    LiveData<List<CreateNote>> getAllCreateNotes();
+    @Query("select * from to_do_list_table order by timestamp desc")
+    LiveData<List<ToDoList>> getAllToDoList();
 
 }

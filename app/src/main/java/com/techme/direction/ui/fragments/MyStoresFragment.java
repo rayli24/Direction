@@ -3,6 +3,7 @@ package com.techme.direction.ui.fragments;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,24 +17,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.techme.direction.CreateNote;
 import com.techme.direction.DirectionViewModel;
 import com.techme.direction.Note;
 import com.techme.direction.helper.MyStoreRecycleItemTouchHelper;
 import com.techme.direction.adapter.MyStoreRecycleAdapter;
 import com.techme.direction.R;
 import com.techme.direction.Store;
-import com.techme.direction.helper.ReceiveDataHelper;
 import com.techme.direction.helper.VariablesHelper;
+import com.techme.direction.ui.MapsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class MyStoresFragment extends Fragment implements MyStoreRecycleItemTouchHelper.RecyclerItemTouchHelperListener {
 
     private RecyclerView recyclerView;
     private MyStoreRecycleAdapter adapter;
     private DirectionViewModel viewModel;
+    private Note searchedNote = null;
 
     public static MyStoresFragment newInstance() {
         return new MyStoresFragment();
@@ -51,11 +53,22 @@ public class MyStoresFragment extends Fragment implements MyStoreRecycleItemTouc
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         init();
-        viewModelMethod();
+        observer();
+        onItemClick();
 
         ItemTouchHelper.SimpleCallback itemTouchHelperCallBack = new MyStoreRecycleItemTouchHelper(0,  ItemTouchHelper.LEFT,this);
         new ItemTouchHelper(itemTouchHelperCallBack).attachToRecyclerView(recyclerView);
 
+    }
+
+    private void onItemClick(){
+        adapter.setOnItemClickListener(new MyStoreRecycleAdapter.onItemClickListener() {
+            @Override
+            public void onclick(Store store) {
+                Intent intent = new Intent(getContext(), MapsActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void init(){
@@ -66,7 +79,7 @@ public class MyStoresFragment extends Fragment implements MyStoreRecycleItemTouc
         recyclerView.setAdapter(adapter);
     }
 
-    private void viewModelMethod(){
+    private void observer(){
         viewModel = new ViewModelProvider(this).get(DirectionViewModel.class);
         viewModel.getAllSelectedStores().observe(getViewLifecycleOwner(), new Observer<List<Store>>() {
             @Override
@@ -80,6 +93,13 @@ public class MyStoresFragment extends Fragment implements MyStoreRecycleItemTouc
                 adapter.submitList(list);
             }
         });
+
+//        viewModel.getSearchNotes().observe(getViewLifecycleOwner(), new Observer<List<Note>>() {
+//            @Override
+//            public void onChanged(List<Note> notes) {
+//                searchNote = notes.get(0);
+//            }
+//        });
     }
 
     @Override
@@ -87,16 +107,22 @@ public class MyStoresFragment extends Fragment implements MyStoreRecycleItemTouc
         Store store = adapter.getStore(viewHolder.getAdapterPosition());
         String name = store.getName();
         // this if statement checks if the item that is about to be delete is a grocery
-        // and then checks if that grocery note was used to create its own create notes
+        // and then checks if that grocery note was used to create its own To-Do list
         if(store.getType().equals(VariablesHelper.GROCERY)){
-            Note note = ReceiveDataHelper.getNoteData(getViewLifecycleOwner(), name);
-            if(note.getSelected() == VariablesHelper.TRUE){
-                long noteId = note.getNote_id();
-                for(CreateNote createNote: ReceiveDataHelper.getCreateNoteData(getViewLifecycleOwner(),noteId)){
-                    viewModel.deleteCreateNote(createNote);
+            try {
+                if(!viewModel.noteTest(name).isEmpty()) {
+                    searchedNote = viewModel.noteTest(name).get(0);
                 }
+            }catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
             }
-            viewModel.deleteNote(note);
+
+            if(searchedNote.getSelected() == VariablesHelper.TRUE){
+               viewModel.deleteAllNotesId(searchedNote.getNote_id());
+            }
+            viewModel.deleteNote(searchedNote);
         }
 
         store.setSelected(VariablesHelper.FALSE);

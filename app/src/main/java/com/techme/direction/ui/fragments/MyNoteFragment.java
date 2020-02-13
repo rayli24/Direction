@@ -16,18 +16,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.techme.direction.CreateNote;
 import com.techme.direction.DirectionViewModel;
 import com.techme.direction.Note;
 import com.techme.direction.R;
-import com.techme.direction.Store;
 import com.techme.direction.adapter.MyNoteRecycleAdapter;
-import com.techme.direction.adapter.SelectNoteRecycleAdapter;
 import com.techme.direction.helper.MyNoteRecycleItemTouchHelper;
-import com.techme.direction.helper.ReceiveDataHelper;
 import com.techme.direction.helper.VariablesHelper;
-import com.techme.direction.ui.CreateNoteActivity;
+import com.techme.direction.ui.ToDoListActivity;
 import com.techme.direction.ui.SelectNoteActivity;
+import com.techme.direction.ui.ToDoNoteActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,18 +55,27 @@ public class MyNoteFragment extends Fragment implements MyNoteRecycleItemTouchHe
         super.onActivityCreated(savedInstanceState);
         buttonsEvent();
         init();
-        viewModelMethod();
-        onEditCLick();
+        observer();
+        onItemCLick();
         ItemTouchHelper.SimpleCallback itemTouchHelperCallBack = new MyNoteRecycleItemTouchHelper(0,ItemTouchHelper.LEFT,this);
         new ItemTouchHelper(itemTouchHelperCallBack).attachToRecyclerView(recyclerView);
     }
 
-    private void onEditCLick(){
+
+    private void onItemCLick(){
         adapter.setOnItemClickListener(new MyNoteRecycleAdapter.onItemClickListener() {
             @Override
             public void onEditClick(Note note) {
-                Intent intent = new Intent(getContext(),CreateNoteActivity.class);
-                intent.putExtra(VariablesHelper.EXTRA_NOTE,note.getName());
+                Intent intent = new Intent(getContext(), ToDoListActivity.class);
+                intent.putExtra(VariablesHelper.EXTRA_NOTE_NAME,note.getName());
+                intent.putExtra(VariablesHelper.EXTRA_NOTE_ID,note.getNote_id());
+                startActivity(intent);
+            }
+
+            @Override
+            public void onItemClick(Note note) {
+                Intent intent = new Intent(getContext(), ToDoNoteActivity.class);
+                intent.putExtra(VariablesHelper.EXTRA_NOTE_NAME,note.getName());
                 intent.putExtra(VariablesHelper.EXTRA_NOTE_ID,note.getNote_id());
                 startActivity(intent);
             }
@@ -84,7 +90,7 @@ public class MyNoteFragment extends Fragment implements MyNoteRecycleItemTouchHe
         recyclerView.setAdapter(adapter);
     }
 
-    private void viewModelMethod(){
+    private void observer(){
         viewModel = new ViewModelProvider(this).get(DirectionViewModel.class);
         viewModel.getAllNotes().observe(getViewLifecycleOwner(), new Observer<List<Note>>() {
             @Override
@@ -95,7 +101,7 @@ public class MyNoteFragment extends Fragment implements MyNoteRecycleItemTouchHe
                         list.add(note);
                     }
                 }
-                adapter.submitList(notes);
+                adapter.submitList(list);
             }
         });
     }
@@ -114,12 +120,12 @@ public class MyNoteFragment extends Fragment implements MyNoteRecycleItemTouchHe
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
         Note note = adapter.getNote(viewHolder.getAdapterPosition());
-        // delete all the create notes that belong to the note by getting the note id
-        for(CreateNote createNote: ReceiveDataHelper.getCreateNoteData(getViewLifecycleOwner(),note.getNote_id())){
-            viewModel.deleteCreateNote(createNote);
-        }
+        // delete all the To-Do list that belong to the note by getting the note id
+        viewModel.deleteAllNotesId(note.getNote_id());
         note.setSelected(VariablesHelper.FALSE);
         viewModel.updateNote(note);
-        // remember to check for when a grocery store has been deleted from my store list to delete it from notes as well
+        //todo remember to check for when a grocery store has been deleted from my store list to delete it from notes as well
     }
+
+
 }

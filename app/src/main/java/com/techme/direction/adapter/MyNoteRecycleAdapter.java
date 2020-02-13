@@ -44,6 +44,15 @@ public class MyNoteRecycleAdapter extends ListAdapter<Note, MyNoteRecycleAdapter
             imgEdit = itemView.findViewById(R.id.img_edit_notes_recycle_view);
             viewForeground = itemView.findViewById(R.id.layout_foreground_note_recycle_view);
             viewBackground = itemView.findViewById(R.id.layout_background_note_recycle_view);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = getAdapterPosition();
+                    if(listener != null && position != RecyclerView.NO_POSITION){
+                        listener.onItemClick(getNote(position));
+                    }
+                }
+            });
             imgEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -66,7 +75,7 @@ public class MyNoteRecycleAdapter extends ListAdapter<Note, MyNoteRecycleAdapter
     @Override
     public void onBindViewHolder(@NonNull NoteViewHolder holder, int position) {
         Note note = getNote(position);
-        holder.txtName.setText(note.getName());
+        holder.txtName.setText(note.getName() + " note");
     }
 
     public Note getNote(int position){
@@ -75,6 +84,7 @@ public class MyNoteRecycleAdapter extends ListAdapter<Note, MyNoteRecycleAdapter
 
     public interface onItemClickListener{
         void onEditClick(Note note);
+        void onItemClick(Note note);
     }
 
     public void setOnItemClickListener(onItemClickListener listener){

@@ -129,7 +129,6 @@ public class MyStoreActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MyStoreActivity.this, AddStoreActivity.class);
                 startActivity(intent);
-                finish();
             }
         });
     }

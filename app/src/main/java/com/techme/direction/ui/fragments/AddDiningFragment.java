@@ -46,11 +46,20 @@ public class AddDiningFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        init();
+        observer();
+        itemClicked();
+    }
+
+    private void init(){
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemViewCacheSize(20); // to ensure how many items should be hold in the cache after scrolling
         adapter = new AddStoreRecycleAdapter();
         recyclerView.setAdapter(adapter);
+    }
+
+    private void observer(){
         viewModel = new ViewModelProvider(this).get(DirectionViewModel.class);
         viewModel.getAllUnSelectedStores().observe(getViewLifecycleOwner(), new Observer<List<Store>>() {
             @Override
@@ -64,7 +73,6 @@ public class AddDiningFragment extends Fragment {
                 adapter.submitList(list);
             }
         });
-        itemClicked();
     }
 
     /**
@@ -76,7 +84,7 @@ public class AddDiningFragment extends Fragment {
             @Override
             public void onClick(Store store, int position) {
                 Store myStore = adapter.getStore(position);
-                myStore.setSelected(1);
+                myStore.setSelected(VariablesHelper.TRUE);
                 viewModel.updateStore(myStore);
             }
         });

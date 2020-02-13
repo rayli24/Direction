@@ -14,10 +14,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.techme.direction.CreateNote;
 import com.techme.direction.DirectionViewModel;
 import com.techme.direction.Note;
-import com.techme.direction.helper.ReceiveDataHelper;
 import com.techme.direction.helper.VariablesHelper;
 import com.techme.direction.helper.MyStoreRecycleItemTouchHelper;
 import com.techme.direction.R;
@@ -26,6 +24,7 @@ import com.techme.direction.adapter.MyStoreRecycleAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 
 public class MyGroceryFragment extends Fragment implements MyStoreRecycleItemTouchHelper.RecyclerItemTouchHelperListener {
@@ -33,7 +32,7 @@ public class MyGroceryFragment extends Fragment implements MyStoreRecycleItemTou
     private RecyclerView recyclerView;
     private DirectionViewModel viewModel;
     private MyStoreRecycleAdapter adapter;
-
+    private Note searchedNote = null;
     public MyGroceryFragment() {
         // Required empty public constructor
     }
@@ -50,13 +49,13 @@ public class MyGroceryFragment extends Fragment implements MyStoreRecycleItemTou
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         init();
-        viewModelMethod();
+        observer();
 
-        ItemTouchHelper.SimpleCallback itemTouchHelperCallBack = new MyStoreRecycleItemTouchHelper(0,ItemTouchHelper.LEFT,this);
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallBack = new MyStoreRecycleItemTouchHelper(0, ItemTouchHelper.LEFT, this);
         new ItemTouchHelper(itemTouchHelperCallBack).attachToRecyclerView(recyclerView);
     }
 
-    private void init(){
+    private void init() {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemViewCacheSize(20);
@@ -64,7 +63,7 @@ public class MyGroceryFragment extends Fragment implements MyStoreRecycleItemTou
         recyclerView.setAdapter(adapter);
     }
 
-    private void viewModelMethod(){
+    private void observer() {
         viewModel = new ViewModelProvider(this).get(DirectionViewModel.class);
         viewModel.getAllSelectedStores().observe(getViewLifecycleOwner(), new Observer<List<Store>>() {
             @Override
@@ -78,25 +77,50 @@ public class MyGroceryFragment extends Fragment implements MyStoreRecycleItemTou
                 adapter.submitList(list);
             }
         });
+
+//        viewModel.getAllNotes().observe(getViewLifecycleOwner(), new Observer<List<Note>>() {
+//            @Override
+//            public void onChanged(List<Note> notes) {
+//
+//            }
+//        });
+//
+//        viewModel.getAllSearchNotes().observe(getViewLifecycleOwner(), new Observer<List<Note>>() {
+//            @Override
+//            public void onChanged(List<Note> notes) {
+//                if(notes.size() >0){
+//                    searchedNote = notes.get(0);
+//                }
+//            }
+//        });
+
     }
 
+    //todo check when search for a name if you are able to delete it
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
         Store store = adapter.getStore(viewHolder.getAdapterPosition());
         String name = store.getName();
-        // this if statement checks if the item that is about to be delete is a grocery
-        // and then checks if that grocery note was used to create its own create notes
-        if(store.getType().equals(VariablesHelper.GROCERY)){
-            Note note = ReceiveDataHelper.getNoteData(getViewLifecycleOwner(), name);
-            if(note.getSelected() == VariablesHelper.TRUE){
-                long noteId = note.getNote_id();
-                for(CreateNote createNote: ReceiveDataHelper.getCreateNoteData(getViewLifecycleOwner(),noteId)){
-                    viewModel.deleteCreateNote(createNote);
-                }
+
+
+        try {
+            if(!viewModel.noteTest(name).isEmpty()) {
+                searchedNote = viewModel.noteTest(name).get(0);
             }
-            viewModel.deleteNote(note);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+        // this if statement checks if the grocery note was used to create its own To-Do list
+        if (searchedNote != null && searchedNote.getSelected() == VariablesHelper.TRUE) {
+            // deletes all the To-Do list that belong to the note
+            viewModel.deleteAllNotesId(searchedNote.getNote_id());
+        }
+        viewModel.deleteNote(searchedNote);
         store.setSelected(VariablesHelper.FALSE);
         viewModel.updateStore(adapter.getStore(viewHolder.getAdapterPosition()));
     }
+
+
 }

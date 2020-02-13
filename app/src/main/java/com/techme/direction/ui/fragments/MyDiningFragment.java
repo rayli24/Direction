@@ -46,11 +46,23 @@ public class MyDiningFragment extends Fragment implements MyStoreRecycleItemTouc
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+       init();
+       observer();
+
+
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallBack = new MyStoreRecycleItemTouchHelper(0,ItemTouchHelper.LEFT,this);
+        new ItemTouchHelper(itemTouchHelperCallBack).attachToRecyclerView(recyclerView);
+    }
+
+    private void init(){
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemViewCacheSize(20);
         adapter = new MyStoreRecycleAdapter();
         recyclerView.setAdapter(adapter);
+    }
+
+    private void observer(){
         viewModel = new ViewModelProvider(this).get(DirectionViewModel.class);
         viewModel.getAllSelectedStores().observe(getViewLifecycleOwner(), new Observer<List<Store>>() {
             @Override
@@ -64,10 +76,6 @@ public class MyDiningFragment extends Fragment implements MyStoreRecycleItemTouc
                 adapter.submitList(list);
             }
         });
-
-
-        ItemTouchHelper.SimpleCallback itemTouchHelperCallBack = new MyStoreRecycleItemTouchHelper(0,ItemTouchHelper.LEFT,this);
-        new ItemTouchHelper(itemTouchHelperCallBack).attachToRecyclerView(recyclerView);
     }
 
     @Override

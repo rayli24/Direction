@@ -47,7 +47,7 @@ public class AddGroceryFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         init();
-        viewModelMethod();
+        observer();
 
         itemClicked();
     }
@@ -60,7 +60,7 @@ public class AddGroceryFragment extends Fragment {
         recyclerView.setAdapter(adapter);
     }
 
-    private void viewModelMethod() {
+    private void observer() {
         viewModel = new ViewModelProvider(this).get(DirectionViewModel.class);
         viewModel.getAllUnSelectedStores().observe(getViewLifecycleOwner(), new Observer<List<Store>>() {
             @Override

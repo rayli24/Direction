@@ -15,7 +15,6 @@ import android.widget.ImageView;
 import com.techme.direction.DirectionViewModel;
 import com.techme.direction.Note;
 import com.techme.direction.R;
-import com.techme.direction.Store;
 import com.techme.direction.adapter.SelectNoteRecycleAdapter;
 import com.techme.direction.helper.VariablesHelper;
 
@@ -34,7 +33,7 @@ public class SelectNoteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_note);
         init();
-        viewModelMethod();
+        observer();
         buttonEvents();
         onItemClicked();
     }
@@ -42,7 +41,7 @@ public class SelectNoteActivity extends AppCompatActivity {
     private void init(){
         search = findViewById(R.id.search_select_note);
         imgBack = findViewById(R.id.img_select_note_back);
-        recyclerView = findViewById(R.id.recycle_view_select_note);
+        recyclerView = findViewById(R.id.recycle_view_to_do_note);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemViewCacheSize(20);
@@ -50,7 +49,7 @@ public class SelectNoteActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 
-    private void viewModelMethod(){
+    private void observer(){
         viewModel = new ViewModelProvider(this).get(DirectionViewModel.class);
         viewModel.getAllNotes().observe(this, new Observer<List<Note>>() {
             @Override
@@ -82,10 +81,12 @@ public class SelectNoteActivity extends AppCompatActivity {
             @Override
             public void onClick(Note note) {
                 Note myNote = new Note(note.getName(),VariablesHelper.TRUE);
+                myNote.setNote_id(note.getNote_id());
                 String name = myNote.getName();
                 viewModel.updateNote(myNote);
-                Intent intent = new Intent(SelectNoteActivity.this, CreateNoteActivity.class);
-                intent.putExtra(VariablesHelper.EXTRA_NOTE,name);
+                Intent intent = new Intent(SelectNoteActivity.this, ToDoListActivity.class);
+                intent.putExtra(VariablesHelper.EXTRA_NOTE_NAME,name);
+                intent.putExtra(VariablesHelper.EXTRA_NOTE_ID,note.getNote_id());
                 startActivity(intent);
                 finish();
             }

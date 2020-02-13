@@ -6,10 +6,11 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "create_note_table")
-public class CreateNote {
+@Entity(tableName = "to_do_list_table")
+@ForeignKey(entity = Note.class,parentColumns = "note_id",childColumns = "create_id",onDelete = ForeignKey.CASCADE)
+public class ToDoList {
     @PrimaryKey(autoGenerate = true)
-    private long create_id;
+    private long to_do_id;
 
     private String item;
 
@@ -18,10 +19,10 @@ public class CreateNote {
     private int timestamp; // keep incrementing to keep track of las input
 
     private boolean checked;
-    @ForeignKey(entity = Note.class,parentColumns = "note_id",childColumns = "create_id",onDelete = ForeignKey.CASCADE)
+
     private long note_id;
 
-    public CreateNote(String item, int amount, boolean checked,int timestamp, long note_id) {
+    public ToDoList(String item, int amount, boolean checked, int timestamp, long note_id) {
         this.item = item;
         this.amount = amount;
         this.checked = checked;
@@ -29,8 +30,8 @@ public class CreateNote {
         this.note_id = note_id;
     }
 
-    public void setCreate_id(long create_id) {
-        this.create_id = create_id;
+    public void setTo_do_id(long to_do_id) {
+        this.to_do_id = to_do_id;
     }
 
     public void setChecked(boolean checked) {
@@ -50,8 +51,8 @@ public class CreateNote {
         return note_id;
     }
 
-    public long getCreate_id() {
-        return create_id;
+    public long getTo_do_id() {
+        return to_do_id;
     }
 
     public String getItem() {

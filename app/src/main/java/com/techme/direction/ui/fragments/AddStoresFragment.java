@@ -48,11 +48,20 @@ public class AddStoresFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        init();
+        viewModelMethod();
+        itemClicked();
+    }
+
+    private void init(){
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemViewCacheSize(20);
         adapter = new AddStoreRecycleAdapter();
         recyclerView.setAdapter(adapter);
+    }
+
+    private void viewModelMethod(){
         viewModel = new ViewModelProvider(this).get(DirectionViewModel.class);
         viewModel.getAllUnSelectedStores().observe(getViewLifecycleOwner(), new Observer<List<Store>>() {
             @Override
@@ -67,7 +76,6 @@ public class AddStoresFragment extends Fragment {
                 adapter.submitList(list);
             }
         });
-        itemClicked();
     }
 
     /**

@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,65 +15,73 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.techme.direction.CreateNote;
+import com.techme.direction.ToDoList;
 import com.techme.direction.DirectionViewModel;
 import com.techme.direction.R;
-import com.techme.direction.adapter.CreateNoteRecycleAdapter;
-import com.techme.direction.helper.CreateNoteRecycleItemTouchHelper;
+import com.techme.direction.adapter.ToDoListRecycleAdapter;
+import com.techme.direction.helper.ToDoListRecycleItemTouchHelper;
 import com.techme.direction.helper.VariablesHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CreateNoteActivity extends AppCompatActivity implements CreateNoteRecycleItemTouchHelper.RecyclerItemTouchHelperListener {
+public class ToDoListActivity extends AppCompatActivity implements ToDoListRecycleItemTouchHelper.RecyclerItemTouchHelperListener {
 
     private boolean boolEdit = false;
     private int editPosition = -1;
     private long noteId;
+    private String titleName;
+    private TextView txtName;
     private EditText editAmount, editItem;
     private Button btnAdd;
     private ImageView imgSave;
     private DirectionViewModel viewModel;
     private RecyclerView recyclerView;
-    private CreateNoteRecycleAdapter adapter;
+    private ToDoListRecycleAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_note);
+        setContentView(R.layout.activity_to_do_list);
         init();
-        viewModelMethod();
+        observer();
         onItemClick();
-        onButtonClick();
+        onAddButtonClick();
 
-        ItemTouchHelper.SimpleCallback itemTouchHelperCallBack = new CreateNoteRecycleItemTouchHelper(0,
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallBack = new ToDoListRecycleItemTouchHelper(0,
                 ItemTouchHelper.LEFT,this);
+        new ItemTouchHelper(itemTouchHelperCallBack).attachToRecyclerView(recyclerView);
     }
 
     public void init() {
-        editAmount = findViewById(R.id.edit_amount_create_note);
-        editItem = findViewById(R.id.edit_item_create_note);
+        txtName = findViewById(R.id.txt_name_to_do_list);
+        editAmount = findViewById(R.id.edit_amount_to_do_list);
+        editItem = findViewById(R.id.edit_item_to_do_list);
         imgSave = findViewById(R.id.img_save_create_note);
-        recyclerView = findViewById(R.id.recycle_view_create_note);
+        btnAdd = findViewById(R.id.btn_add_to_do_list);
+        recyclerView = findViewById(R.id.recycle_view_to_do_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemViewCacheSize(20);
-        adapter = new CreateNoteRecycleAdapter();
+        adapter = new ToDoListRecycleAdapter();
         recyclerView.setAdapter(adapter);
+        titleName = getIntent().getStringExtra(VariablesHelper.EXTRA_NOTE_NAME);
+        txtName.setText(titleName + " Note");
         noteId = getIntent().getLongExtra(VariablesHelper.EXTRA_NOTE_ID,-1);
     }
 
-    public void viewModelMethod() {
+    public void observer() {
         viewModel = new ViewModelProvider(this).get(DirectionViewModel.class);
-        viewModel.getAllCreateNote().observe(this, new Observer<List<CreateNote>>() {
+        viewModel.getAllToDoList().observe(this, new Observer<List<ToDoList>>() {
             @Override
-            public void onChanged(List<CreateNote> createNotes) {
-                List<CreateNote> list = new ArrayList<>();
-                for(CreateNote createNote: createNotes){
-                    if(createNote.getNote_id() == noteId){ // check if the note id belongs to the created note
-                        list.add(createNote);
+            public void onChanged(List<ToDoList> toDoLists) {
+                List<ToDoList> list = new ArrayList<>();
+                for(ToDoList toDoList : toDoLists){
+                    if(toDoList.getNote_id() == noteId){ // check if the note id belongs to the created note
+                        list.add(toDoList);
                     }
                 }
                 adapter.submitList(list);
@@ -86,20 +93,14 @@ public class CreateNoteActivity extends AppCompatActivity implements CreateNoteR
      * handles the the edit and check box items in the recycle view
      */
     public void onItemClick() {
-        adapter.setOnItemClickListener(new CreateNoteRecycleAdapter.onItemClickListener() {
+        adapter.setOnItemClickListener(new ToDoListRecycleAdapter.onItemClickListener() {
             @Override
-            public void onEditClick(CreateNote createNote, int position) {
-                editAmount.setText(String.valueOf(createNote.getAmount()));
-                editItem.setText(createNote.getItem());
+            public void onEditClick(ToDoList toDoList, int position) {
+                editAmount.setText(String.valueOf(toDoList.getAmount()));
+                editItem.setText(toDoList.getItem());
+                btnAdd.setText("edit");
                 editPosition = position;
                 boolEdit = true;
-            }
-
-            @Override
-            public void onCheckClick(CreateNote createNote, boolean checked) {
-                CreateNote myCreateNote = createNote;
-                myCreateNote.setChecked(checked);
-                viewModel.updateCreateNote(myCreateNote);
             }
         });
     }
@@ -107,7 +108,7 @@ public class CreateNoteActivity extends AppCompatActivity implements CreateNoteR
     /**
      * this method checks if the item is new or an already existing item that need to be edit
      */
-    public void onButtonClick() {
+    public void onAddButtonClick() {
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -117,23 +118,27 @@ public class CreateNoteActivity extends AppCompatActivity implements CreateNoteR
                     int amount = Integer.parseInt(editAmount.getText().toString());
 
                     if (boolEdit && editPosition != -1) {
-                        CreateNote oldNote = adapter.getCreateNote(editPosition);
-                        long id = oldNote.getCreate_id();
+                        ToDoList oldNote = adapter.getToDoList(editPosition);
+                        long id = oldNote.getTo_do_id();
                         int timestamp = oldNote.timestamp();
                         boolean checked = oldNote.isChecked();
-                        CreateNote createNote = new CreateNote(item, amount, checked, timestamp, noteId);
-                        createNote.setCreate_id(id);
-                        viewModel.updateCreateNote(createNote);
+                        ToDoList toDoList = new ToDoList(item, amount, checked, timestamp, noteId);
+                        toDoList.setTo_do_id(id);
+                        viewModel.updateToDoList(toDoList);
+                        btnAdd.setText("add");
                         boolEdit = false;
                         editPosition = -1;
                     } else {
                         int timestamp = adapter.getItemCount() + 1;
-                        CreateNote createNote = new CreateNote(item, amount, false, timestamp, noteId);
-                        viewModel.insertCreateNote(createNote);
+                        ToDoList toDoList = new ToDoList(item, amount, false, timestamp, noteId);
+                        viewModel.insertToDoList(toDoList);
                     }
+                    editItem.requestFocus();
+                    editAmount.setText("");
+                    editItem.setText("");
                 }
                 else{
-                    Toast.makeText(CreateNoteActivity.this, "Make sure to fill item and amount",
+                    Toast.makeText(ToDoListActivity.this, "Make sure to fill item and amount",
                             Toast.LENGTH_SHORT).show();
                 }
             }
@@ -162,7 +167,7 @@ public class CreateNoteActivity extends AppCompatActivity implements CreateNoteR
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
-        CreateNote createNote = adapter.getCreateNote(position);
-        viewModel.deleteCreateNote(createNote);
+        ToDoList toDoList = adapter.getToDoList(viewHolder.getAdapterPosition());
+        viewModel.deleteToDoList(toDoList);
     }
 }

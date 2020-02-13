@@ -5,21 +5,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.CreateNoteActivity">
+    tools:context=".ui.ToDoListActivity">
 
     <RelativeLayout
-        android:id="@+id/create_note_bar_layout"
+        android:id="@+id/to_do_list_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="102dp"
         android:background="@drawable/gradient_purple">
 
         <TextView
-            android:id="@+id/txt_name_create_note"
+            android:id="@+id/txt_name_to_do_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
-            android:text="Create Walmart Note"
+            android:text="Walmart Note"
             android:textColor="@color/white"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
 
@@ -51,7 +51,7 @@
         android:padding="8dp">
 
         <EditText
-            android:id="@+id/edit_item_create_note"
+            android:id="@+id/edit_item_to_do_list"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:hint="Item"
@@ -62,17 +62,18 @@
             android:layout_marginRight="30dp"/>
 
         <EditText
-            android:id="@+id/edit_amount_create_note"
+            android:id="@+id/edit_amount_to_do_list"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/edit_item_create_note"
+            android:layout_below="@+id/edit_item_to_do_list"
             android:hint="Amount"
+            android:maxLength="3"
             android:layout_marginLeft="50dp"
             android:inputType="number"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
 
         <Button
-            android:id="@+id/btn_add_ceate_note"
+            android:id="@+id/btn_add_to_do_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Add"
@@ -84,10 +85,10 @@
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycle_view_create_note"
+        android:id="@+id/recycle_view_to_do_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/create_note_recycle_view"/>
+        tools:listitem="@layout/to_do_list_recycle_view"/>
 
 
 </LinearLayout>

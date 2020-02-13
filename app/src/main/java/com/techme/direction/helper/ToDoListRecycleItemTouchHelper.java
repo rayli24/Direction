@@ -3,17 +3,16 @@ package com.techme.direction.helper;
 import android.graphics.Canvas;
 import android.view.View;
 
-import com.techme.direction.adapter.CreateNoteRecycleAdapter;
-import com.techme.direction.adapter.MyNoteRecycleAdapter;
+import com.techme.direction.adapter.ToDoListRecycleAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class CreateNoteRecycleItemTouchHelper extends ItemTouchHelper.SimpleCallback {
+public class ToDoListRecycleItemTouchHelper extends ItemTouchHelper.SimpleCallback {
     private RecyclerItemTouchHelperListener listener;
 
-    public CreateNoteRecycleItemTouchHelper(int dragDirs, int swipeDirs, RecyclerItemTouchHelperListener listener) {
+    public ToDoListRecycleItemTouchHelper(int dragDirs, int swipeDirs, RecyclerItemTouchHelperListener listener) {
         super(dragDirs, swipeDirs);
         this.listener = listener;
     }
@@ -27,7 +26,7 @@ public class CreateNoteRecycleItemTouchHelper extends ItemTouchHelper.SimpleCall
     @Override
     public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
         if (viewHolder != null) {
-            final View foregroundView = ((CreateNoteRecycleAdapter.CreateViewHolder) viewHolder).viewForeground;
+            final View foregroundView = ((ToDoListRecycleAdapter.ToDoListViewHolder) viewHolder).viewForeground;
 
             getDefaultUIUtil().onSelected(foregroundView);
         }
@@ -37,14 +36,14 @@ public class CreateNoteRecycleItemTouchHelper extends ItemTouchHelper.SimpleCall
     public void onChildDrawOver(Canvas c, RecyclerView recyclerView,
                                 RecyclerView.ViewHolder viewHolder, float dX, float dY,
                                 int actionState, boolean isCurrentlyActive) {
-        final View foregroundView = ((CreateNoteRecycleAdapter.CreateViewHolder) viewHolder).viewForeground;
+        final View foregroundView = ((ToDoListRecycleAdapter.ToDoListViewHolder) viewHolder).viewForeground;
         getDefaultUIUtil().onDrawOver(c, recyclerView, foregroundView, dX, dY,
                 actionState, isCurrentlyActive);
     }
 
     @Override
     public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-        final View foregroundView = ((CreateNoteRecycleAdapter.CreateViewHolder) viewHolder).viewForeground;
+        final View foregroundView = ((ToDoListRecycleAdapter.ToDoListViewHolder) viewHolder).viewForeground;
         getDefaultUIUtil().clearView(foregroundView);
     }
 
@@ -52,7 +51,7 @@ public class CreateNoteRecycleItemTouchHelper extends ItemTouchHelper.SimpleCall
     public void onChildDraw(Canvas c, RecyclerView recyclerView,
                             RecyclerView.ViewHolder viewHolder, float dX, float dY,
                             int actionState, boolean isCurrentlyActive) {
-        final View foregroundView = ((CreateNoteRecycleAdapter.CreateViewHolder) viewHolder).viewForeground;
+        final View foregroundView = ((ToDoListRecycleAdapter.ToDoListViewHolder) viewHolder).viewForeground;
 
         getDefaultUIUtil().onDraw(c, recyclerView, foregroundView, dX, dY,
                 actionState, isCurrentlyActive);

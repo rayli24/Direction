@@ -95,7 +95,7 @@ public class MyStoreRecycleAdapter extends ListAdapter<Store,MyStoreRecycleAdapt
         void onclick(Store store);
     }
 
-    public void onSetItemClickListener(onItemClickListener listener) {
+    public void setOnItemClickListener(onItemClickListener listener) {
         this.listener = listener;
     }
 }
