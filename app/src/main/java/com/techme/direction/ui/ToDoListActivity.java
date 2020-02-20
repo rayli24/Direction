@@ -34,10 +34,9 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListRecyc
     private int editPosition = -1;
     private long noteId;
     private String titleName;
-    private TextView txtName;
+    private TextView txtName, txtDone;
     private EditText editAmount, editItem;
     private Button btnAdd;
-    private ImageView imgSave;
     private DirectionViewModel viewModel;
     private RecyclerView recyclerView;
     private ToDoListRecycleAdapter adapter;
@@ -60,7 +59,7 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListRecyc
         txtName = findViewById(R.id.txt_name_to_do_list);
         editAmount = findViewById(R.id.edit_amount_to_do_list);
         editItem = findViewById(R.id.edit_item_to_do_list);
-        imgSave = findViewById(R.id.img_save_create_note);
+        txtDone = findViewById(R.id.txt_done_to_do_list);
         btnAdd = findViewById(R.id.btn_add_to_do_list);
         recyclerView = findViewById(R.id.recycle_view_to_do_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

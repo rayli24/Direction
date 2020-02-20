@@ -20,15 +20,6 @@ public class Repository {
     private LiveData<List<Store>> allUnSelectedStores;
     private LiveData<List<Country>> allCountries;
 
-    //test
-//    private LiveData<List<Note>> searchTest;
-//
-//    // searching members
-//    private MutableLiveData<List<Note>> allSearchNote = new MutableLiveData<>();
-//
-//    private void finishAsync(List<Note> list) {
-//        allSearchNote.setValue(list);
-//    }
 
 //    private String name;
     public Repository(Application application) {
@@ -40,23 +31,51 @@ public class Repository {
         allCountries = dao.getAllCountries();
         allUnSelectedStores = dao.getAllUnSelectedStores();
 
-//        //test
-        //searchTest = dao.searchTest(name);
-
     }
 
-    public List<Note> noteTest(String name) throws ExecutionException, InterruptedException {
-        SearchNoteAsyncTask test = new SearchNoteAsyncTask(dao);
-        test.execute(name);
-//        allSearchNote.setValue(test.test);
-        return test.get();
-        //searchTest = dao.searchTest(name);
+    public List<Note> searchNote(String name) throws ExecutionException, InterruptedException {
+        SearchNoteAsyncTask search = new SearchNoteAsyncTask(dao);
+        search.execute(name);
+        return search.get();
     }
+
+    public List<Store> searchMyStore(String name) throws ExecutionException, InterruptedException {
+        SearchMyStoreAsyncTask search= new SearchMyStoreAsyncTask(dao);
+        search.execute(name);
+        return search.get();
+    }
+
+    public List<Store> searchAddStore(String name) throws ExecutionException, InterruptedException {
+        SearchAddStoreAsyncTask search = new SearchAddStoreAsyncTask(dao);
+        search.execute(name);
+        return search.get();
+    }
+
+    private static class SearchAddStoreAsyncTask extends  AsyncTask<String,Void,List<Store>>{
+        private Dao dao;
+        private SearchAddStoreAsyncTask(Dao dao){this.dao = dao;}
+
+        @Override
+        protected List<Store> doInBackground(String... strings) {
+            List<Store> list = dao.searchAddStore(strings[0]);
+            return list.size() > 0? list: new ArrayList<Store>() ;
+        }
+    }
+
+    private static class SearchMyStoreAsyncTask extends AsyncTask<String, Void, List<Store>>{
+        private Dao dao;
+        private SearchMyStoreAsyncTask(Dao dao){ this.dao = dao;}
+        @Override
+        protected List<Store> doInBackground(String... strings) {
+            List<Store> list = dao.searchMyStore(strings[0]);
+            return list.size() > 0? list: new ArrayList<Store>();
+        }
+    }
+
     private static class SearchNoteAsyncTask extends AsyncTask<String,Void,List<Note>>{
         private Dao dao;
         private SearchNoteAsyncTask(Dao dao){
             this.dao =dao;
-//            this.name = name;
         }
         @Override
         protected List<Note> doInBackground(String... strings) {
@@ -66,7 +85,6 @@ public class Repository {
         }
     }
 
-//    public LiveData<List<Note>> getSearchTest(){return searchTest;}
 
 
     public void insertNotes(Note note) {
@@ -105,12 +123,6 @@ public class Repository {
         new DeleteAllNotesIdAsyncTask(dao, id).execute();
     }
 
-    // searching for data
-//    public void searchNote(String name) {
-//        GetNoteAsyncTask task = new GetNoteAsyncTask(dao);
-//        task.repository = this;
-//        task.execute(name);
-//    }
 
     // Live Data for the tables
     public LiveData<List<Note>> getAllNotes() {
@@ -132,32 +144,6 @@ public class Repository {
     public LiveData<List<Store>> getAllUnSelectedStores() {
         return allUnSelectedStores;
     }
-
-//    public MutableLiveData<List<Note>> getAllSearchNote() {
-//        return allSearchNote;
-//    }
-
-//     Threads for data executions
-//    private static class GetNoteAsyncTask extends AsyncTask<String, Void, List<Note>> {
-//
-//        private Dao dao;
-//        private Repository repository = null;
-//
-//        private GetNoteAsyncTask(Dao dao) {
-//            this.dao = dao;
-//        }
-//
-//        @Override
-//        protected List<Note> doInBackground(String... strings) {
-//            return dao.getNote(strings[0]);
-//        }
-//
-//        @Override
-//        protected void onPostExecute(List<Note> notes) {
-//            super.onPostExecute(notes);
-//            repository.finishAsync(notes);
-//        }
-//    }
 
     private static class InsertNotesAsyncTask extends AsyncTask<Note, Void, Void> {
         private Dao dao;

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.techme.direction.DirectionViewModel;
@@ -34,6 +35,7 @@ public class ToDoNoteActivity extends AppCompatActivity implements ToDoNoteRecyc
     private String titleName;
     private long noteId;
     private TextView txtName;
+    private RelativeLayout layoutEmpty;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +53,7 @@ public class ToDoNoteActivity extends AppCompatActivity implements ToDoNoteRecyc
     private void init(){
         imgBack = findViewById(R.id.img_to_do_note_back);
         txtName = findViewById(R.id.txt_to_do_note_layout_title);
+        layoutEmpty = findViewById(R.id.to_do_layout_note_empty);
         recyclerView = findViewById(R.id.recycle_view_to_do_note);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
@@ -72,6 +75,13 @@ public class ToDoNoteActivity extends AppCompatActivity implements ToDoNoteRecyc
                     if(toDo.getNote_id() == noteId){
                         list.add(toDo);
                     }
+                }
+                if(!list.isEmpty()){
+                    recyclerView.setVisibility(View.VISIBLE);
+                    layoutEmpty.setVisibility(View.GONE);
+                }else {
+                    layoutEmpty.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
                 }
                 adapter.submitList(list);
             }

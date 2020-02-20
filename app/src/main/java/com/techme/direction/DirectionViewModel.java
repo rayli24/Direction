@@ -16,10 +16,7 @@ public class DirectionViewModel extends AndroidViewModel {
     private LiveData<List<Country>> allCountries;
     private LiveData<List<Store>> allSelectedStores;
     private LiveData<List<Store>> allUnSelectedStores;
-//    private MutableLiveData<List<Note>> allSearchNotes;
 
-    //test
-//    private LiveData<List<Note>> searchTest;
 
     public DirectionViewModel(@NonNull Application application) {
         super(application);
@@ -29,38 +26,80 @@ public class DirectionViewModel extends AndroidViewModel {
         allNotes = repository.getAllNotes();
         allSelectedStores = repository.getAllSelectedStores();
         allUnSelectedStores = repository.getAllUnSelectedStores();
-//        allSearchNotes = repository.getAllSearchNote();
-
-        //test
-//        searchTest = repository.getSearchTest();
 
     }
 
 
-
-
     // methods to be call to do sqlite database executions
-    public void insertNote(Note note){repository.insertNotes(note);}
-    public void insertToDoList(ToDoList toDoList){repository.insertToDoList(toDoList);}
-    public void updateToDoList(ToDoList toDoList){repository.updateToDoList(toDoList);}
-    public void updateStore(Store store){repository.updateStore(store);}
-    public void updateNote(Note note){repository.updateNote(note);}
-    public void deleteToDoList(ToDoList toDoList){repository.deleteToDoList(toDoList);}
-    public void deleteNote(Note note){repository.deleteNote(note);}
-    public void deleteAllNotes(){repository.deleteAllNotes();}
-    public void deleteAllNotesId(long id){repository.deleteAllNotesId(id);}
-//    public void searchNote(String name){repository.searchNote(name);}
+    public void insertNote(Note note) {
+        repository.insertNotes(note);
+    }
+
+    public void insertToDoList(ToDoList toDoList) {
+        repository.insertToDoList(toDoList);
+    }
+
+    public void updateToDoList(ToDoList toDoList) {
+        repository.updateToDoList(toDoList);
+    }
+
+    public void updateStore(Store store) {
+        repository.updateStore(store);
+    }
+
+    public void updateNote(Note note) {
+        repository.updateNote(note);
+    }
+
+    public void deleteToDoList(ToDoList toDoList) {
+        repository.deleteToDoList(toDoList);
+    }
+
+    public void deleteNote(Note note) {
+        repository.deleteNote(note);
+    }
+
+    public void deleteAllNotes() {
+        repository.deleteAllNotes();
+    }
+
+    public void deleteAllNotesId(long id) {
+        repository.deleteAllNotesId(id);
+    }
 
 
-    //test
-    public List<Note> noteTest(String name) throws ExecutionException, InterruptedException { return repository.noteTest(name);}
+    // methods for search views
+    public List<Note> searchNote(String name) throws ExecutionException, InterruptedException {
+        return repository.searchNote(name);
+    }
+
+    public List<Store> searchMyStore(String name) throws ExecutionException, InterruptedException {
+        return repository.searchMyStore(name);
+    }
+
+    public List<Store> searchAddStore(String name) throws ExecutionException, InterruptedException {
+        return repository.searchAddStore(name);
+    }
 
 
     // Live Data for the tables
-    public LiveData<List<Note>> getAllNotes(){return allNotes;}
-    public LiveData<List<ToDoList>> getAllToDoList(){return allToDoList;}
-    public LiveData<List<Country>> getAllCountries(){return allCountries;}
-    public LiveData<List<Store>> getAllSelectedStores(){return allSelectedStores;}
-    public LiveData<List<Store>> getAllUnSelectedStores(){return allUnSelectedStores;}
-//    public LiveData<List<Note>> getAllSearchNotes(){return allSearchNotes;}
+    public LiveData<List<Note>> getAllNotes() {
+        return allNotes;
+    }
+
+    public LiveData<List<ToDoList>> getAllToDoList() {
+        return allToDoList;
+    }
+
+    public LiveData<List<Country>> getAllCountries() {
+        return allCountries;
+    }
+
+    public LiveData<List<Store>> getAllSelectedStores() {
+        return allSelectedStores;
+    }
+
+    public LiveData<List<Store>> getAllUnSelectedStores() {
+        return allUnSelectedStores;
+    }
 }

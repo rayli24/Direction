@@ -60,17 +60,4 @@ public class AddStoreActivity extends AppCompatActivity {
         return true;
     }
 
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId())
-        {
-            case R.id.bar_search:
-                Toast.makeText(this, "search clicked", Toast.LENGTH_SHORT).show();
-                return  true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-
-    }
 }

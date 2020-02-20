@@ -23,9 +23,10 @@ import com.techme.direction.ui.fragments.MyStoresFragment;
 import com.techme.direction.R;
 
 public class MyStoreActivity extends AppCompatActivity {
-    DirectionViewModel viewModel;
-    BottomNavigationView navigationView;
-    FloatingActionButton floatingActionButton;
+
+    private BottomNavigationView navigationView;
+    private FloatingActionButton floatingActionButton;
+    private static String currentFrag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,9 +84,6 @@ public class MyStoreActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId())
         {
-            case R.id.bar_search:
-                Toast.makeText(this, "search clicked", Toast.LENGTH_SHORT).show();
-                return  true;
             case R.id.bar_settings:
                 Toast.makeText(this, "settings clicked", Toast.LENGTH_SHORT).show();
                 return true;
@@ -106,6 +104,7 @@ public class MyStoreActivity extends AppCompatActivity {
         }
 
     }
+
 
     /**
      * toggle the visibility of the floating button

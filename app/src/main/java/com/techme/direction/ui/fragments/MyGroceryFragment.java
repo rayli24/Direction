@@ -2,7 +2,9 @@ package com.techme.direction.ui.fragments;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -11,8 +13,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.techme.direction.DirectionViewModel;
 import com.techme.direction.Note;
@@ -33,8 +38,18 @@ public class MyGroceryFragment extends Fragment implements MyStoreRecycleItemTou
     private DirectionViewModel viewModel;
     private MyStoreRecycleAdapter adapter;
     private Note searchedNote = null;
+    private RelativeLayout layoutEmpty;
+    private SearchView searchView;
+    private List<Store> origList = new ArrayList<>();
+
     public MyGroceryFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -42,6 +57,7 @@ public class MyGroceryFragment extends Fragment implements MyStoreRecycleItemTou
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.my_grocery_fragment, container, false);
         recyclerView = view.findViewById(R.id.recycle_view_my_grocery);
+        layoutEmpty = view.findViewById(R.id.my_layout_grocery_empty);
         return view;
     }
 
@@ -58,7 +74,7 @@ public class MyGroceryFragment extends Fragment implements MyStoreRecycleItemTou
     private void init() {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
-        recyclerView.setItemViewCacheSize(20);
+        recyclerView.setItemViewCacheSize(7);
         adapter = new MyStoreRecycleAdapter();
         recyclerView.setAdapter(adapter);
     }
@@ -74,29 +90,34 @@ public class MyGroceryFragment extends Fragment implements MyStoreRecycleItemTou
                         list.add(store);
                     }
                 }
+                if(!list.isEmpty()){
+                    recyclerView.setVisibility(View.VISIBLE);
+                    layoutEmpty.setVisibility(View.GONE);
+                }else {
+                    layoutEmpty.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
+                }
+                origList = new ArrayList<>(list);
+
                 adapter.submitList(list);
+
+                // to keep the correct list after removing a searched item
+                if(searchView != null && searchView.getQuery().length() > 0){
+                    String temp = String.valueOf(searchView.getQuery());
+                    searchView.setQuery("", false);
+                    searchView.setQuery(temp, false);
+                }
             }
         });
 
-//        viewModel.getAllNotes().observe(getViewLifecycleOwner(), new Observer<List<Note>>() {
-//            @Override
-//            public void onChanged(List<Note> notes) {
-//
-//            }
-//        });
-//
-//        viewModel.getAllSearchNotes().observe(getViewLifecycleOwner(), new Observer<List<Note>>() {
-//            @Override
-//            public void onChanged(List<Note> notes) {
-//                if(notes.size() >0){
-//                    searchedNote = notes.get(0);
-//                }
-//            }
-//        });
-
     }
 
-    //todo check when search for a name if you are able to delete it
+//    @Override
+//    public void onStop() {
+//        super.onStop();
+//        searchView.setQuery(VariablesHelper.REPLACE,true);
+//    }
+
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
         Store store = adapter.getStore(viewHolder.getAdapterPosition());
@@ -104,8 +125,8 @@ public class MyGroceryFragment extends Fragment implements MyStoreRecycleItemTou
 
 
         try {
-            if(!viewModel.noteTest(name).isEmpty()) {
-                searchedNote = viewModel.noteTest(name).get(0);
+            if(!viewModel.searchNote(name).isEmpty()) {
+                searchedNote = viewModel.searchNote(name).get(0);
             }
         } catch (ExecutionException e) {
             e.printStackTrace();
@@ -122,5 +143,48 @@ public class MyGroceryFragment extends Fragment implements MyStoreRecycleItemTou
         viewModel.updateStore(adapter.getStore(viewHolder.getAdapterPosition()));
     }
 
+    @Override
+    public void onPrepareOptionsMenu(@NonNull Menu menu) {
+        MenuItem menuItem = menu.findItem(R.id.bar_search);
+        searchView = (SearchView) menuItem.getActionView();
+        search(menuItem);
+    }
 
+    /**
+     * handles the search view
+     * @param menuItem
+     */
+    private void search(final MenuItem menuItem){
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                menuItem.collapseActionView();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (!newText.isEmpty()) {
+                    String name = "%" + newText + "%";
+                    try {
+                        List<Store> list = new ArrayList<>();
+                        for(Store store: viewModel.searchMyStore(name)){
+                            if(store.getType().equals(VariablesHelper.GROCERY) &&
+                                    store.getCountryName().equals(VariablesHelper.countryName)){
+                                list.add(store);
+                            }
+                        }
+                        adapter.submitList(list);
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }else {
+                    adapter.submitList(origList);
+                }
+                return true;
+            }
+        });
+    }
 }

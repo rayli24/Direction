@@ -54,19 +54,23 @@ public interface Dao {
     @Query("delete from to_do_list_table")
     void deleteAllToDoList();
 
-    //get a specific note
-//    @Query("select * from note_table where name = :name")
-//    List<Note> getNote(String name);
+    //get a specific search data
+     @Query("select * from note_table where name like :name and selected = 1 order by name")
+     List<Note> searchNote(String name);
 
-     @Query("select * from note_table where name like :name ")
-     List<Note> searchNote(String name); //todo remember to remove if not work
+     @Query("select * from store_table where name like :name and selected = 1 order by name")
+     List<Store> searchMyStore(String name);
+
+     @Query("select * from store_table where name like :name and selected = 0 order by name")
+     List<Store> searchAddStore(String name);
 
 
-    //todo try, passing the method into the constructor with the string name in a livedata -> repository
+
+
 
 
     // get the data from database with LiveData
-    @Query("select * from store_table where selected = 1 order by time") // 1 stands for true
+    @Query("select * from store_table where selected = 1 order by name") // 1 stands for true
     LiveData<List<Store>> getAllSelectedStores();
 
     @Query("select * from store_table where selected = 0 order by name") // 0 stands for false

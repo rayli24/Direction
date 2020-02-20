@@ -16,4 +16,7 @@
     <string name="setting_nearest">Nearest</string>
     <string name="setting_sorting">Sorting</string>
     <string name="delete">DELETE</string>
+    <string name="add_stores">Add stores to my list</string>
+    <string name="add_notes">Create notes</string>
+    <string name="todo_note">Empty</string>
 </resources>

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ui.fragments.MyDiningFragment">
 
     <RelativeLayout
@@ -10,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="102dp"
         tools:ignore="MissingConstraints"
-        android:background="@drawable/gradient_purple">
+        android:background="@drawable/gradient_purple"
+        android:elevation="@dimen/bar_elevation">
 
         <TextView
             android:layout_width="wrap_content"
@@ -30,5 +32,30 @@
         android:layout_height="match_parent"
         tools:listitem="@layout/my_store_recycle_view"/>
 
+    <RelativeLayout
+        android:id="@+id/my_layout_dining_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-</RelativeLayout>
+        <ImageView
+            android:id="@+id/my_img_add_dining_empty_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:scaleX="2"
+            android:scaleY="2"
+            android:src="@drawable/ic_add_circle_grey_24dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/add_stores"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:layout_below="@+id/my_img_add_dining_empty_view"
+            android:textColor="@color/light_text"
+            android:gravity="center" />
+    </RelativeLayout>
+
+
+</LinearLayout>

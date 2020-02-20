@@ -3,6 +3,7 @@ package com.techme.direction.ui.fragments;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -11,10 +12,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TabHost;
-import android.widget.Toast;
+import androidx.appcompat.widget.SearchView;
 
 import com.techme.direction.Note;
 import com.techme.direction.adapter.AddStoreRecycleAdapter;
@@ -25,16 +27,20 @@ import com.techme.direction.helper.VariablesHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 
 public class AddStoresFragment extends Fragment {
     private DirectionViewModel viewModel;
     private RecyclerView recyclerView;
     private AddStoreRecycleAdapter adapter;
+    private SearchView searchView;
+    private List<Store> origList = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -49,7 +55,8 @@ public class AddStoresFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         init();
-        viewModelMethod();
+        observer();
+//        searchView.setQuery(VariablesHelper.REPLACE, true); // to close the search view if open
         itemClicked();
     }
 
@@ -61,7 +68,7 @@ public class AddStoresFragment extends Fragment {
         recyclerView.setAdapter(adapter);
     }
 
-    private void viewModelMethod(){
+    private void observer(){
         viewModel = new ViewModelProvider(this).get(DirectionViewModel.class);
         viewModel.getAllUnSelectedStores().observe(getViewLifecycleOwner(), new Observer<List<Store>>() {
             @Override
@@ -69,17 +76,29 @@ public class AddStoresFragment extends Fragment {
                 // update recycle view
                 List<Store> list = new ArrayList<>();
                 for (Store store : stores) {
-                    if (store.getCountryName().equals("Canada")) {
+                    if (store.getCountryName().equals(VariablesHelper.countryName)) {
                         list.add(store);
                     }
                 }
+                origList = new ArrayList<>(list);
+
+
                 adapter.submitList(list);
+
+                if(searchView != null && searchView.getQuery().length() > 0){
+                    String temp = String.valueOf(searchView.getQuery());
+                    searchView.setQuery("",false);
+                    searchView.setQuery(temp,false);
+                }
             }
         });
+
+
     }
 
     /**
      * this method is to update the selected items in add store and send them to my store list
+     * it also set the note attribute "select" to false -> meaning there is no note created for the grocery
      */
     private void itemClicked() {
         adapter.setOnItemClickListener(new AddStoreRecycleAdapter.onItemClickListener() {
@@ -96,4 +115,47 @@ public class AddStoresFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onPrepareOptionsMenu(@NonNull Menu menu) {
+        MenuItem menuItem = menu.findItem(R.id.bar_search);
+        searchView = (SearchView) menuItem.getActionView();
+        search(menuItem);
+    }
+
+    /**
+     * handles the search view
+     * @param menuItem
+     */
+    private void search(final MenuItem menuItem){
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                menuItem.collapseActionView();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if(!newText.isEmpty()){
+                    try {
+                        String name = "%" + newText + "%";
+                        List<Store> list = new ArrayList<>();
+                        for(Store store: viewModel.searchAddStore(name)){
+                            if(store.getCountryName().equals(VariablesHelper.countryName)){
+                                list.add(store);
+                            }
+                        }
+                        adapter.submitList(list);
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    adapter.submitList(origList);
+                }
+                return true;
+            }
+        });
+    }
 }
