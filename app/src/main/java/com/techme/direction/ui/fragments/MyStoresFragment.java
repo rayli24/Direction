@@ -38,6 +38,15 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import static android.app.Activity.RESULT_OK;
+import static com.techme.direction.helper.VariablesHelper.DAILY_NOTES;
+import static com.techme.direction.helper.VariablesHelper.EXTRA_COUNTRY_CODE;
+import static com.techme.direction.helper.VariablesHelper.FALSE;
+import static com.techme.direction.helper.VariablesHelper.GROCERY;
+import static com.techme.direction.helper.VariablesHelper.RECYCLE_CACHE;
+import static com.techme.direction.helper.VariablesHelper.REPLACE;
+import static com.techme.direction.helper.VariablesHelper.TRUE;
+import static com.techme.direction.helper.VariablesHelper.countryName;
+import static com.techme.direction.helper.VariablesHelper.stringToUri;
 
 public class MyStoresFragment extends Fragment implements MyStoreRecycleItemTouchHelper.RecyclerItemTouchHelperListener {
 
@@ -89,7 +98,7 @@ public class MyStoresFragment extends Fragment implements MyStoreRecycleItemTouc
         adapter.setOnItemClickListener(new MyStoreRecycleAdapter.onItemClickListener() {
             @Override
             public void onclick(Store store) {
-                String name = VariablesHelper.stringToUri(store.getName());
+                String name = stringToUri(store.getName());
                 String country = store.getCountryName();
                 Uri gmmIntentUri = Uri.parse("google.navigation:q=" + name + "," + country);
                 Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
@@ -103,7 +112,7 @@ public class MyStoresFragment extends Fragment implements MyStoreRecycleItemTouc
     private void init() {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
-        recyclerView.setItemViewCacheSize(VariablesHelper.RECYCLE_CACHE);
+        recyclerView.setItemViewCacheSize(RECYCLE_CACHE);
         adapter = new MyStoreRecycleAdapter();
         recyclerView.setAdapter(adapter);
     }
@@ -115,7 +124,7 @@ public class MyStoresFragment extends Fragment implements MyStoreRecycleItemTouc
             public void onChanged(List<Store> stores) {
                 List<Store> list = new ArrayList<>();
                 for (Store store : stores) {
-                    if (store.getCountryName().equals(VariablesHelper.countryName)) {
+                    if (store.getCountryName().equals(countryName)) {
                         list.add(store);
                     }
                 }
@@ -149,11 +158,11 @@ public class MyStoresFragment extends Fragment implements MyStoreRecycleItemTouc
 
     }
 
-//    @Override
-//    public void onStop() {
-//        super.onStop();
-//        searchView.setQuery(VariablesHelper.REPLACE,true);
-//    }
+    @Override
+    public void onStop() {
+        super.onStop();
+        searchView.setQuery(REPLACE,true);
+    }
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
@@ -161,7 +170,7 @@ public class MyStoresFragment extends Fragment implements MyStoreRecycleItemTouc
         String name = store.getName();
         // this if statement checks if the item that is about to be delete is a grocery
         // and then checks if that grocery note was used to create its own To-Do list
-        if (store.getType().equals(VariablesHelper.GROCERY)) {
+        if (store.getType().equals(GROCERY)) {
                 if (!noteList.isEmpty()) {
                     for(Note note: noteList){
                         if(note.getName().equals(name)){
@@ -169,7 +178,7 @@ public class MyStoresFragment extends Fragment implements MyStoreRecycleItemTouc
                             break;
                         }
                     }
-                    if (searchedNote.getSelected() == VariablesHelper.TRUE) {
+                    if (searchedNote.getSelected() == TRUE) {
                         viewModel.deleteAllNotesId(searchedNote.getNote_id());
                     }
                     viewModel.deleteNote(searchedNote);
@@ -177,7 +186,7 @@ public class MyStoresFragment extends Fragment implements MyStoreRecycleItemTouc
 
 
         }
-        store.setSelected(VariablesHelper.FALSE);
+        store.setSelected(FALSE);
         viewModel.updateStore(adapter.getStore(viewHolder.getAdapterPosition()));
     }
 
@@ -198,6 +207,7 @@ public class MyStoresFragment extends Fragment implements MyStoreRecycleItemTouc
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                searchView.setQuery("",false);
                 menuItem.collapseActionView();
                 return false;
             }
@@ -209,7 +219,7 @@ public class MyStoresFragment extends Fragment implements MyStoreRecycleItemTouc
                         String name = "%" + newText + "%";
                         List<Store> list = new ArrayList<>();
                         for (Store store: viewModel.searchMyStore(name)){
-                            if(store.getCountryName().equals(VariablesHelper.countryName)){
+                            if(store.getCountryName().equals(countryName)){
                                 list.add(store);
                             }
                         }
@@ -236,7 +246,7 @@ public class MyStoresFragment extends Fragment implements MyStoreRecycleItemTouc
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 Intent intent = new Intent(getContext(), CountryActivity.class);
-                startActivityForResult(intent,VariablesHelper.EXTRA_COUNTRY_CODE);
+                startActivityForResult(intent,EXTRA_COUNTRY_CODE);
                 return true;
             }
         });
@@ -247,18 +257,17 @@ public class MyStoresFragment extends Fragment implements MyStoreRecycleItemTouc
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         // refresh recycle view
-        if(requestCode == VariablesHelper.EXTRA_COUNTRY_CODE && resultCode == RESULT_OK){
+        if(requestCode == EXTRA_COUNTRY_CODE && resultCode == RESULT_OK){
             observer();
-            System.out.println("store list size is: " + origList.size());
             // create a new daily note
-            Note note = new Note(VariablesHelper.DAILY_NOTES,VariablesHelper.FALSE);
+            Note note = new Note(DAILY_NOTES, FALSE);
             viewModel.insertNote(note);
             if(!origList.isEmpty()) {
                 // create old empty notes from new location country
                 for(Store store: origList){
-                    if(store.getType().equals(VariablesHelper.GROCERY) &&
-                            store.getCountryName().equals(VariablesHelper.countryName)){
-                        note = new Note(store.getName(),VariablesHelper.FALSE);
+                    if(store.getType().equals(GROCERY) &&
+                            store.getCountryName().equals(countryName)){
+                        note = new Note(store.getName(), FALSE);
                         viewModel.insertNote(note);
                     }
                 }

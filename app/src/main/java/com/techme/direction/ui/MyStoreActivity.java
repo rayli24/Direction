@@ -28,7 +28,6 @@ public class MyStoreActivity extends AppCompatActivity {
 
     private BottomNavigationView navigationView;
     private FloatingActionButton floatingActionButton;
-    private static String currentFrag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,10 +92,6 @@ public class MyStoreActivity extends AppCompatActivity {
                 return true;
             case R.id.bar_alphabetic:
                 return true;
-//            case R.id.bar_location:
-//                Intent intent = new Intent(MyStoreActivity.this, CountryActivity.class);
-//                startActivityForResult(intent, VariablesHelper.EXTRA_COUNTRY_CODE);
-//                return true;
             case R.id.bar_nearest:
                 return true;
             default:
@@ -119,7 +114,7 @@ public class MyStoreActivity extends AppCompatActivity {
     }
 
     /**
-     * hold all the onClick button listeners
+     * floating point to open add store activity
      */
     private void buttons()
     {

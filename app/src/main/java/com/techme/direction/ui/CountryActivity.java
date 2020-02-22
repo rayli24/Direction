@@ -11,7 +11,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +25,13 @@ import com.techme.direction.adapter.CountryRecycleAdapter;
 import com.techme.direction.helper.VariablesHelper;
 
 import java.util.List;
+
+import static com.techme.direction.helper.VariablesHelper.FALSE;
+import static com.techme.direction.helper.VariablesHelper.LOAD_COUNTRY;
+import static com.techme.direction.helper.VariablesHelper.RECYCLE_CACHE;
+import static com.techme.direction.helper.VariablesHelper.SHARED_PREF_COUNTRY;
+import static com.techme.direction.helper.VariablesHelper.TRUE;
+import static com.techme.direction.helper.VariablesHelper.countryName;
 
 public class CountryActivity extends AppCompatActivity {
 
@@ -51,10 +60,10 @@ public class CountryActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recycle_view_country);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
-        recyclerView.setItemViewCacheSize(VariablesHelper.RECYCLE_CACHE);
+        recyclerView.setItemViewCacheSize(RECYCLE_CACHE);
         adapter = new CountryRecycleAdapter();
         recyclerView.setAdapter(adapter);
-        txtName.setText("Change: " + VariablesHelper.countryName);
+        txtName.setText("Change: " + countryName);
     }
 
     private void observer(){
@@ -64,7 +73,7 @@ public class CountryActivity extends AppCompatActivity {
             public void onChanged(List<Country> countries) {
                 adapter.submitList(countries);
                 for(Country country: countries){
-                    if(country.getName().equals(VariablesHelper.countryName)){
+                    if(country.getName().equals(countryName)){
                         currentCountry = country;
                         return;
                     }
@@ -73,14 +82,15 @@ public class CountryActivity extends AppCompatActivity {
         });
     }
 
-    // todo: delete all todoList, all notes, change the current saved country in shared preference
     private void onItemClick(){
         adapter.setOnItemClickListener(new CountryRecycleAdapter.onItemClickListener() {
             @Override
             public void onClick(Country country) {
                 if(country.getName().equals(currentCountry.getName())){
-                    Toast.makeText(CountryActivity.this, currentCountry.getName()
-                            + " is already your current location", Toast.LENGTH_SHORT).show();
+                    Toast toast = Toast.makeText(CountryActivity.this, currentCountry.getName()
+                            + " is already your current location", Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.CENTER,0,0);
+                    toast.show();
                 }else {
                     displayDialog(country);
                 }
@@ -89,10 +99,10 @@ public class CountryActivity extends AppCompatActivity {
     }
 
     private void updateCountry(Country newCountry){
-            currentCountry.setSelected(VariablesHelper.FALSE);
+            currentCountry.setSelected(FALSE);
             viewModel.updateCountry(currentCountry);
-            newCountry.setSelected(VariablesHelper.TRUE);
-            VariablesHelper.countryName = newCountry.getName();
+            newCountry.setSelected(TRUE);
+            countryName = newCountry.getName();
             deleteCountryNotes();
             saveCountry();
             viewModel.updateCountry(newCountry);
@@ -101,7 +111,7 @@ public class CountryActivity extends AppCompatActivity {
     }
 
     private void displayDialog(final Country newCountry){
-        showDialog("Permission needed", "You will lose all '" + currentCountry.getName()+ "' Todo list",
+        showDialog("Confirmation needed", "You will lose all '" + currentCountry.getName()+ "' Todo list",
                 "Ok, Proceed", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -112,7 +122,9 @@ public class CountryActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
-                        Toast.makeText(CountryActivity.this, "Country change failed", Toast.LENGTH_SHORT).show();
+                        Toast toast = Toast.makeText(CountryActivity.this, "Country change failed", Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.CENTER,0,0);
+                        toast.show();
                     }
                 },false);
     }
@@ -127,8 +139,11 @@ public class CountryActivity extends AppCompatActivity {
                 .setMessage(msg)
                 .setPositiveButton(positiveLabel, positiveOnClick)
                 .setNegativeButton(negativeLabel, negativeOnClick)
+//                .setIcon(R.drawable.ic_delete_red_24dp)
                 .create();
 
+        Window view = ((alertDialog)).getWindow();
+        view.setBackgroundDrawableResource(R.drawable.white_border);
         alertDialog.show();
         return alertDialog;
 
@@ -143,10 +158,13 @@ public class CountryActivity extends AppCompatActivity {
         viewModel.deleteAllNotes();
     }
 
+    /**
+     * save the new country in a shared preference
+     */
     private void saveCountry(){
-        SharedPreferences sharedPreferences = getSharedPreferences(VariablesHelper.SHARED_PREF_COUNTRY,MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_COUNTRY,MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(VariablesHelper.LOAD_COUNTRY,VariablesHelper.countryName);
+        editor.putString(LOAD_COUNTRY, countryName);
         editor.apply();
     }
 

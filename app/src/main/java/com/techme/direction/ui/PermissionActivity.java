@@ -19,6 +19,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.view.Window;
 import android.widget.Toast;
 
 import com.techme.direction.Country;
@@ -31,6 +32,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.techme.direction.helper.VariablesHelper.ALL_PERMISSION_CODE;
+import static com.techme.direction.helper.VariablesHelper.APP_PERMISSION;
+import static com.techme.direction.helper.VariablesHelper.LOAD_COUNTRY;
+import static com.techme.direction.helper.VariablesHelper.RECYCLE_CACHE;
+import static com.techme.direction.helper.VariablesHelper.SHARED_PREF_COUNTRY;
+import static com.techme.direction.helper.VariablesHelper.TRUE;
+import static com.techme.direction.helper.VariablesHelper.countrySelected;
 
 public class PermissionActivity extends AppCompatActivity {
     private DirectionViewModel viewModel;
@@ -60,7 +69,7 @@ public class PermissionActivity extends AppCompatActivity {
     private boolean checkPermission() {
         List<String> listPermissionsNeeded = new ArrayList<>();
         // check which permission are granted
-        for (String permission : VariablesHelper.APP_PERMISSION) {
+        for (String permission : APP_PERMISSION) {
             if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
                 listPermissionsNeeded.add(permission);
             }
@@ -69,7 +78,7 @@ public class PermissionActivity extends AppCompatActivity {
         // check if there was permissions that was not granted
         if (!listPermissionsNeeded.isEmpty()) {
             ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]),
-                    VariablesHelper.ALL_PERMISSION_CODE);
+                    ALL_PERMISSION_CODE);
             return false;
         }
         return true;
@@ -78,7 +87,7 @@ public class PermissionActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == VariablesHelper.ALL_PERMISSION_CODE) {
+        if (requestCode == ALL_PERMISSION_CODE) {
             HashMap<String, Integer> permissionResults = new HashMap<>();
             int deniedCount = 0;
 
@@ -93,14 +102,14 @@ public class PermissionActivity extends AppCompatActivity {
             // check if all permissions are granted
             if (deniedCount == 0) {
                 // if the user accepted the permission again and they selected a country already
-                if (VariablesHelper.countrySelected) {
+                if (countrySelected) {
                     Intent intent = new Intent(PermissionActivity.this, MyStoreActivity.class);
                     startActivity(intent);
                     finish();
                 }
                 Toast.makeText(this, "Permission GRANTED", Toast.LENGTH_SHORT).show();
                 // close the app if the user denied and already has chosen a location before
-            } else if (VariablesHelper.countrySelected) {
+            } else if (countrySelected) {
                 finish();
                 moveTaskToBack(true);
             } else {
@@ -187,6 +196,8 @@ public class PermissionActivity extends AppCompatActivity {
                 .setNegativeButton(negativeLabel, negativeOnClick)
                 .create();
 
+        Window view = ((alertDialog)).getWindow();
+        view.setBackgroundDrawableResource(R.drawable.white_border);
         alertDialog.show();
         return alertDialog;
 
@@ -197,7 +208,7 @@ public class PermissionActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recycle_view_country_permission);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
-        recyclerView.setItemViewCacheSize(VariablesHelper.RECYCLE_CACHE);
+        recyclerView.setItemViewCacheSize(RECYCLE_CACHE);
         adapter = new CountryRecycleAdapter();
         recyclerView.setAdapter(adapter);
     }
@@ -218,7 +229,7 @@ public class PermissionActivity extends AppCompatActivity {
             public void onClick(Country country) {
                 if (checkPermission()) {
                     saveCountry(country.getName());
-                    country.setSelected(VariablesHelper.TRUE);
+                    country.setSelected(TRUE);
                     viewModel.updateCountry(country);
                     Intent intent = new Intent(PermissionActivity.this, MyStoreActivity.class);
                     startActivity(intent);
@@ -236,9 +247,9 @@ public class PermissionActivity extends AppCompatActivity {
      * @param name
      */
     private void saveCountry(String name) {
-        SharedPreferences sharedPreferences = getSharedPreferences(VariablesHelper.SHARED_PREF_COUNTRY, MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_COUNTRY, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(VariablesHelper.LOAD_COUNTRY, name);
+        editor.putString(LOAD_COUNTRY, name);
         editor.apply();
     }
 }

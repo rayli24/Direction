@@ -29,6 +29,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import static com.techme.direction.helper.VariablesHelper.FALSE;
+import static com.techme.direction.helper.VariablesHelper.GROCERY;
+import static com.techme.direction.helper.VariablesHelper.RECYCLE_CACHE;
+import static com.techme.direction.helper.VariablesHelper.TRUE;
+import static com.techme.direction.helper.VariablesHelper.countryName;
+
 
 public class AddStoresFragment extends Fragment {
     private DirectionViewModel viewModel;
@@ -63,7 +69,7 @@ public class AddStoresFragment extends Fragment {
     private void init(){
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
-        recyclerView.setItemViewCacheSize(VariablesHelper.RECYCLE_CACHE);
+        recyclerView.setItemViewCacheSize(RECYCLE_CACHE);
         adapter = new AddStoreRecycleAdapter();
         recyclerView.setAdapter(adapter);
     }
@@ -76,7 +82,7 @@ public class AddStoresFragment extends Fragment {
                 // update recycle view
                 List<Store> list = new ArrayList<>();
                 for (Store store : stores) {
-                    if (store.getCountryName().equals(VariablesHelper.countryName)) {
+                    if (store.getCountryName().equals(countryName)) {
                         list.add(store);
                     }
                 }
@@ -105,9 +111,9 @@ public class AddStoresFragment extends Fragment {
             @Override
             public void onClick(Store store, int position) {
                 Store myStore = adapter.getStore(position);
-                myStore.setSelected(VariablesHelper.TRUE);
-                if (myStore.getType().equals(VariablesHelper.GROCERY)) {
-                    Note note = new Note(myStore.getName(), VariablesHelper.FALSE);
+                myStore.setSelected(TRUE);
+                if (myStore.getType().equals(GROCERY)) {
+                    Note note = new Note(myStore.getName(), FALSE);
                     viewModel.insertNote(note);
                 }
                 viewModel.updateStore(myStore);
@@ -141,7 +147,7 @@ public class AddStoresFragment extends Fragment {
                         String name = "%" + newText + "%";
                         List<Store> list = new ArrayList<>();
                         for(Store store: viewModel.searchAddStore(name)){
-                            if(store.getCountryName().equals(VariablesHelper.countryName)){
+                            if(store.getCountryName().equals(countryName)){
                                 list.add(store);
                             }
                         }

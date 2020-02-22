@@ -21,6 +21,12 @@ import com.techme.direction.helper.VariablesHelper;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.techme.direction.helper.VariablesHelper.APP_PERMISSION;
+import static com.techme.direction.helper.VariablesHelper.LOAD_COUNTRY;
+import static com.techme.direction.helper.VariablesHelper.SHARED_PREF_COUNTRY;
+import static com.techme.direction.helper.VariablesHelper.countryName;
+import static com.techme.direction.helper.VariablesHelper.countrySelected;
+
 public class SplashScreenActivity extends AppCompatActivity {
 
     private static int splashTime = 3000;
@@ -38,7 +44,7 @@ public class SplashScreenActivity extends AppCompatActivity {
             @Override
             public void run() {
                 loadCountry();
-                if(!checkPermission() || !VariablesHelper.countrySelected) {
+                if(!checkPermission() || !countrySelected) {
                     Intent intent = new Intent(SplashScreenActivity.this, PermissionActivity.class);
                     startActivity(intent);
                 }else{
@@ -51,10 +57,10 @@ public class SplashScreenActivity extends AppCompatActivity {
     }
 
     private void loadCountry(){
-        SharedPreferences sharedPreferences = getSharedPreferences(VariablesHelper.SHARED_PREF_COUNTRY,MODE_PRIVATE);
-        VariablesHelper.countryName = sharedPreferences.getString(VariablesHelper.LOAD_COUNTRY,"none");
-        if(!VariablesHelper.countryName.equals("none")){
-            VariablesHelper.countrySelected = true;
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_COUNTRY,MODE_PRIVATE);
+        countryName = sharedPreferences.getString(LOAD_COUNTRY,"none");
+        if(!countryName.equals("none")){
+            countrySelected = true;
         }
     }
 
@@ -65,7 +71,7 @@ public class SplashScreenActivity extends AppCompatActivity {
     private boolean checkPermission(){
         List<String> listPermissionsNeeded = new ArrayList<>();
         // check which permission are granted
-        for(String permission: VariablesHelper.APP_PERMISSION){
+        for(String permission: APP_PERMISSION){
             if(ContextCompat.checkSelfPermission(this,permission) != PackageManager.PERMISSION_GRANTED){
                 listPermissionsNeeded.add(permission);
             }

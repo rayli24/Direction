@@ -5,6 +5,13 @@ import android.Manifest;
 
 public class VariablesHelper {
 
+    // to know which new code to use next time for intents (update if create a new code)
+    private int nextCodeToUse = 3;
+
+    // countries
+    public static final String CANADA = "Canada";
+    public static final String USA = "USA";
+
     // for database
     public static final String GROCERY = "grocery";
     public static final String DINING = "dining";

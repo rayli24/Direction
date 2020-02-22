@@ -23,6 +23,10 @@ import com.techme.direction.helper.VariablesHelper;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.techme.direction.helper.VariablesHelper.EXTRA_NOTE_ID;
+import static com.techme.direction.helper.VariablesHelper.EXTRA_NOTE_NAME;
+import static com.techme.direction.helper.VariablesHelper.RECYCLE_CACHE;
+
 /**
  * this class displays a list of all the To-do for a specific note
  */
@@ -57,11 +61,11 @@ public class ToDoNoteActivity extends AppCompatActivity implements ToDoNoteRecyc
         recyclerView = findViewById(R.id.recycle_view_to_do_note);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
-        recyclerView.setItemViewCacheSize(VariablesHelper.RECYCLE_CACHE);
+        recyclerView.setItemViewCacheSize(RECYCLE_CACHE);
         adapter = new ToDoNoteRecycleAdapter();
         recyclerView.setAdapter(adapter);
-        titleName = getIntent().getStringExtra(VariablesHelper.EXTRA_NOTE_NAME);
-        noteId = getIntent().getLongExtra(VariablesHelper.EXTRA_NOTE_ID,-1);
+        titleName = getIntent().getStringExtra(EXTRA_NOTE_NAME);
+        noteId = getIntent().getLongExtra(EXTRA_NOTE_ID,-1);
         txtName.setText(titleName + " ToDo List");
     }
 

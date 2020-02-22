@@ -34,20 +34,11 @@
             android:layout_marginTop="16dp"
             android:layout_marginLeft="14dp"/>
 
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/search_select_note"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            app:searchIcon="@drawable/ic_search_white_24dp"
-            android:layout_below="@+id/txt_select_note_layout_title"
-            android:layout_alignParentEnd="true"
-            android:layout_marginRight="15dp"/>
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycle_view_to_do_note"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/search_select_note"
+            android:layout_below="@+id/txt_select_note_layout_title"
             android:background="@drawable/white_border"
             android:layout_marginRight="20dp"
             android:layout_marginLeft="20dp"

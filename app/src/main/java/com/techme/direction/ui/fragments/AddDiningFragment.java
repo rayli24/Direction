@@ -28,6 +28,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import static com.techme.direction.helper.VariablesHelper.DINING;
+import static com.techme.direction.helper.VariablesHelper.RECYCLE_CACHE;
+import static com.techme.direction.helper.VariablesHelper.TRUE;
+import static com.techme.direction.helper.VariablesHelper.countryName;
+
 
 public class AddDiningFragment extends Fragment {
 
@@ -67,7 +72,7 @@ public class AddDiningFragment extends Fragment {
     private void init(){
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
-        recyclerView.setItemViewCacheSize(VariablesHelper.RECYCLE_CACHE); // to ensure how many items should be hold in the cache after scrolling
+        recyclerView.setItemViewCacheSize(RECYCLE_CACHE); // to ensure how many items should be hold in the cache after scrolling
         adapter = new AddStoreRecycleAdapter();
         recyclerView.setAdapter(adapter);
     }
@@ -80,8 +85,8 @@ public class AddDiningFragment extends Fragment {
                 List<Store> list = new ArrayList<>();
                 for(Store store: stores)
                 {
-                    if(store.getCountryName().equals(VariablesHelper.countryName) &&
-                            store.getType().equals(VariablesHelper.DINING))
+                    if(store.getCountryName().equals(countryName) &&
+                            store.getType().equals(DINING))
                         list.add(store);
                 }
                 origList = new ArrayList<>(list);
@@ -105,7 +110,7 @@ public class AddDiningFragment extends Fragment {
             @Override
             public void onClick(Store store, int position) {
                 Store myStore = adapter.getStore(position);
-                myStore.setSelected(VariablesHelper.TRUE);
+                myStore.setSelected(TRUE);
                 viewModel.updateStore(myStore);
             }
         });
@@ -133,8 +138,8 @@ public class AddDiningFragment extends Fragment {
                     List<Store> list = new ArrayList<>();
                     try {
                         for(Store store: viewModel.searchAddStore(name)){
-                            if(store.getType().equals(VariablesHelper.DINING) &&
-                                    store.getCountryName().equals(VariablesHelper.countryName)){
+                            if(store.getType().equals(DINING) &&
+                                    store.getCountryName().equals(countryName)){
                                 list.add(store);
                             }
                         }

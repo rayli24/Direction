@@ -28,6 +28,10 @@ import com.techme.direction.helper.VariablesHelper;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.techme.direction.helper.VariablesHelper.EXTRA_NOTE_ID;
+import static com.techme.direction.helper.VariablesHelper.EXTRA_NOTE_NAME;
+import static com.techme.direction.helper.VariablesHelper.RECYCLE_CACHE;
+
 public class ToDoListActivity extends AppCompatActivity implements ToDoListRecycleItemTouchHelper.RecyclerItemTouchHelperListener {
 
     private boolean boolEdit = false;
@@ -64,12 +68,12 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListRecyc
         recyclerView = findViewById(R.id.recycle_view_to_do_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
-        recyclerView.setItemViewCacheSize(VariablesHelper.RECYCLE_CACHE);
+        recyclerView.setItemViewCacheSize(RECYCLE_CACHE);
         adapter = new ToDoListRecycleAdapter();
         recyclerView.setAdapter(adapter);
-        titleName = getIntent().getStringExtra(VariablesHelper.EXTRA_NOTE_NAME);
+        titleName = getIntent().getStringExtra(EXTRA_NOTE_NAME);
         txtName.setText(titleName + " Note");
-        noteId = getIntent().getLongExtra(VariablesHelper.EXTRA_NOTE_ID,-1);
+        noteId = getIntent().getLongExtra(EXTRA_NOTE_ID,-1);
     }
 
     private void observer() {
@@ -153,25 +157,6 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListRecyc
         });
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        MenuInflater inflater = getMenuInflater();
-//        inflater.inflate(R.menu.menu_action_bar, menu);
-//        menu.findItem(R.id.bar_settings).setVisible(false);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.bar_search:
-//                Toast.makeText(this, "search clicked", Toast.LENGTH_SHORT).show();
-//                return true;
-//            default:
-//                return super.onOptionsItemSelected(item);
-//        }
-//
-//    }
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {

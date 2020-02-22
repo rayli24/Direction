@@ -19,7 +19,6 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class AddStoreRecycleAdapter extends ListAdapter<Store, AddStoreRecycleAdapter.AddStoreViewHolder> {
-    //private List<Store> unselectedList = new ArrayList<>();
     private onItemClickListener listener;
 
     public AddStoreRecycleAdapter() {

@@ -36,6 +36,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import static com.techme.direction.helper.VariablesHelper.EXTRA_NOTE_ID;
+import static com.techme.direction.helper.VariablesHelper.EXTRA_NOTE_NAME;
+import static com.techme.direction.helper.VariablesHelper.FALSE;
+import static com.techme.direction.helper.VariablesHelper.RECYCLE_CACHE;
+import static com.techme.direction.helper.VariablesHelper.REPLACE;
+import static com.techme.direction.helper.VariablesHelper.TRUE;
+
 
 public class MyNoteFragment extends Fragment implements MyNoteRecycleItemTouchHelper.RecyclerItemTouchHelperListener {
 
@@ -84,16 +91,16 @@ public class MyNoteFragment extends Fragment implements MyNoteRecycleItemTouchHe
             @Override
             public void onEditClick(Note note) {
                 Intent intent = new Intent(getContext(), ToDoListActivity.class);
-                intent.putExtra(VariablesHelper.EXTRA_NOTE_NAME,note.getName());
-                intent.putExtra(VariablesHelper.EXTRA_NOTE_ID,note.getNote_id());
+                intent.putExtra(EXTRA_NOTE_NAME,note.getName());
+                intent.putExtra(EXTRA_NOTE_ID,note.getNote_id());
                 startActivity(intent);
             }
 
             @Override
             public void onItemClick(Note note) {
                 Intent intent = new Intent(getContext(), ToDoNoteActivity.class);
-                intent.putExtra(VariablesHelper.EXTRA_NOTE_NAME,note.getName());
-                intent.putExtra(VariablesHelper.EXTRA_NOTE_ID,note.getNote_id());
+                intent.putExtra(EXTRA_NOTE_NAME,note.getName());
+                intent.putExtra(EXTRA_NOTE_ID,note.getNote_id());
                 startActivity(intent);
             }
         });
@@ -102,7 +109,7 @@ public class MyNoteFragment extends Fragment implements MyNoteRecycleItemTouchHe
     private void init(){
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
-        recyclerView.setItemViewCacheSize(20);
+        recyclerView.setItemViewCacheSize(RECYCLE_CACHE);
         adapter = new MyNoteRecycleAdapter();
         recyclerView.setAdapter(adapter);
     }
@@ -114,7 +121,7 @@ public class MyNoteFragment extends Fragment implements MyNoteRecycleItemTouchHe
             public void onChanged(List<Note> notes) {
                 List<Note> list = new ArrayList<>();
                 for(Note note: notes){
-                    if(note.getSelected() == VariablesHelper.TRUE){
+                    if(note.getSelected() == TRUE){
                         list.add(note);
                     }
                 }
@@ -140,18 +147,18 @@ public class MyNoteFragment extends Fragment implements MyNoteRecycleItemTouchHe
             }
         });
     }
-//
-//    @Override
-//    public void onStop() {
-//        super.onStop();
-//        searchView.setQuery(VariablesHelper.REPLACE,true);
-//    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        searchView.setQuery(REPLACE,true);
+    }
 
     private void buttonsEvent(){
         imgAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                searchView.setQuery(VariablesHelper.REPLACE, true);
+                searchView.setQuery(REPLACE, true);
                 Intent intent = new Intent(getContext(), SelectNoteActivity.class);
                 startActivity(intent);
             }
@@ -164,7 +171,7 @@ public class MyNoteFragment extends Fragment implements MyNoteRecycleItemTouchHe
         Note note = adapter.getNote(viewHolder.getAdapterPosition());
         // delete all the To-Do list that belong to the note by getting the note id
         viewModel.deleteAllNotesId(note.getNote_id());
-        note.setSelected(VariablesHelper.FALSE);
+        note.setSelected(FALSE);
         viewModel.updateNote(note);
     }
 
@@ -185,6 +192,7 @@ public class MyNoteFragment extends Fragment implements MyNoteRecycleItemTouchHe
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
+                searchView.setQuery("",false);
                 menuItem.collapseActionView();
                 return false;
             }

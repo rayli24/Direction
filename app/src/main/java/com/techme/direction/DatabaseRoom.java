@@ -1,12 +1,11 @@
 package com.techme.direction;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 
-import com.techme.direction.helper.ContextHelper;
-import com.techme.direction.helper.VariablesHelper;
+import com.techme.direction.countries.CanadaStores;
+import com.techme.direction.countries.UnitedStatesStores;
+
 
 import java.io.IOException;
 
@@ -16,7 +15,9 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import static com.techme.direction.helper.ConvertImage.convertImageToByte;
+import static com.techme.direction.helper.VariablesHelper.CANADA;
+import static com.techme.direction.helper.VariablesHelper.FALSE;
+import static com.techme.direction.helper.VariablesHelper.USA;
 
 @Database(entities = {Country.class, ToDoList.class, Note.class, Store.class}, version = 1)
 public abstract class DatabaseRoom extends RoomDatabase {
@@ -102,60 +103,20 @@ public abstract class DatabaseRoom extends RoomDatabase {
 
         public void defaultNote() {
 
-            dao.insertNote(new Note("Daily", VariablesHelper.FALSE));
+            dao.insertNote(new Note("Daily", FALSE));
         }
 
         public void country() {
-            dao.insertCountry(new Country("Canada",VariablesHelper.FALSE));
-            dao.insertCountry(new Country("USA", VariablesHelper.FALSE));
+            dao.insertCountry(new Country(CANADA,FALSE));
+            dao.insertCountry(new Country(USA, FALSE));
         }
 
         public void store() throws IOException {
-            final String CANADA = "Canada";
-            final String USA = "USA";
-            final String GROCERY = "grocery";
-            final String DINING = "dining";
             // Canada
-
-            Bitmap bitmap = BitmapFactory.decodeResource(ContextHelper.Helper.getResource(), R.drawable.sobey);
-            dao.insertStore(new Store("Sobey's", 12, convertImageToByte(bitmap),
-                    GROCERY, CANADA, VariablesHelper.FALSE));
-
-            bitmap = BitmapFactory.decodeResource(ContextHelper.Helper.getResource(), R.drawable.walmart);
-            dao.insertStore(new Store("Walmart", 9, convertImageToByte(bitmap),
-                    GROCERY, CANADA, VariablesHelper.FALSE));
-
-            bitmap = BitmapFactory.decodeResource(ContextHelper.Helper.getResource(), R.drawable.pizzahut);
-            dao.insertStore(new Store("Pizza Hut", 17, convertImageToByte(bitmap),
-                    DINING, CANADA, VariablesHelper.FALSE));
-
-            bitmap = BitmapFactory.decodeResource(ContextHelper.Helper.getResource(), R.drawable.mcdonald);
-            dao.insertStore(new Store("McDonald's", 23, convertImageToByte(bitmap),
-                    DINING, CANADA, VariablesHelper.FALSE));
-
-            bitmap = BitmapFactory.decodeResource(ContextHelper.Helper.getResource(), R.drawable.kfc);
-            dao.insertStore(new Store("K.F.C", 11, convertImageToByte(bitmap),
-                    DINING, CANADA, VariablesHelper.FALSE));
-
+            CanadaStores.stores(dao);
 
             // USA
-
-            bitmap = BitmapFactory.decodeResource(ContextHelper.Helper.getResource(), R.drawable.walmart);
-            dao.insertStore(new Store("Walmart", 19, convertImageToByte(bitmap),
-                    GROCERY, USA, VariablesHelper.FALSE));
-
-            bitmap = BitmapFactory.decodeResource(ContextHelper.Helper.getResource(), R.drawable.pizzahut);
-            dao.insertStore(new Store("Pizza Hut", 8, convertImageToByte(bitmap),
-                    DINING, USA, VariablesHelper.FALSE));
-
-            bitmap = BitmapFactory.decodeResource(ContextHelper.Helper.getResource(), R.drawable.mcdonald);
-            dao.insertStore(new Store("McDonald's", 13, convertImageToByte(bitmap),
-                    DINING, USA, VariablesHelper.FALSE));
-
-            bitmap = BitmapFactory.decodeResource(ContextHelper.Helper.getResource(), R.drawable.kfc);
-            dao.insertStore(new Store("K.F.C", 12, convertImageToByte(bitmap),
-                    DINING, USA, VariablesHelper.FALSE));
-
+            UnitedStatesStores.Stores(dao);
 
         }
 
