@@ -1,5 +1,6 @@
 package com.techme.direction.ui.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.techme.direction.DirectionViewModel;
 import com.techme.direction.Note;
@@ -26,10 +28,13 @@ import com.techme.direction.helper.MyStoreRecycleItemTouchHelper;
 import com.techme.direction.R;
 import com.techme.direction.Store;
 import com.techme.direction.adapter.MyStoreRecycleAdapter;
+import com.techme.direction.ui.CountryActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+
+import static android.app.Activity.RESULT_OK;
 
 
 public class MyGroceryFragment extends Fragment implements MyStoreRecycleItemTouchHelper.RecyclerItemTouchHelperListener {
@@ -41,6 +46,7 @@ public class MyGroceryFragment extends Fragment implements MyStoreRecycleItemTou
     private RelativeLayout layoutEmpty;
     private SearchView searchView;
     private List<Store> origList = new ArrayList<>();
+    private List<Note> noteList = new ArrayList<>();
 
     public MyGroceryFragment() {
         // Required empty public constructor
@@ -74,7 +80,7 @@ public class MyGroceryFragment extends Fragment implements MyStoreRecycleItemTou
     private void init() {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
-        recyclerView.setItemViewCacheSize(7);
+        recyclerView.setItemViewCacheSize(VariablesHelper.RECYCLE_CACHE);
         adapter = new MyStoreRecycleAdapter();
         recyclerView.setAdapter(adapter);
     }
@@ -86,7 +92,8 @@ public class MyGroceryFragment extends Fragment implements MyStoreRecycleItemTou
             public void onChanged(List<Store> stores) {
                 List<Store> list = new ArrayList<>();
                 for (Store store : stores) {
-                    if (store.getCountryName().equals("Canada") && store.getType().equals(VariablesHelper.GROCERY)) {
+                    if (store.getCountryName().equals(VariablesHelper.countryName)
+                            && store.getType().equals(VariablesHelper.GROCERY)) {
                         list.add(store);
                     }
                 }
@@ -110,6 +117,13 @@ public class MyGroceryFragment extends Fragment implements MyStoreRecycleItemTou
             }
         });
 
+        viewModel.getAllNotes().observe(getViewLifecycleOwner(), new Observer<List<Note>>() {
+            @Override
+            public void onChanged(List<Note> notes) {
+                noteList = new ArrayList<>(notes);
+            }
+        });
+
     }
 
 //    @Override
@@ -123,22 +137,22 @@ public class MyGroceryFragment extends Fragment implements MyStoreRecycleItemTou
         Store store = adapter.getStore(viewHolder.getAdapterPosition());
         String name = store.getName();
 
-
-        try {
-            if(!viewModel.searchNote(name).isEmpty()) {
-                searchedNote = viewModel.searchNote(name).get(0);
+        if(!noteList.isEmpty()) {
+            for(Note note: noteList){
+                if(note.getName().equals(name)){
+                    searchedNote = note;
+                    break;
+                }
             }
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+
+            // this if statement checks if the grocery note was used to create its own To-Do list
+            if (searchedNote.getSelected() == VariablesHelper.TRUE) {
+                // deletes all the To-Do list that belong to the note
+                viewModel.deleteAllNotesId(searchedNote.getNote_id());
+            }
+            viewModel.deleteNote(searchedNote);
         }
-        // this if statement checks if the grocery note was used to create its own To-Do list
-        if (searchedNote != null && searchedNote.getSelected() == VariablesHelper.TRUE) {
-            // deletes all the To-Do list that belong to the note
-            viewModel.deleteAllNotesId(searchedNote.getNote_id());
-        }
-        viewModel.deleteNote(searchedNote);
+
         store.setSelected(VariablesHelper.FALSE);
         viewModel.updateStore(adapter.getStore(viewHolder.getAdapterPosition()));
     }
@@ -146,6 +160,8 @@ public class MyGroceryFragment extends Fragment implements MyStoreRecycleItemTou
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
         MenuItem menuItem = menu.findItem(R.id.bar_search);
+        MenuItem locationItem = menu.findItem(R.id.bar_location);
+        requestNewLocation(locationItem);
         searchView = (SearchView) menuItem.getActionView();
         search(menuItem);
     }
@@ -159,7 +175,7 @@ public class MyGroceryFragment extends Fragment implements MyStoreRecycleItemTou
             @Override
             public boolean onQueryTextSubmit(String query) {
                 menuItem.collapseActionView();
-                return true;
+                return false;
             }
 
             @Override
@@ -186,5 +202,43 @@ public class MyGroceryFragment extends Fragment implements MyStoreRecycleItemTou
                 return true;
             }
         });
+    }
+
+    /**
+     * open th country activity to retrieve the new chosen location
+     * @param location
+     */
+    private void requestNewLocation(MenuItem location){
+        location.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                Intent intent = new Intent(getContext(), CountryActivity.class);
+                startActivityForResult(intent,VariablesHelper.EXTRA_COUNTRY_CODE);
+                return true;
+            }
+        });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        // refresh recycle view
+        if(requestCode == VariablesHelper.EXTRA_COUNTRY_CODE && resultCode == RESULT_OK){
+            observer();
+            System.out.println("grocery list size is: " + origList.size());
+            // create a new daily note
+            Note note = new Note(VariablesHelper.DAILY_NOTES,VariablesHelper.FALSE);
+            viewModel.insertNote(note);
+            if(!origList.isEmpty()) {
+                // create old empty notes from new location country
+                for(Store store: origList){
+                    if(store.getType().equals(VariablesHelper.GROCERY) &&
+                            store.getCountryName().equals(VariablesHelper.countryName)){
+                        note = new Note(store.getName(),VariablesHelper.FALSE);
+                        viewModel.insertNote(note);
+                    }
+                }
+            }
+            Toast.makeText(getContext(), "Country has been changed", Toast.LENGTH_SHORT).show();
+        }
     }
 }

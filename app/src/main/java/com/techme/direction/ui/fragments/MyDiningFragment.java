@@ -1,5 +1,6 @@
 package com.techme.direction.ui.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -20,17 +21,22 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.techme.direction.DirectionViewModel;
+import com.techme.direction.Note;
 import com.techme.direction.helper.VariablesHelper;
 import com.techme.direction.helper.MyStoreRecycleItemTouchHelper;
 import com.techme.direction.R;
 import com.techme.direction.Store;
 import com.techme.direction.adapter.MyStoreRecycleAdapter;
+import com.techme.direction.ui.CountryActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+
+import static android.app.Activity.RESULT_OK;
 
 
 public class MyDiningFragment extends Fragment implements MyStoreRecycleItemTouchHelper.RecyclerItemTouchHelperListener {
@@ -41,6 +47,7 @@ public class MyDiningFragment extends Fragment implements MyStoreRecycleItemTouc
     private RelativeLayout layoutEmpty;
     private List<Store> origList = new ArrayList<>();
     private SearchView searchView;
+    private List<Store> groceryList = new ArrayList<>();
 
     public MyDiningFragment() {
         // Required empty public constructor
@@ -75,7 +82,7 @@ public class MyDiningFragment extends Fragment implements MyStoreRecycleItemTouc
     private void init(){
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
-        recyclerView.setItemViewCacheSize(7);
+        recyclerView.setItemViewCacheSize(VariablesHelper.RECYCLE_CACHE);
         adapter = new MyStoreRecycleAdapter();
         recyclerView.setAdapter(adapter);
     }
@@ -87,9 +94,15 @@ public class MyDiningFragment extends Fragment implements MyStoreRecycleItemTouc
             public void onChanged(List<Store> stores) {
                 List<Store> list = new ArrayList<>();
                 for (Store store : stores) {
-                    if (store.getCountryName().equals("Canada") && store.getType().equals(VariablesHelper.DINING)) {
+                    if (store.getCountryName().equals(VariablesHelper.countryName)
+                            && store.getType().equals(VariablesHelper.DINING)) {
                         list.add(store);
                     }
+                    if (store.getCountryName().equals(VariablesHelper.countryName)
+                            && store.getType().equals(VariablesHelper.GROCERY)) {
+                        groceryList.add(store);
+                    }
+
                 }
                 if(!list.isEmpty()){
                     recyclerView.setVisibility(View.VISIBLE);
@@ -128,6 +141,8 @@ public class MyDiningFragment extends Fragment implements MyStoreRecycleItemTouc
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
         MenuItem menuItem = menu.findItem(R.id.bar_search);
+        MenuItem locationItem = menu.findItem(R.id.bar_location);
+        requestNewLocation(locationItem);
         searchView = (SearchView) menuItem.getActionView();
         search(menuItem);
     }
@@ -141,7 +156,7 @@ public class MyDiningFragment extends Fragment implements MyStoreRecycleItemTouc
             @Override
             public boolean onQueryTextSubmit(String query) {
                 menuItem.collapseActionView();
-                return true;
+                return false;
             }
 
             @Override
@@ -168,5 +183,42 @@ public class MyDiningFragment extends Fragment implements MyStoreRecycleItemTouc
                 return true;
             }
         });
+    }
+
+    /**
+     * open th country activity to retrieve the new chosen location
+     * @param location
+     */
+    private  void requestNewLocation(MenuItem location){
+        location.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                Intent intent = new Intent(getContext(), CountryActivity.class);
+                startActivityForResult(intent,VariablesHelper.EXTRA_COUNTRY_CODE);
+                return true;
+            }
+        });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        // refresh recycle view
+        if(requestCode == VariablesHelper.EXTRA_COUNTRY_CODE && resultCode == RESULT_OK){
+            observer();
+            // create a new daily note
+            Note note = new Note(VariablesHelper.DAILY_NOTES,VariablesHelper.FALSE);
+            viewModel.insertNote(note);
+            if(!groceryList.isEmpty()) {
+                // create old empty notes from new location country
+                for(Store store: groceryList){
+                    if(store.getType().equals(VariablesHelper.GROCERY) &&
+                            store.getCountryName().equals(VariablesHelper.countryName)){
+                        note = new Note(store.getName(),VariablesHelper.FALSE);
+                        viewModel.insertNote(note);
+                    }
+                }
+            }
+            Toast.makeText(getContext(), "Country has been changed", Toast.LENGTH_SHORT).show();
+        }
     }
 }

@@ -67,7 +67,7 @@ public class AddDiningFragment extends Fragment {
     private void init(){
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
-        recyclerView.setItemViewCacheSize(20); // to ensure how many items should be hold in the cache after scrolling
+        recyclerView.setItemViewCacheSize(VariablesHelper.RECYCLE_CACHE); // to ensure how many items should be hold in the cache after scrolling
         adapter = new AddStoreRecycleAdapter();
         recyclerView.setAdapter(adapter);
     }

@@ -49,13 +49,13 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListRecyc
         observer();
         onItemClick();
         onAddButtonClick();
-
+        onDoneButtonClick();
         ItemTouchHelper.SimpleCallback itemTouchHelperCallBack = new ToDoListRecycleItemTouchHelper(0,
                 ItemTouchHelper.LEFT,this);
         new ItemTouchHelper(itemTouchHelperCallBack).attachToRecyclerView(recyclerView);
     }
 
-    public void init() {
+    private void init() {
         txtName = findViewById(R.id.txt_name_to_do_list);
         editAmount = findViewById(R.id.edit_amount_to_do_list);
         editItem = findViewById(R.id.edit_item_to_do_list);
@@ -64,7 +64,7 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListRecyc
         recyclerView = findViewById(R.id.recycle_view_to_do_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
-        recyclerView.setItemViewCacheSize(20);
+        recyclerView.setItemViewCacheSize(VariablesHelper.RECYCLE_CACHE);
         adapter = new ToDoListRecycleAdapter();
         recyclerView.setAdapter(adapter);
         titleName = getIntent().getStringExtra(VariablesHelper.EXTRA_NOTE_NAME);
@@ -72,7 +72,7 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListRecyc
         noteId = getIntent().getLongExtra(VariablesHelper.EXTRA_NOTE_ID,-1);
     }
 
-    public void observer() {
+    private void observer() {
         viewModel = new ViewModelProvider(this).get(DirectionViewModel.class);
         viewModel.getAllToDoList().observe(this, new Observer<List<ToDoList>>() {
             @Override
@@ -91,7 +91,7 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListRecyc
     /**
      * handles the the edit and check box items in the recycle view
      */
-    public void onItemClick() {
+    private void onItemClick() {
         adapter.setOnItemClickListener(new ToDoListRecycleAdapter.onItemClickListener() {
             @Override
             public void onEditClick(ToDoList toDoList, int position) {
@@ -104,10 +104,19 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListRecyc
         });
     }
 
+    private void onDoneButtonClick(){
+        txtDone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+    }
+
     /**
      * this method checks if the item is new or an already existing item that need to be edit
      */
-    public void onAddButtonClick() {
+    private void onAddButtonClick() {
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -144,25 +153,25 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListRecyc
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_action_bar, menu);
-        menu.findItem(R.id.bar_settings).setVisible(false);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.bar_search:
-                Toast.makeText(this, "search clicked", Toast.LENGTH_SHORT).show();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        MenuInflater inflater = getMenuInflater();
+//        inflater.inflate(R.menu.menu_action_bar, menu);
+//        menu.findItem(R.id.bar_settings).setVisible(false);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case R.id.bar_search:
+//                Toast.makeText(this, "search clicked", Toast.LENGTH_SHORT).show();
+//                return true;
+//            default:
+//                return super.onOptionsItemSelected(item);
+//        }
+//
+//    }
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {

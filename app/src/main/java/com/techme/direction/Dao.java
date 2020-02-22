@@ -54,6 +54,9 @@ public interface Dao {
     @Query("delete from to_do_list_table")
     void deleteAllToDoList();
 
+    @Query("delete from country_table")
+    void deleteAllCountry();
+
     //get a specific search data
      @Query("select * from note_table where name like :name and selected = 1 order by name")
      List<Note> searchNote(String name);

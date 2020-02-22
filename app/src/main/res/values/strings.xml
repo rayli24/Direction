@@ -9,11 +9,11 @@
     <string name="nav_bottom_note_title">Notes</string>
     <string name="search_bar">Search</string>
     <string name="settings">Settings</string>
-    <string name="setting_duration_time">Duration Time</string>
+    <string name="setting_duration_time">Duration Time (coming soon)</string>
     <string name="title_activity_maps">Direction</string>
-    <string name="setting_location">Location</string>
+    <string name="setting_location">Change Location</string>
     <string name="setting_alphabetic">A - Z</string>
-    <string name="setting_nearest">Nearest</string>
+    <string name="setting_nearest">Nearest (coming soon)</string>
     <string name="setting_sorting">Sorting</string>
     <string name="delete">DELETE</string>
     <string name="add_stores">Add stores to my list</string>

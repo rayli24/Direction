@@ -99,6 +99,10 @@ public class Repository {
         new UpdateToDoListAsyncTask(dao).execute(toDoList);
     }
 
+    public void updateCountry(Country country){
+        new UpdateCountryAsyncTask(dao).execute(country);
+    }
+
     public void updateNote(Note note) {
         new UpdateNoteAsyncTask(dao).execute(note);
     }
@@ -114,6 +118,8 @@ public class Repository {
     public void deleteToDoList(ToDoList toDoList) {
         new DeleteToDoListAsyncTask(dao).execute(toDoList);
     }
+
+    public void deleteAllToDoList() {new DeleteAllToDoListAsyncTask(dao).execute();}
 
     public void deleteAllNotes() {
         new DeleteAllNotesAsyncTask(dao).execute();
@@ -183,6 +189,16 @@ public class Repository {
         @Override
         protected Void doInBackground(ToDoList... toDoLists) {
             dao.updateToDoList(toDoLists[0]);
+            return null;
+        }
+    }
+
+    private static class UpdateCountryAsyncTask extends AsyncTask<Country,Void,Void>{
+        private Dao dao;
+        private UpdateCountryAsyncTask(Dao dao){this.dao = dao;}
+        @Override
+        protected Void doInBackground(Country... countries) {
+            dao.updateCountry(countries[0]);
             return null;
         }
     }
@@ -269,6 +285,16 @@ public class Repository {
         @Override
         protected Void doInBackground(Void... voids) {
             dao.deleteNotesId(id);
+            return null;
+        }
+    }
+
+    private static class DeleteAllToDoListAsyncTask extends AsyncTask<Void,Void,Void>{
+        private Dao dao;
+        private DeleteAllToDoListAsyncTask(Dao dao){this.dao = dao;}
+        @Override
+        protected Void doInBackground(Void... voids) {
+            dao.deleteAllToDoList();
             return null;
         }
     }

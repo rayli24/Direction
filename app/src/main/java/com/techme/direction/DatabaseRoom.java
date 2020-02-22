@@ -18,7 +18,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import static com.techme.direction.helper.ConvertImage.convertImageToByte;
 
-@Database(entities = {Country.class, ToDoList.class, Note.class, Store.class}, version = 5)
+@Database(entities = {Country.class, ToDoList.class, Note.class, Store.class}, version = 1)
 public abstract class DatabaseRoom extends RoomDatabase {
 
     private static DatabaseRoom instance;
@@ -74,6 +74,7 @@ public abstract class DatabaseRoom extends RoomDatabase {
             dao.deleteAllStore();
             dao.deleteAllNotes();
             dao.deleteAllToDoList();
+            dao.deleteAllCountry();
             return null;
         }
     }
@@ -105,8 +106,8 @@ public abstract class DatabaseRoom extends RoomDatabase {
         }
 
         public void country() {
-            dao.insertCountry(new Country("Canada"));
-            dao.insertCountry(new Country("USA"));
+            dao.insertCountry(new Country("Canada",VariablesHelper.FALSE));
+            dao.insertCountry(new Country("USA", VariablesHelper.FALSE));
         }
 
         public void store() throws IOException {

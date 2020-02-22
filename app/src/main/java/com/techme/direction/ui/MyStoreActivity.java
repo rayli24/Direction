@@ -1,6 +1,7 @@
 package com.techme.direction.ui;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
@@ -16,6 +17,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.techme.direction.helper.ContextHelper;
 import com.techme.direction.DirectionViewModel;
+import com.techme.direction.helper.VariablesHelper;
 import com.techme.direction.ui.fragments.MyDiningFragment;
 import com.techme.direction.ui.fragments.MyGroceryFragment;
 import com.techme.direction.ui.fragments.MyNoteFragment;
@@ -32,7 +34,6 @@ public class MyStoreActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_store);
-        ContextHelper.Helper.setResource(getResources()); // store Resource in a class
         floatingActionButton = findViewById(R.id.float_button_store);
 
         navigationView = findViewById(R.id.bottom_nav_my_store);
@@ -76,6 +77,8 @@ public class MyStoreActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_action_bar,menu);
+        menu.findItem(R.id.bar_nearest).setEnabled(false);
+        menu.findItem(R.id.bar_duration_time).setEnabled(false);
         return true;
     }
 
@@ -85,19 +88,16 @@ public class MyStoreActivity extends AppCompatActivity {
         switch (item.getItemId())
         {
             case R.id.bar_settings:
-                Toast.makeText(this, "settings clicked", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.bar_duration_time:
-                Toast.makeText(this, "time clicked", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.bar_alphabetic:
-                Toast.makeText(this, "alpha clicked", Toast.LENGTH_SHORT).show();
                 return true;
-            case R.id.bar_location:
-                Toast.makeText(this, "location clicked", Toast.LENGTH_SHORT).show();
-                return true;
+//            case R.id.bar_location:
+//                Intent intent = new Intent(MyStoreActivity.this, CountryActivity.class);
+//                startActivityForResult(intent, VariablesHelper.EXTRA_COUNTRY_CODE);
+//                return true;
             case R.id.bar_nearest:
-                Toast.makeText(this, "nearest clicked", Toast.LENGTH_SHORT).show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -130,5 +130,10 @@ public class MyStoreActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

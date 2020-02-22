@@ -82,7 +82,7 @@ public class MyStoreRecycleAdapter extends ListAdapter<Store,MyStoreRecycleAdapt
         Store store = getStore(position);
         holder.imgLogo.setImageBitmap(ConvertImage.convertByteToImage(store.getLogo()));
         holder.name.setText(store.getName());
-        holder.time.setText(String.valueOf(store.getTime())+ " min");
+        holder.time.setText(store.getTime()+ " min");
     }
 
 

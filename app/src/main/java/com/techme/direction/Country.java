@@ -11,14 +11,19 @@ public class Country {
 
     private String name;
 
-    public Country(String name)
+    private int selected;
+
+    public Country(String name, int selected)
     {
         this.name = name;
+        this.selected = selected;
     }
 
     public void setId(long id) {
         this.id = id;
     }
+
+    public void setSelected(int selected){this.selected = selected;}
 
     public long getId()
     {
@@ -29,4 +34,6 @@ public class Country {
     {
         return name;
     }
+
+    public int getSelected(){return selected;}
 }

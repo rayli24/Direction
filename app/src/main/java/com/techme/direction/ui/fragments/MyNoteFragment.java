@@ -151,7 +151,7 @@ public class MyNoteFragment extends Fragment implements MyNoteRecycleItemTouchHe
         imgAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                searchView.setQuery(VariablesHelper.REPLACE, true);
+//                searchView.setQuery(VariablesHelper.REPLACE, true);
                 Intent intent = new Intent(getContext(), SelectNoteActivity.class);
                 startActivity(intent);
             }
@@ -166,12 +166,13 @@ public class MyNoteFragment extends Fragment implements MyNoteRecycleItemTouchHe
         viewModel.deleteAllNotesId(note.getNote_id());
         note.setSelected(VariablesHelper.FALSE);
         viewModel.updateNote(note);
-        //todo remember to check for when a grocery store has been deleted from my store list to delete it from notes as well
     }
 
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
         MenuItem menuItem = menu.findItem(R.id.bar_search);
+        MenuItem setting = menu.findItem(R.id.bar_settings);
+        setting.setVisible(false);
         searchView = (SearchView) menuItem.getActionView();
         search(menuItem);
     }
@@ -185,7 +186,7 @@ public class MyNoteFragment extends Fragment implements MyNoteRecycleItemTouchHe
             @Override
             public boolean onQueryTextSubmit(String s) {
                 menuItem.collapseActionView();
-                return true;
+                return false;
             }
 
             @Override

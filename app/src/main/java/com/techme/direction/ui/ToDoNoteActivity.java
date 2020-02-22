@@ -57,7 +57,7 @@ public class ToDoNoteActivity extends AppCompatActivity implements ToDoNoteRecyc
         recyclerView = findViewById(R.id.recycle_view_to_do_note);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
-        recyclerView.setItemViewCacheSize(20);
+        recyclerView.setItemViewCacheSize(VariablesHelper.RECYCLE_CACHE);
         adapter = new ToDoNoteRecycleAdapter();
         recyclerView.setAdapter(adapter);
         titleName = getIntent().getStringExtra(VariablesHelper.EXTRA_NOTE_NAME);

@@ -51,6 +51,10 @@ public class DirectionViewModel extends AndroidViewModel {
         repository.updateNote(note);
     }
 
+    public void updateCountry(Country country){
+        repository.updateCountry(country);
+    }
+
     public void deleteToDoList(ToDoList toDoList) {
         repository.deleteToDoList(toDoList);
     }
@@ -66,6 +70,8 @@ public class DirectionViewModel extends AndroidViewModel {
     public void deleteAllNotesId(long id) {
         repository.deleteAllNotesId(id);
     }
+
+    public void deleteAllToDoList() {repository.deleteAllToDoList();}
 
 
     // methods for search views

@@ -63,7 +63,7 @@ public class AddStoresFragment extends Fragment {
     private void init(){
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
-        recyclerView.setItemViewCacheSize(20);
+        recyclerView.setItemViewCacheSize(VariablesHelper.RECYCLE_CACHE);
         adapter = new AddStoreRecycleAdapter();
         recyclerView.setAdapter(adapter);
     }
