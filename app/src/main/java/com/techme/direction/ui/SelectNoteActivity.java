@@ -1,29 +1,23 @@
 package com.techme.direction.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.Icon;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.techme.direction.DirectionViewModel;
 import com.techme.direction.Note;
 import com.techme.direction.R;
 import com.techme.direction.adapter.SelectNoteRecycleAdapter;
-import com.techme.direction.helper.VariablesHelper;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import static com.techme.direction.helper.VariablesHelper.EXTRA_NOTE_ID;
 import static com.techme.direction.helper.VariablesHelper.EXTRA_NOTE_NAME;

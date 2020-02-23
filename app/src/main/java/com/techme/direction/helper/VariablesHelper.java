@@ -27,6 +27,11 @@ public class VariablesHelper {
     public static final String EXTRA_NOTE_ID = "note id";
     public static final String EXTRA_COUNTRY = "country";
     public static final int EXTRA_COUNTRY_CODE = 2;
+    public static final String EXTRA_FRAGMENT = "fragment note";
+    public static final String NOTE_FRAGMENT = "note";
+    public static final String DINING_FRAGMENT = "dining";
+    public static final String GROCERY_FRAGMENT = "grocery";
+    public static final String STORE_FRAGMENT = "store";
 
     // for search view
     public static final String REPLACE = "replace";

@@ -24,6 +24,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.techme.direction.DirectionViewModel;
 import com.techme.direction.Note;
 import com.techme.direction.helper.VariablesHelper;
@@ -31,6 +32,7 @@ import com.techme.direction.helper.MyStoreRecycleItemTouchHelper;
 import com.techme.direction.R;
 import com.techme.direction.Store;
 import com.techme.direction.adapter.MyStoreRecycleAdapter;
+import com.techme.direction.ui.AddStoreActivity;
 import com.techme.direction.ui.CountryActivity;
 
 import java.util.ArrayList;
@@ -40,7 +42,9 @@ import java.util.concurrent.ExecutionException;
 import static android.app.Activity.RESULT_OK;
 import static com.techme.direction.helper.VariablesHelper.DAILY_NOTES;
 import static com.techme.direction.helper.VariablesHelper.DINING;
+import static com.techme.direction.helper.VariablesHelper.DINING_FRAGMENT;
 import static com.techme.direction.helper.VariablesHelper.EXTRA_COUNTRY_CODE;
+import static com.techme.direction.helper.VariablesHelper.EXTRA_FRAGMENT;
 import static com.techme.direction.helper.VariablesHelper.FALSE;
 import static com.techme.direction.helper.VariablesHelper.GROCERY;
 import static com.techme.direction.helper.VariablesHelper.RECYCLE_CACHE;
@@ -58,6 +62,7 @@ public class MyDiningFragment extends Fragment implements MyStoreRecycleItemTouc
     private List<Store> origList = new ArrayList<>();
     private SearchView searchView;
     private List<Store> groceryList = new ArrayList<>();
+    private FloatingActionButton floatingActionButton;
 
     public MyDiningFragment() {
         // Required empty public constructor
@@ -111,6 +116,7 @@ public class MyDiningFragment extends Fragment implements MyStoreRecycleItemTouc
         recyclerView.setItemViewCacheSize(RECYCLE_CACHE);
         adapter = new MyStoreRecycleAdapter();
         recyclerView.setAdapter(adapter);
+        floatingButton();
     }
 
     private void observer(){
@@ -148,11 +154,25 @@ public class MyDiningFragment extends Fragment implements MyStoreRecycleItemTouc
         });
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        searchView.setQuery(REPLACE,true);
+
+    private  void floatingButton(){
+        floatingActionButton = getActivity().findViewById(R.id.float_button_store);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), AddStoreActivity.class);
+                intent.putExtra(EXTRA_FRAGMENT,DINING_FRAGMENT);
+                startActivity(intent);
+            }
+        });
+
     }
+
+//    @Override
+//    public void onStop() {
+//        super.onStop();
+//        searchView.setQuery(REPLACE,true);
+//    }
 
 
 
@@ -166,6 +186,7 @@ public class MyDiningFragment extends Fragment implements MyStoreRecycleItemTouc
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
         MenuItem menuItem = menu.findItem(R.id.bar_search);
         MenuItem locationItem = menu.findItem(R.id.bar_location);
+        menuItem.collapseActionView();
         requestNewLocation(locationItem);
         searchView = (SearchView) menuItem.getActionView();
         search(menuItem);
@@ -179,8 +200,8 @@ public class MyDiningFragment extends Fragment implements MyStoreRecycleItemTouc
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                searchView.setQuery("",false);
-                menuItem.collapseActionView();
+//                searchView.setQuery("",false);
+//                menuItem.collapseActionView();
                 return false;
             }
 

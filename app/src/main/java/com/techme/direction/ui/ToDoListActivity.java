@@ -7,14 +7,11 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,13 +20,14 @@ import com.techme.direction.DirectionViewModel;
 import com.techme.direction.R;
 import com.techme.direction.adapter.ToDoListRecycleAdapter;
 import com.techme.direction.helper.ToDoListRecycleItemTouchHelper;
-import com.techme.direction.helper.VariablesHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.techme.direction.helper.VariablesHelper.EXTRA_FRAGMENT;
 import static com.techme.direction.helper.VariablesHelper.EXTRA_NOTE_ID;
 import static com.techme.direction.helper.VariablesHelper.EXTRA_NOTE_NAME;
+import static com.techme.direction.helper.VariablesHelper.NOTE_FRAGMENT;
 import static com.techme.direction.helper.VariablesHelper.RECYCLE_CACHE;
 
 public class ToDoListActivity extends AppCompatActivity implements ToDoListRecycleItemTouchHelper.RecyclerItemTouchHelperListener {
@@ -112,6 +110,9 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListRecyc
         txtDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(ToDoListActivity.this,MyStoreActivity.class);
+                intent.putExtra(EXTRA_FRAGMENT,NOTE_FRAGMENT);
+                startActivity(intent);
                 finish();
             }
         });

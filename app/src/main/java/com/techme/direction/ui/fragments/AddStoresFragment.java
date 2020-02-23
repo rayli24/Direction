@@ -124,6 +124,7 @@ public class AddStoresFragment extends Fragment {
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
         MenuItem menuItem = menu.findItem(R.id.bar_search);
+        menuItem.collapseActionView();
         searchView = (SearchView) menuItem.getActionView();
         search(menuItem);
     }

@@ -7,27 +7,29 @@ import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.techme.direction.helper.ContextHelper;
-import com.techme.direction.DirectionViewModel;
-import com.techme.direction.helper.VariablesHelper;
 import com.techme.direction.ui.fragments.MyDiningFragment;
 import com.techme.direction.ui.fragments.MyGroceryFragment;
 import com.techme.direction.ui.fragments.MyNoteFragment;
 import com.techme.direction.ui.fragments.MyStoresFragment;
 import com.techme.direction.R;
 
+import static com.techme.direction.helper.VariablesHelper.EXTRA_FRAGMENT;
+import static com.techme.direction.helper.VariablesHelper.NOTE_FRAGMENT;
+
 public class MyStoreActivity extends AppCompatActivity {
 
     private BottomNavigationView navigationView;
     private FloatingActionButton floatingActionButton;
+    private String intentFragment;
+    private int selectedId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +40,19 @@ public class MyStoreActivity extends AppCompatActivity {
         navigationView = findViewById(R.id.bottom_nav_my_store);
         navigationView.setOnNavigationItemSelectedListener(navListener);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_my_store,new MyStoresFragment()).commit();
-        buttons();
+        intentFragment = getIntent().getStringExtra(EXTRA_FRAGMENT);
+        if(!TextUtils.isEmpty(intentFragment)){
+            switch (intentFragment){
+                case NOTE_FRAGMENT:
+                    selectedId = navigationView.getMenu().findItem(R.id.nav_my_store_notes).getItemId();
+                    navigationView.setSelectedItemId(selectedId);
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_my_store, new MyNoteFragment()).commit();
+                    break;
+            }
+        }else {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_my_store, new MyStoresFragment()).commit();
+        }
+//        buttons();
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
@@ -113,22 +126,11 @@ public class MyStoreActivity extends AppCompatActivity {
             floatingActionButton.hide();
     }
 
-    /**
-     * floating point to open add store activity
-     */
-    private void buttons()
-    {
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MyStoreActivity.this, AddStoreActivity.class);
-                startActivity(intent);
-            }
-        });
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+
 }

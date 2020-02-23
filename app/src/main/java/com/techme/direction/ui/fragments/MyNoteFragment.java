@@ -27,7 +27,6 @@ import com.techme.direction.Note;
 import com.techme.direction.R;
 import com.techme.direction.adapter.MyNoteRecycleAdapter;
 import com.techme.direction.helper.MyNoteRecycleItemTouchHelper;
-import com.techme.direction.helper.VariablesHelper;
 import com.techme.direction.ui.ToDoListActivity;
 import com.techme.direction.ui.SelectNoteActivity;
 import com.techme.direction.ui.ToDoNoteActivity;
@@ -40,7 +39,6 @@ import static com.techme.direction.helper.VariablesHelper.EXTRA_NOTE_ID;
 import static com.techme.direction.helper.VariablesHelper.EXTRA_NOTE_NAME;
 import static com.techme.direction.helper.VariablesHelper.FALSE;
 import static com.techme.direction.helper.VariablesHelper.RECYCLE_CACHE;
-import static com.techme.direction.helper.VariablesHelper.REPLACE;
 import static com.techme.direction.helper.VariablesHelper.TRUE;
 
 
@@ -148,17 +146,11 @@ public class MyNoteFragment extends Fragment implements MyNoteRecycleItemTouchHe
         });
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        searchView.setQuery(REPLACE,true);
-    }
-
     private void buttonsEvent(){
         imgAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                searchView.setQuery(REPLACE, true);
+//                searchView.setQuery(REPLACE, true);
                 Intent intent = new Intent(getContext(), SelectNoteActivity.class);
                 startActivity(intent);
             }
@@ -179,10 +171,12 @@ public class MyNoteFragment extends Fragment implements MyNoteRecycleItemTouchHe
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
         MenuItem menuItem = menu.findItem(R.id.bar_search);
         MenuItem setting = menu.findItem(R.id.bar_settings);
+        menuItem.collapseActionView();
         setting.setVisible(false);
         searchView = (SearchView) menuItem.getActionView();
         search(menuItem);
     }
+
 
     /**
      * handles the search view
@@ -192,8 +186,8 @@ public class MyNoteFragment extends Fragment implements MyNoteRecycleItemTouchHe
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
-                searchView.setQuery("",false);
-                menuItem.collapseActionView();
+//                searchView.setQuery("",false);
+//                menuItem.collapseActionView();
                 return false;
             }
 

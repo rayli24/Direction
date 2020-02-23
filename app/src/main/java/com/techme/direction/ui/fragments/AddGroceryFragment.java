@@ -95,7 +95,7 @@ public class AddGroceryFragment extends Fragment {
 
                 adapter.submitList(list);
 
-                if(searchView != null & searchView.getQuery().length() > 0){
+                if(searchView != null && searchView.getQuery().length() > 0){
                     String temp = String.valueOf(searchView.getQuery());
                     searchView.setQuery("",false);
                     searchView.setQuery(temp,false);
@@ -123,6 +123,7 @@ public class AddGroceryFragment extends Fragment {
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
         MenuItem menuItem = menu.findItem(R.id.bar_search);
+        menuItem.collapseActionView();
         searchView = (SearchView) menuItem.getActionView();
         search(menuItem);
     }
