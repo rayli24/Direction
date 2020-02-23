@@ -45,7 +45,7 @@
             android:id="@+id/img_my_logo_recycle_view"
             android:layout_width="60dp"
             android:layout_height="50dp"
-            android:src="@drawable/sobey"
+            android:src="@drawable/mcdonald"
             android:layout_marginStart="10dp"/>
 
         <TextView

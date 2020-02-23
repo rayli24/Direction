@@ -159,8 +159,8 @@ public class MyStoresFragment extends Fragment implements MyStoreRecycleItemTouc
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onDetach() {
+        super.onDetach();
         searchView.setQuery(REPLACE,true);
     }
 
