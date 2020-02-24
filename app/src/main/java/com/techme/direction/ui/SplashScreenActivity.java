@@ -29,7 +29,7 @@ import static com.techme.direction.helper.VariablesHelper.countrySelected;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
-    private static int splashTime = 3000;
+    private static int splashTime = 1000;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

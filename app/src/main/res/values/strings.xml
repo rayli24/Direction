@@ -19,4 +19,6 @@
     <string name="add_stores">Add stores to my list</string>
     <string name="add_notes">Create notes</string>
     <string name="todo_note">Empty</string>
+    <integer name="repeat_num">3</integer>
+    <string name="splash_screen">Lets ride ...</string>
 </resources>

@@ -73,6 +73,8 @@ public class AddStoreRecycleAdapter extends ListAdapter<Store, AddStoreRecycleAd
         Store store = getItem(position);
         holder.imgLogo.setImageBitmap(ConvertImage.convertByteToImage(store.getLogo()));
         holder.txtName.setText(store.getName());
+        holder.txtName.setSelected(true);
+        holder.txtName.setFocusableInTouchMode(true);
     }
 
 

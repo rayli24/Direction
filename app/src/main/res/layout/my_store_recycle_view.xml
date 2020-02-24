@@ -53,14 +53,17 @@
             android:layout_width="174dp"
             android:layout_height="30dp"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="0dp"
             android:layout_toRightOf="@+id/img_my_logo_recycle_view"
             android:layout_marginStart="10dp"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:text="Sobey's"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="@integer/repeat_num"
+            android:text="Atlantic superstore today"
             android:gravity="center"
+            android:scrollHorizontally="true"
             android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+
 
         <ImageView
             android:id="@+id/img_my_location_recycle_view"

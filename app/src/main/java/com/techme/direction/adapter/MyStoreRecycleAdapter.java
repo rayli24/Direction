@@ -3,6 +3,7 @@ package com.techme.direction.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -21,7 +22,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class MyStoreRecycleAdapter extends ListAdapter<Store,MyStoreRecycleAdapter.MyStoreViewHolder> {
     private onItemClickListener listener;
-    //private List<Store> selectedList = new ArrayList<>();
 
     public MyStoreRecycleAdapter() {
         super(Diff_Callback);
@@ -49,6 +49,7 @@ public class MyStoreRecycleAdapter extends ListAdapter<Store,MyStoreRecycleAdapt
         private TextView name, time;
         public RelativeLayout viewForeground, viewBackground;
 
+
         public MyStoreViewHolder(@NonNull View itemView) {
             super(itemView);
             imgLogo = itemView.findViewById(R.id.img_my_logo_recycle_view);
@@ -56,7 +57,6 @@ public class MyStoreRecycleAdapter extends ListAdapter<Store,MyStoreRecycleAdapt
             time = itemView.findViewById(R.id.txt_my_time_recycle_view);
             viewForeground = itemView.findViewById(R.id.layout_foreground_my_store_recycle_view);
             viewBackground = itemView.findViewById(R.id.layout_background_my_store_recycle_view);
-
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -82,6 +82,8 @@ public class MyStoreRecycleAdapter extends ListAdapter<Store,MyStoreRecycleAdapt
         Store store = getStore(position);
         holder.imgLogo.setImageBitmap(ConvertImage.convertByteToImage(store.getLogo()));
         holder.name.setText(store.getName());
+        holder.name.setSelected(true);
+        holder.name.setFocusableInTouchMode(true);
         holder.time.setText(store.getTime()+ " min");
     }
 
