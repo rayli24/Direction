@@ -39,6 +39,7 @@ import static com.techme.direction.helper.VariablesHelper.LOAD_COUNTRY;
 import static com.techme.direction.helper.VariablesHelper.RECYCLE_CACHE;
 import static com.techme.direction.helper.VariablesHelper.SHARED_PREF_COUNTRY;
 import static com.techme.direction.helper.VariablesHelper.TRUE;
+import static com.techme.direction.helper.VariablesHelper.countryName;
 import static com.techme.direction.helper.VariablesHelper.countrySelected;
 
 public class PermissionActivity extends AppCompatActivity {
@@ -226,6 +227,7 @@ public class PermissionActivity extends AppCompatActivity {
             @Override
             public void onClick(Country country) {
                 if (checkPermission()) {
+                    countryName = country.getName();
                     saveCountry(country.getName());
                     country.setSelected(TRUE);
                     viewModel.updateCountry(country);

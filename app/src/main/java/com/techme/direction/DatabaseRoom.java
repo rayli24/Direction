@@ -30,6 +30,7 @@ public abstract class DatabaseRoom extends RoomDatabase {
         if (instance == null) {
             instance = Room.databaseBuilder(context.getApplicationContext(),
                     DatabaseRoom.class, "direction_database")
+                    .fallbackToDestructiveMigration()
                     .addCallback(roomCall)
                     .build();
         }
