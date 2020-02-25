@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.appcompat.widget.SearchView;
 
 import com.techme.direction.Note;
@@ -62,11 +63,10 @@ public class AddStoresFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         init();
         observer();
-//        searchView.setQuery(VariablesHelper.REPLACE, true); // to close the search view if open
         itemClicked();
     }
 
-    private void init(){
+    private void init() {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemViewCacheSize(RECYCLE_CACHE);
@@ -74,7 +74,7 @@ public class AddStoresFragment extends Fragment {
         recyclerView.setAdapter(adapter);
     }
 
-    private void observer(){
+    private void observer() {
         viewModel = new ViewModelProvider(this).get(DirectionViewModel.class);
         viewModel.getAllUnSelectedStores().observe(getViewLifecycleOwner(), new Observer<List<Store>>() {
             @Override
@@ -91,10 +91,10 @@ public class AddStoresFragment extends Fragment {
 
                 adapter.submitList(list);
 
-                if(searchView != null && searchView.getQuery().length() > 0){
+                if (searchView != null && searchView.getQuery().length() > 0) {
                     String temp = String.valueOf(searchView.getQuery());
-                    searchView.setQuery("",false);
-                    searchView.setQuery(temp,false);
+                    searchView.setQuery("", false);
+                    searchView.setQuery(temp, false);
                 }
             }
         });
@@ -131,24 +131,24 @@ public class AddStoresFragment extends Fragment {
 
     /**
      * handles the search view
+     *
      * @param menuItem
      */
-    private void search(final MenuItem menuItem){
+    private void search(final MenuItem menuItem) {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                menuItem.collapseActionView();
-                return true;
+                return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if(!newText.isEmpty()){
+                if (!newText.isEmpty()) {
                     try {
                         String name = "%" + newText + "%";
                         List<Store> list = new ArrayList<>();
-                        for(Store store: viewModel.searchAddStore(name)){
-                            if(store.getCountryName().equals(countryName)){
+                        for (Store store : viewModel.searchAddStore(name)) {
+                            if (store.getCountryName().equals(countryName)) {
                                 list.add(store);
                             }
                         }
@@ -158,7 +158,7 @@ public class AddStoresFragment extends Fragment {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                }else{
+                } else {
                     adapter.submitList(origList);
                 }
                 return true;

@@ -41,18 +41,17 @@ public class MyStoreActivity extends AppCompatActivity {
         navigationView.setOnNavigationItemSelectedListener(navListener);
 
         intentFragment = getIntent().getStringExtra(EXTRA_FRAGMENT);
-        if(!TextUtils.isEmpty(intentFragment)){
-            switch (intentFragment){
+        if (!TextUtils.isEmpty(intentFragment)) {
+            switch (intentFragment) {
                 case NOTE_FRAGMENT:
                     selectedId = navigationView.getMenu().findItem(R.id.nav_my_store_notes).getItemId();
                     navigationView.setSelectedItemId(selectedId);
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_my_store, new MyNoteFragment()).commit();
                     break;
             }
-        }else {
+        } else {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_my_store, new MyStoresFragment()).commit();
         }
-//        buttons();
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
@@ -60,7 +59,7 @@ public class MyStoreActivity extends AppCompatActivity {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                     Fragment selectedFragment = null;
-                    switch (menuItem.getItemId()){
+                    switch (menuItem.getItemId()) {
                         case R.id.nav_my_store_list:
                             showFloat(true);
                             selectedFragment = new MyStoresFragment();
@@ -79,7 +78,7 @@ public class MyStoreActivity extends AppCompatActivity {
                             break;
 
                     }
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_my_store,selectedFragment).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_my_store, selectedFragment).commit();
                     return true;
                 }
             };
@@ -88,7 +87,7 @@ public class MyStoreActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_action_bar,menu);
+        inflater.inflate(R.menu.menu_action_bar, menu);
         menu.findItem(R.id.bar_nearest).setEnabled(false);
         menu.findItem(R.id.bar_duration_time).setEnabled(false);
         return true;
@@ -97,8 +96,7 @@ public class MyStoreActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId())
-        {
+        switch (item.getItemId()) {
             case R.id.bar_settings:
                 return true;
             case R.id.bar_duration_time:
@@ -116,11 +114,11 @@ public class MyStoreActivity extends AppCompatActivity {
 
     /**
      * toggle the visibility of the floating button
+     *
      * @param show
      */
-    private void showFloat(boolean show)
-    {
-        if(show)
+    private void showFloat(boolean show) {
+        if (show)
             floatingActionButton.show();
         else
             floatingActionButton.hide();

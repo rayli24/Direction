@@ -33,8 +33,6 @@ public interface Dao {
 
     // sqlite delete methods
     @Delete
-    void deleteCountry(Country country);
-    @Delete
     void deleteNote(Note note);
     @Delete
     void deleteToDoList(ToDoList toDoList);

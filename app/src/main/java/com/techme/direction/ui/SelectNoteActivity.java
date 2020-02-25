@@ -22,6 +22,7 @@ import java.util.List;
 import static com.techme.direction.helper.VariablesHelper.EXTRA_NOTE_ID;
 import static com.techme.direction.helper.VariablesHelper.EXTRA_NOTE_NAME;
 import static com.techme.direction.helper.VariablesHelper.FALSE;
+import static com.techme.direction.helper.VariablesHelper.MY_STORE_ACTIVITY_CODE;
 import static com.techme.direction.helper.VariablesHelper.RECYCLE_CACHE;
 import static com.techme.direction.helper.VariablesHelper.TRUE;
 
@@ -31,6 +32,7 @@ public class SelectNoteActivity extends AppCompatActivity {
     private DirectionViewModel viewModel;
     private RecyclerView recyclerView;
     private ImageView imgBack;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +43,7 @@ public class SelectNoteActivity extends AppCompatActivity {
         onItemClicked();
     }
 
-    private void init(){
+    private void init() {
         imgBack = findViewById(R.id.img_select_note_back);
         recyclerView = findViewById(R.id.recycle_view_to_do_note);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -51,14 +53,14 @@ public class SelectNoteActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 
-    private void observer(){
+    private void observer() {
         viewModel = new ViewModelProvider(this).get(DirectionViewModel.class);
         viewModel.getAllNotes().observe(this, new Observer<List<Note>>() {
             @Override
             public void onChanged(List<Note> notes) {
                 List<Note> list = new ArrayList<>();
-                for(Note note: notes){
-                    if(note.getSelected() == FALSE){
+                for (Note note : notes) {
+                    if (note.getSelected() == FALSE) {
                         list.add(note);
                     }
                 }
@@ -67,7 +69,7 @@ public class SelectNoteActivity extends AppCompatActivity {
         });
     }
 
-    private void buttonEvents(){
+    private void buttonEvents() {
         imgBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -77,18 +79,18 @@ public class SelectNoteActivity extends AppCompatActivity {
 
     }
 
-    private void onItemClicked(){
+    private void onItemClicked() {
 
         adapter.setOnclickItemListener(new SelectNoteRecycleAdapter.onClickItemListener() {
             @Override
             public void onClick(Note note) {
-                Note myNote = new Note(note.getName(),TRUE);
+                Note myNote = new Note(note.getName(), TRUE);
                 myNote.setNote_id(note.getNote_id());
                 String name = myNote.getName();
                 viewModel.updateNote(myNote);
                 Intent intent = new Intent(SelectNoteActivity.this, ToDoListActivity.class);
-                intent.putExtra(EXTRA_NOTE_NAME,name);
-                intent.putExtra(EXTRA_NOTE_ID,note.getNote_id());
+                intent.putExtra(EXTRA_NOTE_NAME, name);
+                intent.putExtra(EXTRA_NOTE_ID, note.getNote_id());
                 startActivity(intent);
                 finish();
             }

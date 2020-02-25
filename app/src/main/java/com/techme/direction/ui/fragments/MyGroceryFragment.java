@@ -1,11 +1,13 @@
 package com.techme.direction.ui.fragments;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -14,11 +16,13 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -130,10 +134,10 @@ public class MyGroceryFragment extends Fragment implements MyStoreRecycleItemTou
                         list.add(store);
                     }
                 }
-                if(!list.isEmpty()){
+                if (!list.isEmpty()) {
                     recyclerView.setVisibility(View.VISIBLE);
                     layoutEmpty.setVisibility(View.GONE);
-                }else {
+                } else {
                     layoutEmpty.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.GONE);
                 }
@@ -142,7 +146,7 @@ public class MyGroceryFragment extends Fragment implements MyStoreRecycleItemTou
                 adapter.submitList(list);
 
                 // to keep the correct list after removing a searched item
-                if(searchView != null && searchView.getQuery().length() > 0){
+                if (searchView != null && searchView.getQuery().length() > 0) {
                     String temp = String.valueOf(searchView.getQuery());
                     searchView.setQuery("", false);
                     searchView.setQuery(temp, false);
@@ -159,32 +163,27 @@ public class MyGroceryFragment extends Fragment implements MyStoreRecycleItemTou
 
     }
 
-    private void floatButton(){
+    private void floatButton() {
         floatingActionButton = getActivity().findViewById(R.id.float_button_store);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), AddStoreActivity.class);
-                intent.putExtra(EXTRA_FRAGMENT,GROCERY_FRAGMENT);
+                intent.putExtra(EXTRA_FRAGMENT, GROCERY_FRAGMENT);
                 startActivity(intent);
             }
         });
     }
 
-//    @Override
-//    public void onStop() {
-//        super.onStop();
-//        searchView.setQuery(REPLACE,true);
-//    }
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
         Store store = adapter.getStore(viewHolder.getAdapterPosition());
         String name = store.getName();
 
-        if(!noteList.isEmpty()) {
-            for(Note note: noteList){
-                if(note.getName().equals(name)){
+        if (!noteList.isEmpty()) {
+            for (Note note : noteList) {
+                if (note.getName().equals(name)) {
                     searchedNote = note;
                     break;
                 }
@@ -193,11 +192,12 @@ public class MyGroceryFragment extends Fragment implements MyStoreRecycleItemTou
             // this if statement checks if the grocery note was used to create its own To-Do list
             if (searchedNote.getSelected() == TRUE) {
                 // deletes all the To-Do list that belong to the note
-                viewModel.deleteAllNotesId(searchedNote.getNote_id());
+                displayDialog(store);
+            }else {
+                viewModel.deleteNote(searchedNote);
             }
-            viewModel.deleteNote(searchedNote);
-        }
 
+        }
         store.setSelected(FALSE);
         viewModel.updateStore(adapter.getStore(viewHolder.getAdapterPosition()));
     }
@@ -214,14 +214,13 @@ public class MyGroceryFragment extends Fragment implements MyStoreRecycleItemTou
 
     /**
      * handles the search view
+     *
      * @param menuItem
      */
-    private void search(final MenuItem menuItem){
+    private void search(final MenuItem menuItem) {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-//                searchView.setQuery("",false);
-//                menuItem.collapseActionView();
                 return false;
             }
 
@@ -231,9 +230,9 @@ public class MyGroceryFragment extends Fragment implements MyStoreRecycleItemTou
                     String name = "%" + newText + "%";
                     try {
                         List<Store> list = new ArrayList<>();
-                        for(Store store: viewModel.searchMyStore(name)){
-                            if(store.getType().equals(GROCERY) &&
-                                    store.getCountryName().equals(countryName)){
+                        for (Store store : viewModel.searchMyStore(name)) {
+                            if (store.getType().equals(GROCERY) &&
+                                    store.getCountryName().equals(countryName)) {
                                 list.add(store);
                             }
                         }
@@ -243,7 +242,7 @@ public class MyGroceryFragment extends Fragment implements MyStoreRecycleItemTou
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                }else {
+                } else {
                     adapter.submitList(origList);
                 }
                 return true;
@@ -253,14 +252,15 @@ public class MyGroceryFragment extends Fragment implements MyStoreRecycleItemTou
 
     /**
      * open th country activity to retrieve the new chosen location
+     *
      * @param location
      */
-    private void requestNewLocation(MenuItem location){
+    private void requestNewLocation(MenuItem location) {
         location.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 Intent intent = new Intent(getContext(), CountryActivity.class);
-                startActivityForResult(intent,EXTRA_COUNTRY_CODE);
+                startActivityForResult(intent, EXTRA_COUNTRY_CODE);
                 return true;
             }
         });
@@ -269,16 +269,16 @@ public class MyGroceryFragment extends Fragment implements MyStoreRecycleItemTou
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         // refresh recycle view
-        if(requestCode == EXTRA_COUNTRY_CODE && resultCode == RESULT_OK){
+        if (requestCode == EXTRA_COUNTRY_CODE && resultCode == RESULT_OK) {
             observer();
             // create a new daily note
             Note note = new Note(DAILY_NOTES, FALSE);
             viewModel.insertNote(note);
-            if(!origList.isEmpty()) {
+            if (!origList.isEmpty()) {
                 // create old empty notes from new location country
-                for(Store store: origList){
-                    if(store.getType().equals(GROCERY) &&
-                            store.getCountryName().equals(countryName)){
+                for (Store store : origList) {
+                    if (store.getType().equals(GROCERY) &&
+                            store.getCountryName().equals(countryName)) {
                         note = new Note(store.getName(), FALSE);
                         viewModel.insertNote(note);
                     }
@@ -286,5 +286,46 @@ public class MyGroceryFragment extends Fragment implements MyStoreRecycleItemTou
             }
             Toast.makeText(getContext(), "Country has been changed", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void displayDialog(final Store store) {
+        showDialog("Confirmation needed", "You will lose '" +searchedNote.getName()  +"' Todo list",
+                "Ok, Proceed", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                        viewModel.deleteAllNotesId(searchedNote.getNote_id());
+                        viewModel.deleteNote(searchedNote);
+                    }
+                }, "No, Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                        store.setSelected(TRUE);
+                        viewModel.updateStore(store);
+                        Toast toast = Toast.makeText(getContext(), "Failed to delete store", Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
+                    }
+                }, false);
+    }
+
+    private AlertDialog showDialog(String title, String msg, String positiveLabel,
+                                   DialogInterface.OnClickListener positiveOnClick,
+                                   String negativeLabel, DialogInterface.OnClickListener negativeOnClick,
+                                   boolean isCancelAble) {
+        AlertDialog alertDialog = new AlertDialog.Builder(getContext())
+                .setTitle(title)
+                .setCancelable(isCancelAble)
+                .setMessage(msg)
+                .setPositiveButton(positiveLabel, positiveOnClick)
+                .setNegativeButton(negativeLabel, negativeOnClick)
+                .create();
+
+        Window view = ((alertDialog)).getWindow();
+        view.setBackgroundDrawableResource(R.drawable.white_border);
+        alertDialog.show();
+        return alertDialog;
+
     }
 }

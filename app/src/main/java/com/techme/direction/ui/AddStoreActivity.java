@@ -29,6 +29,7 @@ public class AddStoreActivity extends AppCompatActivity {
     private Drawable backIcon;
     private String intentFragment;
     private int selectedId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,8 +41,8 @@ public class AddStoreActivity extends AppCompatActivity {
 
         // to get the correct fragment when user want to add new store my list
         intentFragment = getIntent().getStringExtra(EXTRA_FRAGMENT);
-        if(!TextUtils.isEmpty(intentFragment)){
-            switch (intentFragment){
+        if (!TextUtils.isEmpty(intentFragment)) {
+            switch (intentFragment) {
                 case DINING_FRAGMENT:
                     selectedId = navigationView.getMenu().findItem(R.id.nav_add_store_dining).getItemId();
                     navigationView.setSelectedItemId(selectedId);
@@ -59,7 +60,7 @@ public class AddStoreActivity extends AppCompatActivity {
                     break;
             }
 
-        }else {
+        } else {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_add_store, new AddStoresFragment()).commit();
 
         }
@@ -69,8 +70,7 @@ public class AddStoreActivity extends AppCompatActivity {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
             Fragment selectedFragment = null;
-            switch (menuItem.getItemId())
-            {
+            switch (menuItem.getItemId()) {
                 case R.id.nav_add_store_list:
                     selectedFragment = new AddStoresFragment();
                     break;
@@ -89,7 +89,7 @@ public class AddStoreActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_action_bar,menu);
+        inflater.inflate(R.menu.menu_action_bar, menu);
         menu.findItem(R.id.bar_settings).setVisible(false);
         return true;
     }

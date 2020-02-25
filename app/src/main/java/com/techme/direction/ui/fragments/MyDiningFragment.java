@@ -89,7 +89,7 @@ public class MyDiningFragment extends Fragment implements MyStoreRecycleItemTouc
         init();
         observer();
         onItemClick();
-        ItemTouchHelper.SimpleCallback itemTouchHelperCallBack = new MyStoreRecycleItemTouchHelper(0,ItemTouchHelper.LEFT,this);
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallBack = new MyStoreRecycleItemTouchHelper(0, ItemTouchHelper.LEFT, this);
         new ItemTouchHelper(itemTouchHelperCallBack).attachToRecyclerView(recyclerView);
     }
 
@@ -110,7 +110,7 @@ public class MyDiningFragment extends Fragment implements MyStoreRecycleItemTouc
         });
     }
 
-    private void init(){
+    private void init() {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemViewCacheSize(RECYCLE_CACHE);
@@ -119,7 +119,7 @@ public class MyDiningFragment extends Fragment implements MyStoreRecycleItemTouc
         floatingButton();
     }
 
-    private void observer(){
+    private void observer() {
         viewModel = new ViewModelProvider(this).get(DirectionViewModel.class);
         viewModel.getAllSelectedStores().observe(getViewLifecycleOwner(), new Observer<List<Store>>() {
             @Override
@@ -134,10 +134,10 @@ public class MyDiningFragment extends Fragment implements MyStoreRecycleItemTouc
                     }
 
                 }
-                if(!list.isEmpty()){
+                if (!list.isEmpty()) {
                     recyclerView.setVisibility(View.VISIBLE);
                     layoutEmpty.setVisibility(View.GONE);
-                }else {
+                } else {
                     layoutEmpty.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.GONE);
                 }
@@ -145,7 +145,7 @@ public class MyDiningFragment extends Fragment implements MyStoreRecycleItemTouc
 
                 adapter.submitList(list);
 
-                if(searchView != null && searchView.getQuery().length() > 0){
+                if (searchView != null && searchView.getQuery().length() > 0) {
                     String temp = String.valueOf(searchView.getQuery());
                     searchView.setQuery("", false);
                     searchView.setQuery(temp, false);
@@ -155,25 +155,18 @@ public class MyDiningFragment extends Fragment implements MyStoreRecycleItemTouc
     }
 
 
-    private  void floatingButton(){
+    private void floatingButton() {
         floatingActionButton = getActivity().findViewById(R.id.float_button_store);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), AddStoreActivity.class);
-                intent.putExtra(EXTRA_FRAGMENT,DINING_FRAGMENT);
+                intent.putExtra(EXTRA_FRAGMENT, DINING_FRAGMENT);
                 startActivity(intent);
             }
         });
 
     }
-
-//    @Override
-//    public void onStop() {
-//        super.onStop();
-//        searchView.setQuery(REPLACE,true);
-//    }
-
 
 
     @Override
@@ -194,26 +187,25 @@ public class MyDiningFragment extends Fragment implements MyStoreRecycleItemTouc
 
     /**
      * handles th search view
+     *
      * @param menuItem
      */
-    private void search(final MenuItem menuItem){
+    private void search(final MenuItem menuItem) {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-//                searchView.setQuery("",false);
-//                menuItem.collapseActionView();
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if(!newText.isEmpty()){
+                if (!newText.isEmpty()) {
                     String name = "%" + newText + "%";
                     List<Store> list = new ArrayList<>();
                     try {
-                        for(Store store: viewModel.searchMyStore(name)){
-                            if(store.getType().equals(DINING) &&
-                                    store.getCountryName().equals(countryName)){
+                        for (Store store : viewModel.searchMyStore(name)) {
+                            if (store.getType().equals(DINING) &&
+                                    store.getCountryName().equals(countryName)) {
                                 list.add(store);
                             }
                         }
@@ -223,7 +215,7 @@ public class MyDiningFragment extends Fragment implements MyStoreRecycleItemTouc
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                }else{
+                } else {
                     adapter.submitList(origList);
                 }
                 return true;
@@ -233,14 +225,15 @@ public class MyDiningFragment extends Fragment implements MyStoreRecycleItemTouc
 
     /**
      * open th country activity to retrieve the new chosen location
+     *
      * @param location
      */
-    private  void requestNewLocation(MenuItem location){
+    private void requestNewLocation(MenuItem location) {
         location.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 Intent intent = new Intent(getContext(), CountryActivity.class);
-                startActivityForResult(intent,EXTRA_COUNTRY_CODE);
+                startActivityForResult(intent, EXTRA_COUNTRY_CODE);
                 return true;
             }
         });
@@ -249,16 +242,16 @@ public class MyDiningFragment extends Fragment implements MyStoreRecycleItemTouc
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         // refresh recycle view
-        if(requestCode == EXTRA_COUNTRY_CODE && resultCode == RESULT_OK){
+        if (requestCode == EXTRA_COUNTRY_CODE && resultCode == RESULT_OK) {
             observer();
             // create a new daily note
             Note note = new Note(DAILY_NOTES, FALSE);
             viewModel.insertNote(note);
-            if(!groceryList.isEmpty()) {
+            if (!groceryList.isEmpty()) {
                 // create old empty notes from new location country
-                for(Store store: groceryList){
-                    if(store.getType().equals(GROCERY) &&
-                            store.getCountryName().equals(countryName)){
+                for (Store store : groceryList) {
+                    if (store.getType().equals(GROCERY) &&
+                            store.getCountryName().equals(countryName)) {
                         note = new Note(store.getName(), FALSE);
                         viewModel.insertNote(note);
                     }

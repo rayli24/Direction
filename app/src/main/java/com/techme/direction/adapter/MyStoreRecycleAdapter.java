@@ -20,7 +20,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class MyStoreRecycleAdapter extends ListAdapter<Store,MyStoreRecycleAdapter.MyStoreViewHolder> {
+public class MyStoreRecycleAdapter extends ListAdapter<Store, MyStoreRecycleAdapter.MyStoreViewHolder> {
     private onItemClickListener listener;
 
     public MyStoreRecycleAdapter() {
@@ -40,7 +40,7 @@ public class MyStoreRecycleAdapter extends ListAdapter<Store,MyStoreRecycleAdapt
         public boolean areContentsTheSame(@NonNull Store oldItem, @NonNull Store newItem) {
             return oldItem.getType().equals(newItem.getType()) && oldItem.getSelected() == newItem.getSelected()
                     && oldItem.getName().equals(newItem.getName()) && oldItem.getCountryName().equals(newItem.getCountryName())
-            && oldItem.getLogo() == newItem.getLogo() && oldItem.getTime() == newItem.getTime();
+                    && oldItem.getLogo() == newItem.getLogo() && oldItem.getTime() == newItem.getTime();
         }
     };
 
@@ -84,7 +84,7 @@ public class MyStoreRecycleAdapter extends ListAdapter<Store,MyStoreRecycleAdapt
         holder.name.setText(store.getName());
         holder.name.setSelected(true);
         holder.name.setFocusableInTouchMode(true);
-        holder.time.setText(store.getTime()+ " min");
+        holder.time.setText(store.getTime() + " min");
     }
 
 

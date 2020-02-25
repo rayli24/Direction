@@ -27,6 +27,7 @@ import java.util.List;
 import static com.techme.direction.helper.VariablesHelper.EXTRA_FRAGMENT;
 import static com.techme.direction.helper.VariablesHelper.EXTRA_NOTE_ID;
 import static com.techme.direction.helper.VariablesHelper.EXTRA_NOTE_NAME;
+import static com.techme.direction.helper.VariablesHelper.MY_STORE_ACTIVITY_CODE;
 import static com.techme.direction.helper.VariablesHelper.NOTE_FRAGMENT;
 import static com.techme.direction.helper.VariablesHelper.RECYCLE_CACHE;
 
@@ -53,7 +54,7 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListRecyc
         onAddButtonClick();
         onDoneButtonClick();
         ItemTouchHelper.SimpleCallback itemTouchHelperCallBack = new ToDoListRecycleItemTouchHelper(0,
-                ItemTouchHelper.LEFT,this);
+                ItemTouchHelper.LEFT, this);
         new ItemTouchHelper(itemTouchHelperCallBack).attachToRecyclerView(recyclerView);
     }
 
@@ -71,7 +72,7 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListRecyc
         recyclerView.setAdapter(adapter);
         titleName = getIntent().getStringExtra(EXTRA_NOTE_NAME);
         txtName.setText(titleName + " Note");
-        noteId = getIntent().getLongExtra(EXTRA_NOTE_ID,-1);
+        noteId = getIntent().getLongExtra(EXTRA_NOTE_ID, -1);
     }
 
     private void observer() {
@@ -80,8 +81,8 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListRecyc
             @Override
             public void onChanged(List<ToDoList> toDoLists) {
                 List<ToDoList> list = new ArrayList<>();
-                for(ToDoList toDoList : toDoLists){
-                    if(toDoList.getNote_id() == noteId){ // check if the note id belongs to the created note
+                for (ToDoList toDoList : toDoLists) {
+                    if (toDoList.getNote_id() == noteId) { // check if the note id belongs to the created note
                         list.add(toDoList);
                     }
                 }
@@ -106,12 +107,13 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListRecyc
         });
     }
 
-    private void onDoneButtonClick(){
+    private void onDoneButtonClick() {
         txtDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ToDoListActivity.this,MyStoreActivity.class);
-                intent.putExtra(EXTRA_FRAGMENT,NOTE_FRAGMENT);
+                Intent intent = new Intent(ToDoListActivity.this, MyStoreActivity.class);
+                intent.putExtra(EXTRA_FRAGMENT, NOTE_FRAGMENT);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // finish all activities
                 startActivity(intent);
                 finish();
             }
@@ -149,8 +151,7 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListRecyc
                     editItem.requestFocus();
                     editAmount.setText("");
                     editItem.setText("");
-                }
-                else{
+                } else {
                     Toast.makeText(ToDoListActivity.this, "Make sure to fill item and amount",
                             Toast.LENGTH_SHORT).show();
                 }

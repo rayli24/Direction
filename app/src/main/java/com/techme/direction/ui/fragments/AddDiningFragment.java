@@ -65,11 +65,10 @@ public class AddDiningFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         init();
         observer();
-//        searchView.setQuery(VariablesHelper.REPLACE, true);
         itemClicked();
     }
 
-    private void init(){
+    private void init() {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemViewCacheSize(RECYCLE_CACHE); // to ensure how many items should be hold in the cache after scrolling
@@ -77,25 +76,24 @@ public class AddDiningFragment extends Fragment {
         recyclerView.setAdapter(adapter);
     }
 
-    private void observer(){
+    private void observer() {
         viewModel = new ViewModelProvider(this).get(DirectionViewModel.class);
         viewModel.getAllUnSelectedStores().observe(getViewLifecycleOwner(), new Observer<List<Store>>() {
             @Override
             public void onChanged(List<Store> stores) {
                 List<Store> list = new ArrayList<>();
-                for(Store store: stores)
-                {
-                    if(store.getCountryName().equals(countryName) &&
+                for (Store store : stores) {
+                    if (store.getCountryName().equals(countryName) &&
                             store.getType().equals(DINING))
                         list.add(store);
                 }
                 origList = new ArrayList<>(list);
 
                 adapter.submitList(list);
-                if(searchView != null && searchView.getQuery().length() > 0){
+                if (searchView != null && searchView.getQuery().length() > 0) {
                     String temp = String.valueOf(searchView.getQuery());
                     searchView.setQuery("", false);
-                    searchView.setQuery(temp,false);
+                    searchView.setQuery(temp, false);
                 }
             }
         });
@@ -104,8 +102,7 @@ public class AddDiningFragment extends Fragment {
     /**
      * this method is to update the selected items in add store and send them to my store list
      */
-    private void itemClicked()
-    {
+    private void itemClicked() {
         adapter.setOnItemClickListener(new AddStoreRecycleAdapter.onItemClickListener() {
             @Override
             public void onClick(Store store, int position) {
@@ -124,23 +121,22 @@ public class AddDiningFragment extends Fragment {
         search(menuItem);
     }
 
-    private void search(final MenuItem menuItem){
+    private void search(final MenuItem menuItem) {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                menuItem.collapseActionView();
-                return true;
+                return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if(!newText.isEmpty()){
+                if (!newText.isEmpty()) {
                     String name = "%" + newText + "%";
                     List<Store> list = new ArrayList<>();
                     try {
-                        for(Store store: viewModel.searchAddStore(name)){
-                            if(store.getType().equals(DINING) &&
-                                    store.getCountryName().equals(countryName)){
+                        for (Store store : viewModel.searchAddStore(name)) {
+                            if (store.getType().equals(DINING) &&
+                                    store.getCountryName().equals(countryName)) {
                                 list.add(store);
                             }
                         }
@@ -150,7 +146,7 @@ public class AddDiningFragment extends Fragment {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                }else{
+                } else {
                     adapter.submitList(origList);
                 }
                 return true;

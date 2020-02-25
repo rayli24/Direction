@@ -6,7 +6,7 @@ import android.Manifest;
 public class VariablesHelper {
 
     // to know which new code to use next time for intents (update if create a new code)
-    private int nextCodeToUse = 3;
+    private int nextCodeToUse = 4;
 
     // countries
     public static final String CANADA = "Canada";
@@ -25,13 +25,13 @@ public class VariablesHelper {
     // for activity and fragments
     public static final String EXTRA_NOTE_NAME = "note name";
     public static final String EXTRA_NOTE_ID = "note id";
-    public static final String EXTRA_COUNTRY = "country";
     public static final int EXTRA_COUNTRY_CODE = 2;
     public static final String EXTRA_FRAGMENT = "fragment note";
     public static final String NOTE_FRAGMENT = "note";
     public static final String DINING_FRAGMENT = "dining";
     public static final String GROCERY_FRAGMENT = "grocery";
     public static final String STORE_FRAGMENT = "store";
+    public static final int MY_STORE_ACTIVITY_CODE = 3;
 
     // for search view
     public static final String REPLACE = "replace";
@@ -51,13 +51,13 @@ public class VariablesHelper {
 
 
     // for formatting store names that include spaces to fit Uri format
-    public static String stringToUri(String name){
+    public static String stringToUri(String name) {
         String[] list = name.split(" ");
         String uriName = "";
-        for(int i = 0; i < list.length; i++){
-            if(i < list.length -1){
+        for (int i = 0; i < list.length; i++) {
+            if (i < list.length - 1) {
                 uriName += list[i] + "+";
-            }else {
+            } else {
                 uriName += list[i];
             }
         }
@@ -65,6 +65,6 @@ public class VariablesHelper {
     }
 
 
-
-    private VariablesHelper(){} // cant create an instance of this class
+    private VariablesHelper() {
+    } // cant create an instance of this class
 }

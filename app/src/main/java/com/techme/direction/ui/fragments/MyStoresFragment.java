@@ -1,10 +1,12 @@
 package com.techme.direction.ui.fragments;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
 
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,15 +18,18 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.techme.direction.Country;
 import com.techme.direction.DirectionViewModel;
 import com.techme.direction.Note;
 import com.techme.direction.helper.MyStoreRecycleItemTouchHelper;
@@ -164,23 +169,18 @@ public class MyStoresFragment extends Fragment implements MyStoreRecycleItemTouc
 
     }
 
-    private void floatingButton(){
-       floatingActionButton = getActivity().findViewById(R.id.float_button_store);
-       floatingActionButton.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View view) {
-               Intent intent = new Intent(getActivity(), AddStoreActivity.class);
-               intent.putExtra(EXTRA_FRAGMENT,STORE_FRAGMENT);
-               startActivity(intent);
-           }
-       });
+    private void floatingButton() {
+        floatingActionButton = getActivity().findViewById(R.id.float_button_store);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), AddStoreActivity.class);
+                intent.putExtra(EXTRA_FRAGMENT, STORE_FRAGMENT);
+                startActivity(intent);
+            }
+        });
     }
 
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        searchView.setQuery(REPLACE, true);
-//    }
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
@@ -197,15 +197,17 @@ public class MyStoresFragment extends Fragment implements MyStoreRecycleItemTouc
                     }
                 }
                 if (searchedNote.getSelected() == TRUE) {
-                    viewModel.deleteAllNotesId(searchedNote.getNote_id());
+                    displayDialog(store);
+                }else {
+                    viewModel.deleteNote(searchedNote);
                 }
-                viewModel.deleteNote(searchedNote);
-            }
 
+            }
 
         }
         store.setSelected(FALSE);
         viewModel.updateStore(adapter.getStore(viewHolder.getAdapterPosition()));
+
     }
 
     @Override
@@ -227,8 +229,6 @@ public class MyStoresFragment extends Fragment implements MyStoreRecycleItemTouc
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-//                searchView.setQuery("", false);
-//                menuItem.collapseActionView();
                 return false;
             }
 
@@ -294,5 +294,46 @@ public class MyStoresFragment extends Fragment implements MyStoreRecycleItemTouc
             }
             Toast.makeText(getContext(), "Country has been changed", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void displayDialog(final Store store) {
+        showDialog("Confirmation needed", "You will lose '" +searchedNote.getName()  +"' Todo list",
+                "Ok, Proceed", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                        viewModel.deleteAllNotesId(searchedNote.getNote_id());
+                        viewModel.deleteNote(searchedNote);
+                    }
+                }, "No, Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                        store.setSelected(TRUE);
+                        viewModel.updateStore(store);
+                        Toast toast = Toast.makeText(getContext(), "Failed to delete store", Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
+                    }
+                }, false);
+    }
+
+    private AlertDialog showDialog(String title, String msg, String positiveLabel,
+                                   DialogInterface.OnClickListener positiveOnClick,
+                                   String negativeLabel, DialogInterface.OnClickListener negativeOnClick,
+                                   boolean isCancelAble) {
+        AlertDialog alertDialog = new AlertDialog.Builder(getContext())
+                .setTitle(title)
+                .setCancelable(isCancelAble)
+                .setMessage(msg)
+                .setPositiveButton(positiveLabel, positiveOnClick)
+                .setNegativeButton(negativeLabel, negativeOnClick)
+                .create();
+
+        Window view = ((alertDialog)).getWindow();
+        view.setBackgroundDrawableResource(R.drawable.white_border);
+        alertDialog.show();
+        return alertDialog;
+
     }
 }

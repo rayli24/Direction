@@ -54,7 +54,7 @@ public class CountryActivity extends AppCompatActivity {
         onBackButton();
     }
 
-    private void init(){
+    private void init() {
         imgBack = findViewById(R.id.img_country_back);
         txtName = findViewById(R.id.txt_country_layout_title);
         recyclerView = findViewById(R.id.recycle_view_country);
@@ -66,14 +66,14 @@ public class CountryActivity extends AppCompatActivity {
         txtName.setText("Change: " + countryName);
     }
 
-    private void observer(){
+    private void observer() {
         viewModel = new ViewModelProvider(this).get(DirectionViewModel.class);
         viewModel.getAllCountries().observe(this, new Observer<List<Country>>() {
             @Override
             public void onChanged(List<Country> countries) {
                 adapter.submitList(countries);
-                for(Country country: countries){
-                    if(country.getName().equals(countryName)){
+                for (Country country : countries) {
+                    if (country.getName().equals(countryName)) {
                         currentCountry = country;
                         return;
                     }
@@ -82,36 +82,36 @@ public class CountryActivity extends AppCompatActivity {
         });
     }
 
-    private void onItemClick(){
+    private void onItemClick() {
         adapter.setOnItemClickListener(new CountryRecycleAdapter.onItemClickListener() {
             @Override
             public void onClick(Country country) {
-                if(country.getName().equals(currentCountry.getName())){
+                if (country.getName().equals(currentCountry.getName())) {
                     Toast toast = Toast.makeText(CountryActivity.this, currentCountry.getName()
                             + " is already your current location", Toast.LENGTH_SHORT);
-                    toast.setGravity(Gravity.CENTER,0,0);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
                     toast.show();
-                }else {
+                } else {
                     displayDialog(country);
                 }
             }
         });
     }
 
-    private void updateCountry(Country newCountry){
-            currentCountry.setSelected(FALSE);
-            viewModel.updateCountry(currentCountry);
-            newCountry.setSelected(TRUE);
-            countryName = newCountry.getName();
-            deleteCountryNotes();
-            saveCountry();
-            viewModel.updateCountry(newCountry);
-            setResult(RESULT_OK);
-            finish();
+    private void updateCountry(Country newCountry) {
+        currentCountry.setSelected(FALSE);
+        viewModel.updateCountry(currentCountry);
+        newCountry.setSelected(TRUE);
+        countryName = newCountry.getName();
+        deleteCountryNotes();
+        saveCountry();
+        viewModel.updateCountry(newCountry);
+        setResult(RESULT_OK);
+        finish();
     }
 
-    private void displayDialog(final Country newCountry){
-        showDialog("Confirmation needed", "You will lose all '" + currentCountry.getName()+ "' Todo list",
+    private void displayDialog(final Country newCountry) {
+        showDialog("Confirmation needed", "You will lose all '" + currentCountry.getName() + "' Todo list",
                 "Ok, Proceed", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -123,23 +123,22 @@ public class CountryActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
                         Toast toast = Toast.makeText(CountryActivity.this, "Country change failed", Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.CENTER,0,0);
+                        toast.setGravity(Gravity.CENTER, 0, 0);
                         toast.show();
                     }
-                },false);
+                }, false);
     }
 
     private AlertDialog showDialog(String title, String msg, String positiveLabel,
-                                  DialogInterface.OnClickListener positiveOnClick,
-                                  String negativeLabel, DialogInterface.OnClickListener negativeOnClick,
-                                  boolean isCancelAble) {
+                                   DialogInterface.OnClickListener positiveOnClick,
+                                   String negativeLabel, DialogInterface.OnClickListener negativeOnClick,
+                                   boolean isCancelAble) {
         AlertDialog alertDialog = new AlertDialog.Builder(this)
                 .setTitle(title)
                 .setCancelable(isCancelAble)
                 .setMessage(msg)
                 .setPositiveButton(positiveLabel, positiveOnClick)
                 .setNegativeButton(negativeLabel, negativeOnClick)
-//                .setIcon(R.drawable.ic_delete_red_24dp)
                 .create();
 
         Window view = ((alertDialog)).getWindow();
@@ -151,9 +150,8 @@ public class CountryActivity extends AppCompatActivity {
 
     /**
      * delete all notes and to-do list
-     *
      */
-    private void deleteCountryNotes(){
+    private void deleteCountryNotes() {
         viewModel.deleteAllToDoList();
         viewModel.deleteAllNotes();
     }
@@ -161,14 +159,14 @@ public class CountryActivity extends AppCompatActivity {
     /**
      * save the new country in a shared preference
      */
-    private void saveCountry(){
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_COUNTRY,MODE_PRIVATE);
+    private void saveCountry() {
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_COUNTRY, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(LOAD_COUNTRY, countryName);
         editor.apply();
     }
 
-    private void onBackButton(){
+    private void onBackButton() {
         imgBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

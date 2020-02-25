@@ -30,7 +30,6 @@ public abstract class DatabaseRoom extends RoomDatabase {
         if (instance == null) {
             instance = Room.databaseBuilder(context.getApplicationContext(),
                     DatabaseRoom.class, "direction_database")
-                    .fallbackToDestructiveMigration()
                     .addCallback(roomCall)
                     .build();
         }
@@ -107,7 +106,7 @@ public abstract class DatabaseRoom extends RoomDatabase {
         }
 
         public void country() {
-            dao.insertCountry(new Country(CANADA,FALSE));
+            dao.insertCountry(new Country(CANADA, FALSE));
             dao.insertCountry(new Country(USA, FALSE));
         }
 

@@ -40,6 +40,7 @@ public class ToDoNoteActivity extends AppCompatActivity implements ToDoNoteRecyc
     private long noteId;
     private TextView txtName;
     private RelativeLayout layoutEmpty;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,11 +51,11 @@ public class ToDoNoteActivity extends AppCompatActivity implements ToDoNoteRecyc
         onItemClick();
 
         ItemTouchHelper.SimpleCallback itemTouchHelperCallBack =
-                new ToDoNoteRecycleItemTouchHelper(0,ItemTouchHelper.LEFT,this);
+                new ToDoNoteRecycleItemTouchHelper(0, ItemTouchHelper.LEFT, this);
         new ItemTouchHelper(itemTouchHelperCallBack).attachToRecyclerView(recyclerView);
     }
 
-    private void init(){
+    private void init() {
         imgBack = findViewById(R.id.img_to_do_note_back);
         txtName = findViewById(R.id.txt_to_do_note_layout_title);
         layoutEmpty = findViewById(R.id.to_do_layout_note_empty);
@@ -65,25 +66,25 @@ public class ToDoNoteActivity extends AppCompatActivity implements ToDoNoteRecyc
         adapter = new ToDoNoteRecycleAdapter();
         recyclerView.setAdapter(adapter);
         titleName = getIntent().getStringExtra(EXTRA_NOTE_NAME);
-        noteId = getIntent().getLongExtra(EXTRA_NOTE_ID,-1);
+        noteId = getIntent().getLongExtra(EXTRA_NOTE_ID, -1);
         txtName.setText(titleName + " ToDo List");
     }
 
-    private void observer(){
+    private void observer() {
         viewModel = new ViewModelProvider(this).get(DirectionViewModel.class);
         viewModel.getAllToDoList().observe(this, new Observer<List<ToDoList>>() {
             @Override
             public void onChanged(List<ToDoList> toDoLists) {
                 List<ToDoList> list = new ArrayList<>();
-                for(ToDoList toDo: toDoLists){
-                    if(toDo.getNote_id() == noteId){
+                for (ToDoList toDo : toDoLists) {
+                    if (toDo.getNote_id() == noteId) {
                         list.add(toDo);
                     }
                 }
-                if(!list.isEmpty()){
+                if (!list.isEmpty()) {
                     recyclerView.setVisibility(View.VISIBLE);
                     layoutEmpty.setVisibility(View.GONE);
-                }else {
+                } else {
                     layoutEmpty.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.GONE);
                 }
@@ -92,7 +93,7 @@ public class ToDoNoteActivity extends AppCompatActivity implements ToDoNoteRecyc
         });
     }
 
-    private void buttonEvent(){
+    private void buttonEvent() {
         imgBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -101,7 +102,7 @@ public class ToDoNoteActivity extends AppCompatActivity implements ToDoNoteRecyc
         });
     }
 
-    private void onItemClick(){
+    private void onItemClick() {
         adapter.setOnItemClickListener(new ToDoNoteRecycleAdapter.onItemClickListener() {
             @Override
             public void onChecked(ToDoList toDo, boolean checked) {

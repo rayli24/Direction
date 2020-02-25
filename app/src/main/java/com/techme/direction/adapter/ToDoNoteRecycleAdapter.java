@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ToDoNoteRecycleAdapter extends ListAdapter<ToDoList,ToDoNoteRecycleAdapter.ToDoNoteViewHolder> {
+public class ToDoNoteRecycleAdapter extends ListAdapter<ToDoList, ToDoNoteRecycleAdapter.ToDoNoteViewHolder> {
     private onItemClickListener listener;
 
     public ToDoNoteRecycleAdapter() {
@@ -35,10 +35,11 @@ public class ToDoNoteRecycleAdapter extends ListAdapter<ToDoList,ToDoNoteRecycle
         }
     };
 
-    public class ToDoNoteViewHolder  extends RecyclerView.ViewHolder {
+    public class ToDoNoteViewHolder extends RecyclerView.ViewHolder {
         private TextView txtItem, txtAmount;
         private CheckBox chkDone;
         public RelativeLayout viewForeground, viewBackground;
+
         public ToDoNoteViewHolder(@NonNull View itemView) {
             super(itemView);
             txtItem = itemView.findViewById(R.id.txt_item_to_do_note_recycle_view);
@@ -50,8 +51,8 @@ public class ToDoNoteRecycleAdapter extends ListAdapter<ToDoList,ToDoNoteRecycle
                 @Override
                 public void onClick(View view) {
                     int position = getAdapterPosition();
-                    if(listener != null && position != RecyclerView.NO_POSITION){
-                        listener.onChecked(getToDo(position),chkDone.isChecked());
+                    if (listener != null && position != RecyclerView.NO_POSITION) {
+                        listener.onChecked(getToDo(position), chkDone.isChecked());
                     }
                 }
             });
@@ -73,15 +74,15 @@ public class ToDoNoteRecycleAdapter extends ListAdapter<ToDoList,ToDoNoteRecycle
         holder.chkDone.setChecked(todo.isChecked());
     }
 
-    public ToDoList getToDo(int position){
+    public ToDoList getToDo(int position) {
         return getItem(position);
     }
 
-    public interface onItemClickListener{
+    public interface onItemClickListener {
         void onChecked(ToDoList toDo, boolean checked);
     }
 
-    public void setOnItemClickListener(onItemClickListener listener){
+    public void setOnItemClickListener(onItemClickListener listener) {
         this.listener = listener;
     }
 

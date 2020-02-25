@@ -38,6 +38,7 @@ import java.util.concurrent.ExecutionException;
 import static com.techme.direction.helper.VariablesHelper.EXTRA_NOTE_ID;
 import static com.techme.direction.helper.VariablesHelper.EXTRA_NOTE_NAME;
 import static com.techme.direction.helper.VariablesHelper.FALSE;
+import static com.techme.direction.helper.VariablesHelper.MY_STORE_ACTIVITY_CODE;
 import static com.techme.direction.helper.VariablesHelper.RECYCLE_CACHE;
 import static com.techme.direction.helper.VariablesHelper.TRUE;
 
@@ -66,7 +67,7 @@ public class MyNoteFragment extends Fragment implements MyNoteRecycleItemTouchHe
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.my_note_fragment, container, false);
-        imgAdd =  view.findViewById(R.id.img_add_my_note);
+        imgAdd = view.findViewById(R.id.img_add_my_note);
         recyclerView = view.findViewById(R.id.recycle_view_my_notes);
         layoutEmpty = view.findViewById(R.id.note_layout_empty);
         return view;
@@ -79,32 +80,32 @@ public class MyNoteFragment extends Fragment implements MyNoteRecycleItemTouchHe
         init();
         observer();
         onItemCLick();
-        ItemTouchHelper.SimpleCallback itemTouchHelperCallBack = new MyNoteRecycleItemTouchHelper(0,ItemTouchHelper.LEFT,this);
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallBack = new MyNoteRecycleItemTouchHelper(0, ItemTouchHelper.LEFT, this);
         new ItemTouchHelper(itemTouchHelperCallBack).attachToRecyclerView(recyclerView);
     }
 
 
-    private void onItemCLick(){
+    private void onItemCLick() {
         adapter.setOnItemClickListener(new MyNoteRecycleAdapter.onItemClickListener() {
             @Override
             public void onEditClick(Note note) {
                 Intent intent = new Intent(getContext(), ToDoListActivity.class);
-                intent.putExtra(EXTRA_NOTE_NAME,note.getName());
-                intent.putExtra(EXTRA_NOTE_ID,note.getNote_id());
+                intent.putExtra(EXTRA_NOTE_NAME, note.getName());
+                intent.putExtra(EXTRA_NOTE_ID, note.getNote_id());
                 startActivity(intent);
             }
 
             @Override
             public void onItemClick(Note note) {
                 Intent intent = new Intent(getContext(), ToDoNoteActivity.class);
-                intent.putExtra(EXTRA_NOTE_NAME,note.getName());
-                intent.putExtra(EXTRA_NOTE_ID,note.getNote_id());
+                intent.putExtra(EXTRA_NOTE_NAME, note.getName());
+                intent.putExtra(EXTRA_NOTE_ID, note.getNote_id());
                 startActivity(intent);
             }
         });
     }
 
-    private void init(){
+    private void init() {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemViewCacheSize(RECYCLE_CACHE);
@@ -112,21 +113,21 @@ public class MyNoteFragment extends Fragment implements MyNoteRecycleItemTouchHe
         recyclerView.setAdapter(adapter);
     }
 
-    private void observer(){
+    private void observer() {
         viewModel = new ViewModelProvider(this).get(DirectionViewModel.class);
         viewModel.getAllNotes().observe(getViewLifecycleOwner(), new Observer<List<Note>>() {
             @Override
             public void onChanged(List<Note> notes) {
                 List<Note> list = new ArrayList<>();
-                for(Note note: notes){
-                    if(note.getSelected() == TRUE){
+                for (Note note : notes) {
+                    if (note.getSelected() == TRUE) {
                         list.add(note);
                     }
                 }
-                if(!list.isEmpty()){
+                if (!list.isEmpty()) {
                     recyclerView.setVisibility(View.VISIBLE);
                     layoutEmpty.setVisibility(View.GONE);
-                }else {
+                } else {
                     layoutEmpty.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.GONE);
                 }
@@ -136,21 +137,20 @@ public class MyNoteFragment extends Fragment implements MyNoteRecycleItemTouchHe
                 adapter.submitList(list);
 
                 // to keep the correct list to be showed after removing an item
-                if(searchView != null && searchView.getQuery().length() > 0){
+                if (searchView != null && searchView.getQuery().length() > 0) {
                     String temp = String.valueOf(searchView.getQuery());
-                    searchView.setQuery("",false);
-                    searchView.setQuery(temp,false);
+                    searchView.setQuery("", false);
+                    searchView.setQuery(temp, false);
                 }
 
             }
         });
     }
 
-    private void buttonsEvent(){
+    private void buttonsEvent() {
         imgAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                searchView.setQuery(REPLACE, true);
                 Intent intent = new Intent(getContext(), SelectNoteActivity.class);
                 startActivity(intent);
             }
@@ -180,20 +180,19 @@ public class MyNoteFragment extends Fragment implements MyNoteRecycleItemTouchHe
 
     /**
      * handles the search view
+     *
      * @param menuItem
      */
-    private void search(final MenuItem menuItem){
+    private void search(final MenuItem menuItem) {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
-//                searchView.setQuery("",false);
-//                menuItem.collapseActionView();
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String s) {
-                if(!s.isEmpty()){
+                if (!s.isEmpty()) {
                     try {
                         String name = "%" + s + "%";
                         adapter.submitList(viewModel.searchNote(name));
@@ -202,7 +201,7 @@ public class MyNoteFragment extends Fragment implements MyNoteRecycleItemTouchHe
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                }else{
+                } else {
                     adapter.submitList(origList);
                 }
                 return true;

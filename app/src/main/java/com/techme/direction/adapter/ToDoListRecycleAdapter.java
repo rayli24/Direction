@@ -36,11 +36,11 @@ public class ToDoListRecycleAdapter extends ListAdapter<ToDoList, ToDoListRecycl
     };
 
 
-
     public class ToDoListViewHolder extends RecyclerView.ViewHolder {
         private ImageView imgEdit;
         private TextView txtAmount, txtItem;
         public RelativeLayout viewForeground, viewBackground;
+
         public ToDoListViewHolder(@NonNull View itemView) {
             super(itemView);
             imgEdit = itemView.findViewById(R.id.img_edit_to_do_list_recycle_view);
@@ -52,8 +52,8 @@ public class ToDoListRecycleAdapter extends ListAdapter<ToDoList, ToDoListRecycl
                 @Override
                 public void onClick(View view) {
                     int position = getAdapterPosition();
-                    if(listener != null && position != RecyclerView.NO_POSITION){
-                        listener.onEditClick(getToDoList(position),position);
+                    if (listener != null && position != RecyclerView.NO_POSITION) {
+                        listener.onEditClick(getToDoList(position), position);
                     }
                 }
             });
@@ -65,7 +65,7 @@ public class ToDoListRecycleAdapter extends ListAdapter<ToDoList, ToDoListRecycl
     @NonNull
     @Override
     public ToDoListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.to_do_list_recycle_view,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.to_do_list_recycle_view, parent, false);
         return new ToDoListViewHolder(view);
     }
 
@@ -77,15 +77,15 @@ public class ToDoListRecycleAdapter extends ListAdapter<ToDoList, ToDoListRecycl
     }
 
 
-    public ToDoList getToDoList(int position){
+    public ToDoList getToDoList(int position) {
         return getItem(position);
     }
 
-    public interface onItemClickListener{
+    public interface onItemClickListener {
         void onEditClick(ToDoList toDoList, int position);
     }
 
-    public void setOnItemClickListener(onItemClickListener listener){
+    public void setOnItemClickListener(onItemClickListener listener) {
         this.listener = listener;
     }
 }

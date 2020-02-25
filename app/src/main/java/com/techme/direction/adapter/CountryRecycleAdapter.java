@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class CountryRecycleAdapter extends ListAdapter<Country,CountryRecycleAdapter.CountryViewHolder> {
+public class CountryRecycleAdapter extends ListAdapter<Country, CountryRecycleAdapter.CountryViewHolder> {
     private onItemClickListener listener;
 
     public CountryRecycleAdapter() {
@@ -34,6 +34,7 @@ public class CountryRecycleAdapter extends ListAdapter<Country,CountryRecycleAda
 
     public class CountryViewHolder extends RecyclerView.ViewHolder {
         private TextView txtName;
+
         public CountryViewHolder(@NonNull View itemView) {
             super(itemView);
             txtName = itemView.findViewById(R.id.txt_country_recycle_view);
@@ -41,7 +42,7 @@ public class CountryRecycleAdapter extends ListAdapter<Country,CountryRecycleAda
                 @Override
                 public void onClick(View view) {
                     int position = getAdapterPosition();
-                    if(listener != null && position != RecyclerView.NO_POSITION){
+                    if (listener != null && position != RecyclerView.NO_POSITION) {
                         listener.onClick(getCountry(position));
                     }
                 }
@@ -52,7 +53,7 @@ public class CountryRecycleAdapter extends ListAdapter<Country,CountryRecycleAda
     @NonNull
     @Override
     public CountryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.country_recycle_view,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.country_recycle_view, parent, false);
         return new CountryViewHolder(view);
     }
 
@@ -61,15 +62,16 @@ public class CountryRecycleAdapter extends ListAdapter<Country,CountryRecycleAda
         Country country = getCountry(position);
         holder.txtName.setText(country.getName());
     }
-    public Country getCountry(int position){
+
+    public Country getCountry(int position) {
         return getItem(position);
     }
 
-    public interface onItemClickListener{
+    public interface onItemClickListener {
         void onClick(Country country);
     }
 
-    public void setOnItemClickListener(onItemClickListener listener){
+    public void setOnItemClickListener(onItemClickListener listener) {
         this.listener = listener;
     }
 

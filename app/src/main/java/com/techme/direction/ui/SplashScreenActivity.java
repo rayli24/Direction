@@ -30,6 +30,7 @@ import static com.techme.direction.helper.VariablesHelper.countrySelected;
 public class SplashScreenActivity extends AppCompatActivity {
 
     private static int splashTime = 1000;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,47 +39,48 @@ public class SplashScreenActivity extends AppCompatActivity {
         splashTime();
     }
 
-    private void splashTime(){
+    private void splashTime() {
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 loadCountry();
-                if(!checkPermission() || !countrySelected) {
+                if (!checkPermission() || !countrySelected) {
                     Intent intent = new Intent(SplashScreenActivity.this, PermissionActivity.class);
                     startActivity(intent);
-                }else{
+                } else {
                     Intent intent = new Intent(SplashScreenActivity.this, MyStoreActivity.class);
                     startActivity(intent);
                 }
                 finish();
             }
-        },splashTime);
+        }, splashTime);
     }
 
-    private void loadCountry(){
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_COUNTRY,MODE_PRIVATE);
-        countryName = sharedPreferences.getString(LOAD_COUNTRY,"none");
-        if(!countryName.equals("none")){
+    private void loadCountry() {
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_COUNTRY, MODE_PRIVATE);
+        countryName = sharedPreferences.getString(LOAD_COUNTRY, "none");
+        if (!countryName.equals("none")) {
             countrySelected = true;
         }
     }
 
     /**
      * check if all the permissions were granted or not
+     *
      * @return
      */
-    private boolean checkPermission(){
+    private boolean checkPermission() {
         List<String> listPermissionsNeeded = new ArrayList<>();
         // check which permission are granted
-        for(String permission: APP_PERMISSION){
-            if(ContextCompat.checkSelfPermission(this,permission) != PackageManager.PERMISSION_GRANTED){
+        for (String permission : APP_PERMISSION) {
+            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
                 listPermissionsNeeded.add(permission);
             }
         }
 
         // check if there was permissions that was not granted
-        if(!listPermissionsNeeded.isEmpty()){
+        if (!listPermissionsNeeded.isEmpty()) {
             return false;
         }
         return true;

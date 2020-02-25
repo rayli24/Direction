@@ -35,6 +35,7 @@ public class SelectNoteRecycleAdapter extends ListAdapter<Note, SelectNoteRecycl
 
     public class SelectNoteViewHolder extends RecyclerView.ViewHolder {
         private TextView txtName;
+
         public SelectNoteViewHolder(@NonNull View itemView) {
             super(itemView);
             txtName = itemView.findViewById(R.id.txt_select_note_name_recycle_view);
@@ -42,7 +43,7 @@ public class SelectNoteRecycleAdapter extends ListAdapter<Note, SelectNoteRecycl
                 @Override
                 public void onClick(View view) {
                     int position = getAdapterPosition();
-                    if(listener != null && position != RecyclerView.NO_POSITION){
+                    if (listener != null && position != RecyclerView.NO_POSITION) {
                         listener.onClick(getNote(position));
                     }
                 }
@@ -53,7 +54,7 @@ public class SelectNoteRecycleAdapter extends ListAdapter<Note, SelectNoteRecycl
     @NonNull
     @Override
     public SelectNoteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.select_note_recycle_view,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.select_note_recycle_view, parent, false);
         return new SelectNoteViewHolder(view);
     }
 
@@ -64,16 +65,15 @@ public class SelectNoteRecycleAdapter extends ListAdapter<Note, SelectNoteRecycl
     }
 
 
-    public Note getNote(int position)
-    {
+    public Note getNote(int position) {
         return getItem(position);
     }
 
-    public interface onClickItemListener{
+    public interface onClickItemListener {
         void onClick(Note note);
     }
 
-    public void setOnclickItemListener(onClickItemListener listener){
+    public void setOnclickItemListener(onClickItemListener listener) {
         this.listener = listener;
     }
 

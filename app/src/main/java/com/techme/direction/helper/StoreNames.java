@@ -2,7 +2,8 @@ package com.techme.direction.helper;
 
 public class StoreNames {
 
-    private StoreNames(){}
+    private StoreNames() {
+    }
 
     // grocery stores
     public static final String WALMART = "Walmart";

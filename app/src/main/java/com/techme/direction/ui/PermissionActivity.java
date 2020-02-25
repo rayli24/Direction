@@ -47,8 +47,6 @@ public class PermissionActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private static boolean permission_granted = false;
 
-
-    // todo: open dialog for permissions, then close dialog and open countryActivity, then open myStoreActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

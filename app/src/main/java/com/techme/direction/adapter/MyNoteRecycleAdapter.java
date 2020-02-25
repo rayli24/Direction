@@ -38,6 +38,7 @@ public class MyNoteRecycleAdapter extends ListAdapter<Note, MyNoteRecycleAdapter
         private TextView txtName;
         private ImageView imgEdit;
         public RelativeLayout viewForeground, viewBackground;
+
         public NoteViewHolder(@NonNull View itemView) {
             super(itemView);
             txtName = itemView.findViewById(R.id.txt_note_name_recycle_view);
@@ -48,7 +49,7 @@ public class MyNoteRecycleAdapter extends ListAdapter<Note, MyNoteRecycleAdapter
                 @Override
                 public void onClick(View view) {
                     int position = getAdapterPosition();
-                    if(listener != null && position != RecyclerView.NO_POSITION){
+                    if (listener != null && position != RecyclerView.NO_POSITION) {
                         listener.onItemClick(getNote(position));
                     }
                 }
@@ -57,7 +58,7 @@ public class MyNoteRecycleAdapter extends ListAdapter<Note, MyNoteRecycleAdapter
                 @Override
                 public void onClick(View view) {
                     int position = getAdapterPosition();
-                    if(listener != null && position != RecyclerView.NO_POSITION){
+                    if (listener != null && position != RecyclerView.NO_POSITION) {
                         listener.onEditClick(getNote(position));
                     }
                 }
@@ -68,7 +69,7 @@ public class MyNoteRecycleAdapter extends ListAdapter<Note, MyNoteRecycleAdapter
     @NonNull
     @Override
     public NoteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.notes_recycle_view,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.notes_recycle_view, parent, false);
         return new NoteViewHolder(view);
     }
 
@@ -78,16 +79,17 @@ public class MyNoteRecycleAdapter extends ListAdapter<Note, MyNoteRecycleAdapter
         holder.txtName.setText(note.getName() + " note");
     }
 
-    public Note getNote(int position){
+    public Note getNote(int position) {
         return getItem(position);
     }
 
-    public interface onItemClickListener{
+    public interface onItemClickListener {
         void onEditClick(Note note);
+
         void onItemClick(Note note);
     }
 
-    public void setOnItemClickListener(onItemClickListener listener){
+    public void setOnItemClickListener(onItemClickListener listener) {
         this.listener = listener;
     }
 

@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.appcompat.widget.SearchView;
 
 import com.techme.direction.Note;
@@ -67,7 +68,6 @@ public class AddGroceryFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         init();
         observer();
-//        searchView.setQuery(VariablesHelper.REPLACE,true); // to close the search view if open
         itemClicked();
     }
 
@@ -95,10 +95,10 @@ public class AddGroceryFragment extends Fragment {
 
                 adapter.submitList(list);
 
-                if(searchView != null && searchView.getQuery().length() > 0){
+                if (searchView != null && searchView.getQuery().length() > 0) {
                     String temp = String.valueOf(searchView.getQuery());
-                    searchView.setQuery("",false);
-                    searchView.setQuery(temp,false);
+                    searchView.setQuery("", false);
+                    searchView.setQuery(temp, false);
                 }
             }
         });
@@ -130,25 +130,25 @@ public class AddGroceryFragment extends Fragment {
 
     /**
      * handles the search view
+     *
      * @param menuItem
      */
-    private void search(final MenuItem menuItem){
+    private void search(final MenuItem menuItem) {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                menuItem.collapseActionView();
-                return true;
+                return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if(!newText.isEmpty()){
+                if (!newText.isEmpty()) {
                     String name = "%" + newText + "%";
                     List<Store> list = new ArrayList<>();
                     try {
-                        for(Store store: viewModel.searchAddStore(name)){
-                            if(store.getType().equals(GROCERY) &&
-                                    store.getCountryName().equals(countryName)){
+                        for (Store store : viewModel.searchAddStore(name)) {
+                            if (store.getType().equals(GROCERY) &&
+                                    store.getCountryName().equals(countryName)) {
                                 list.add(store);
                             }
                         }
@@ -158,7 +158,7 @@ public class AddGroceryFragment extends Fragment {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                }else{
+                } else {
                     adapter.submitList(origList);
                 }
                 return true;
