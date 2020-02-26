@@ -21,4 +21,10 @@
     <string name="todo_note">Empty</string>
     <integer name="repeat_num">3</integer>
     <string name="splash_screen">Lets ride ...</string>
+    <string name="done">Done</string>
+    <string name="item">Item</string>
+    <string name="amount">Amount</string>
+    <string name="add">add</string>
+
+
 </resources>

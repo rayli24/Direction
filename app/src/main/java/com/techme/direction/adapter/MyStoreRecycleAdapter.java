@@ -54,7 +54,7 @@ public class MyStoreRecycleAdapter extends ListAdapter<Store, MyStoreRecycleAdap
             super(itemView);
             imgLogo = itemView.findViewById(R.id.img_my_logo_recycle_view);
             name = itemView.findViewById(R.id.txt_my_name_recycle_view);
-            time = itemView.findViewById(R.id.txt_my_time_recycle_view);
+//            time = itemView.findViewById(R.id.txt_my_time_recycle_view);
             viewForeground = itemView.findViewById(R.id.layout_foreground_my_store_recycle_view);
             viewBackground = itemView.findViewById(R.id.layout_background_my_store_recycle_view);
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -84,7 +84,7 @@ public class MyStoreRecycleAdapter extends ListAdapter<Store, MyStoreRecycleAdap
         holder.name.setText(store.getName());
         holder.name.setSelected(true);
         holder.name.setFocusableInTouchMode(true);
-        holder.time.setText(store.getTime() + " min");
+//        holder.time.setText(store.getTime() + " min");
     }
 
 

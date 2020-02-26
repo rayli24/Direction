@@ -30,9 +30,9 @@
             android:text="Seclect Note"
             android:textColor="@color/white"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:layout_toRightOf="@+id/img_select_note_back"
+            android:layout_toEndOf="@+id/img_select_note_back"
             android:layout_marginTop="16dp"
-            android:layout_marginLeft="14dp"/>
+            android:layout_marginStart="14dp"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycle_view_to_do_note"
@@ -40,8 +40,8 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/txt_select_note_layout_title"
             android:background="@drawable/white_border"
-            android:layout_marginRight="20dp"
-            android:layout_marginLeft="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"
             android:layout_marginBottom="20dp"
             android:layout_marginTop="10dp"
             tools:listitem="@layout/select_note_recycle_view" />

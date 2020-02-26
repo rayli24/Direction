@@ -4,8 +4,7 @@
     android:layout_height="wrap_content"
     android:layout_marginStart="12dp"
     android:layout_marginEnd="12dp"
-    android:layout_marginTop="12dp"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_marginTop="12dp">
 
 
     <RelativeLayout
@@ -23,10 +22,11 @@
 
         <TextView
             android:id="@+id/txt_add_name_recycle_view"
-            android:layout_width="174dp"
+            android:layout_width="match_parent"
             android:layout_height="30dp"
+            android:layout_marginEnd="50dp"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/img_add_logo_recycle_view"
+            android:layout_toEndOf="@+id/img_add_logo_recycle_view"
             android:layout_marginStart="10dp"
             android:singleLine="true"
             android:ellipsize="marquee"

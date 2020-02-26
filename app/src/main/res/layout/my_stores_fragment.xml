@@ -11,7 +11,6 @@
         android:id="@+id/my_store_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="102dp"
-        tools:ignore="MissingConstraints"
         android:background="@drawable/gradient_purple"
         android:elevation="@dimen/bar_elevation"
         android:gravity="">
@@ -30,7 +29,6 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycle_view_my_store"
         android:layout_width="match_parent"
-        android:layout_below="@+id/my_store_bar_layout"
         android:layout_height="match_parent"
         tools:listitem="@layout/my_store_recycle_view"/>
 
