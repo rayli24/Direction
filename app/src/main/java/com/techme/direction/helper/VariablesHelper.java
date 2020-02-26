@@ -47,7 +47,8 @@ public class VariablesHelper {
     public static final int ALL_PERMISSION_CODE = 1;
     public static final String[] APP_PERMISSION = {
             Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.INTERNET};
+            Manifest.permission.INTERNET,
+            Manifest.permission.ACCESS_NETWORK_STATE};
 
 
     // for formatting store names that include spaces to fit Uri format
