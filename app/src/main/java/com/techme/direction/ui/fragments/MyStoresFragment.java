@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -25,9 +26,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.Api;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.techme.direction.Country;
 import com.techme.direction.DirectionViewModel;
@@ -171,12 +174,14 @@ public class MyStoresFragment extends Fragment implements MyStoreRecycleItemTouc
 
     private void floatingButton() {
         floatingActionButton = getActivity().findViewById(R.id.float_button_store);
+        floatingActionButton.bringToFront();
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), AddStoreActivity.class);
                 intent.putExtra(EXTRA_FRAGMENT, STORE_FRAGMENT);
                 startActivity(intent);
+
             }
         });
     }

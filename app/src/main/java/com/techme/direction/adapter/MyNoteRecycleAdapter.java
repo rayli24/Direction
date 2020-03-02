@@ -36,13 +36,13 @@ public class MyNoteRecycleAdapter extends ListAdapter<Note, MyNoteRecycleAdapter
 
     public class NoteViewHolder extends RecyclerView.ViewHolder {
         private TextView txtName;
-        private ImageView imgEdit;
+        private RelativeLayout editLayout;
         public RelativeLayout viewForeground, viewBackground;
 
         public NoteViewHolder(@NonNull View itemView) {
             super(itemView);
             txtName = itemView.findViewById(R.id.txt_note_name_recycle_view);
-            imgEdit = itemView.findViewById(R.id.img_edit_notes_recycle_view);
+            editLayout = itemView.findViewById(R.id.relative_layout_edit_note);
             viewForeground = itemView.findViewById(R.id.layout_foreground_note_recycle_view);
             viewBackground = itemView.findViewById(R.id.layout_background_note_recycle_view);
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -54,7 +54,7 @@ public class MyNoteRecycleAdapter extends ListAdapter<Note, MyNoteRecycleAdapter
                     }
                 }
             });
-            imgEdit.setOnClickListener(new View.OnClickListener() {
+            editLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     int position = getAdapterPosition();

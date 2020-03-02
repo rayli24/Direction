@@ -37,18 +37,18 @@ public class ToDoListRecycleAdapter extends ListAdapter<ToDoList, ToDoListRecycl
 
 
     public class ToDoListViewHolder extends RecyclerView.ViewHolder {
-        private ImageView imgEdit;
         private TextView txtAmount, txtItem;
+        private RelativeLayout editLayout;
         public RelativeLayout viewForeground, viewBackground;
 
         public ToDoListViewHolder(@NonNull View itemView) {
             super(itemView);
-            imgEdit = itemView.findViewById(R.id.img_edit_to_do_list_recycle_view);
+            editLayout = itemView.findViewById(R.id.relative_layout_edit_to_do_list);
             txtAmount = itemView.findViewById(R.id.txt_amount_to_do_list_recycle_view);
             txtItem = itemView.findViewById(R.id.txt_item_to_do_list_recycle_view);
             viewForeground = itemView.findViewById(R.id.layout_foreground_to_do_list_recycle_view);
             viewBackground = itemView.findViewById(R.id.layout_background_to_do_list_recycle_view);
-            imgEdit.setOnClickListener(new View.OnClickListener() {
+            editLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     int position = getAdapterPosition();

@@ -157,6 +157,7 @@ public class MyDiningFragment extends Fragment implements MyStoreRecycleItemTouc
 
     private void floatingButton() {
         floatingActionButton = getActivity().findViewById(R.id.float_button_store);
+        floatingActionButton.bringToFront();
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

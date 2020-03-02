@@ -6,8 +6,8 @@ android {
         applicationId "com.techme.direction"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 5
-        versionName '1.0.0'
+        versionCode 6
+        versionName '1.0.1'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -46,4 +46,5 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
+
 }
